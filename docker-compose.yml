@@ -1,0 +1,9 @@
+version: '2'
+services:
+  nginx:
+    image: 'nginx:1.14.0-alpine'
+    container_name: nginx_wallet
+    ports:
+      - "8888:80"
+    volumes:
+      - ./html:/usr/share/nginx/html:ro

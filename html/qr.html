@@ -1,0 +1,70 @@
+    <div class="wrapper d-flex flex-column">
+        <header>
+            <div class="red-header">
+                <div class="container-fluid">
+                    <div class="row justify-content-center mb-2rem">
+                        <div class="col-md-11 col-lg-10 col-xl-9">
+                            <div class="logo-box">
+                                <img src="img/logo.svg" alt="">
+                            </div>
+                            <button class="btn btn-logout float-right" id="sigbro-logout">
+                                log out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-wrapper shadow">
+                <ul class="nav justify-content-center this-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="portfolio.html">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="operations.html">Operations</a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <div class="flex-grow-1">
+<!--             <div class="container-fluid">
+                <div class="row justify-content-center return-link-box">
+                    <div class="col-md-11 col-lg-10 col-xl-9">
+                        <a href="operations.html" class="text-uppercase a-black">
+                            <i class="icon-left"></i>generate qr-code
+                        </a> 
+                    </div>
+                </div>
+            </div> -->
+            <div class="container-fluid">
+                <div class="row justify-content-center mb-2rem">
+                    <div class="col-md-10 col-lg-9 col-xl-8 white-bck">
+                        <h1 class="text-center">
+                            QR code
+                        </h1>
+                        <code class="text-center p-noscroll" id="sigbro_qr-code">
+                        </code>
+                        <div class="row justify-content-center mb-2rem"> 
+                            <div class="col-8 col-sm-6 col-md-4 text-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" id="sigbro_qr-qrcode" style="width:20em; height: 20em; display:none">
+                                <rect width="100%" height="100%" fill="#ffffff"></rect>
+                                <path d fill="#000000"></path>
+                              </svg>
+                            </div> 
+                        </div>
+                        <div class="row mb-2rem">
+                            <div class="col text-center">
+                                <a href="" class="a-tranc text-truncate" id="sigbro_qr-url"></a>
+                            </div>   
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 d-lg-none">
+                                <a href="" id="sigbro_qr--mobile_url" class="btn btn-block btn-outline-dark">OPEN IN SIGBRO MOBILE</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

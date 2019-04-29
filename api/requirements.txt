@@ -1,0 +1,5 @@
+gunicorn==19.9.0
+requests==2.20.1
+falcon==1.4.1
+peewee==3.7.1
+psycopg2-binary==2.7.4
