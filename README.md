@@ -1,6 +1,6 @@
 # nxter-sigbro-wallet
 
-Need to instal docker 
+Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sigbro Mobile App [https://www.nxter.org/sigbro/] 
 
 # Info
 
