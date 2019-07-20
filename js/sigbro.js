@@ -1,5 +1,6 @@
 var ARDOR = "https://random.nxter.org/tstardor";
 var NXT   = "https://random.nxter.org/tstnxt"; 
+var APIURL = "http://localhost:8020"
 
 $(document).on('click', 'a.nav-link', function(e) {
   e.preventDefault();
@@ -266,7 +267,7 @@ $(document).on('click', '#sigbro_send_submit', function(e) {
   var msg         = document.getElementById('sigbro_send_message').value;
 
 
-  var url = "https://random.nxter.org/api/wallet/sendmoney";
+  var url = APIURL + "/api/v2/sendmoney/";
 
   param_json = { "currencie" : currencie, "recipient" : recipientRS, "amount" : amount, "publicKey" : senderPubKey, "fee" : fee, "msg" : msg, "encrypt_msg" : encrypt_msg }; 
   param = JSON.stringify(param_json);
@@ -274,7 +275,7 @@ $(document).on('click', '#sigbro_send_submit', function(e) {
   console.log( "url: " + url);
   console.log( "params: " + param );
 
-  sendJSON( url, param, 3000, page_ops_show_result );
+  sendJSON( url, param, 10000, page_ops_show_result );
 });
 
 
@@ -377,7 +378,7 @@ function page_portfolio_show_assets() {
   var assets  = localStorage.getItem("sigbro_wallet_assets");
 
   if ( assets == null ) {
-    var url = "https://random.nxter.org/api/wallet/assets/" + accRS;
+    var url = APIURL + "/api/v2/assets/" + accRS + "/en/";
     getJSON(url, 3000, page_portfolio_save_assets, "assets");
     return;
   }
@@ -388,7 +389,7 @@ function page_portfolio_show_assets() {
   var delta = Date.now() - assets_data.timestamp;
   console.log("Delta: " + delta/1000 + " sec.");
   if ( delta > 5*60*1000 ) {
-    var url = "https://random.nxter.org/api/wallet/assets/" + accRS;
+    var url = APIURL + "/api/v2/assets/" + accRS + "/en/";
     getJSON(url, 3000, page_portfolio_save_assets, "assets");
     return;
   }
@@ -419,7 +420,7 @@ function page_portfolio_show_currencies() {
   var currencies  = localStorage.getItem("sigbro_wallet_currencies");
 
   if ( currencies == null ) {
-    var url = "https://random.nxter.org/api/wallet/currencies/" + accRS;
+    var url = APIURL + "/api/v2/currencies/" + accRS + "/en/";
     getJSON(url, 3000, page_portfolio_save_currencies, "currencies");
     return;
   }
@@ -430,7 +431,7 @@ function page_portfolio_show_currencies() {
   var delta = Date.now() - curr_data.timestamp;
   console.log("Delta: " + delta/1000 + " sec.");
   if ( delta > 5*60*1000 ) {
-    var url = "https://random.nxter.org/api/wallet/currencies/" + accRS;
+    var url = APIURL + "/api/v2/currencies/" + accRS + "/en/";
     getJSON(url, 3000, page_portfolio_save_currencies, "currencies");
     return;
   }
@@ -857,7 +858,7 @@ function getJSON(url, timeout, callback) {
 
 function sendJSON(url, params, timeout, callback) {
 	var args = Array.prototype.slice.call(arguments, 3);
-	var xhr = new XMLHttpRequest();
+  var xhr = new XMLHttpRequest();
 	xhr.ontimeout = function () {
 		console.log("The POST request for " + url + " timed out.");
 	};
@@ -871,9 +872,10 @@ function sendJSON(url, params, timeout, callback) {
 			}
 		}
 	};
-	xhr.open("POST", url, true);
+  xhr.open("POST", url);
+  xhr.setRequestHeader('Content-type', 'application/json');
 	xhr.timeout = timeout;
-	xhr.send(params);
+  xhr.send(params);
 }
 
 function getPublicKey(accountRS, network) {

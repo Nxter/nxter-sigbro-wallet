@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VER=`cat ../api/__init__.py | grep __version__ | awk -F '=' '{print $2}' | sed 's/ //g' | sed 's/"//g'`
+VER='3.0.0'
 
 IMAGE_NAME='nxter-bridge-wallet-web'
 
