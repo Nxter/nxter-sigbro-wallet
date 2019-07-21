@@ -1,166 +1,223 @@
-    <div class="wrapper d-flex flex-column">
-        <header>
-         <div class="red-header">
-            <div class="container-fluid">
-                <div class="row justify-content-center mb-2rem">
-                      <div class="col-md-11 col-lg-10 col-xl-9">
-                            <div class="logo-box">
-                              <img src="img/logo.svg" alt="">
-                            </div>
-                            <button class="btn btn-logout float-right" id="sigbro-logout">
-                                log out
-                            </button>
-                      </div>
-                </div>
+<div class="wrapper d-flex flex-column">
+  <header>
+    <div class="red-header">
+      <div class="container-fluid">
+        <div class="row justify-content-center mb-2rem">
+          <div class="col-md-11 col-lg-10 col-xl-9">
+            <div class="logo-box">
+              <img src="img/logo.svg" alt="">
             </div>
-         </div>
-         <div class="nav-wrapper shadow">
-            <ul class="nav justify-content-center this-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#profile">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#portfolio">Portfolio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#operations">Operations</a>
-                </li>
-            </ul>
-         </div>
-        </header>
-        <div class="flex-grow-1">
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-md-11 col-lg-10 col-xl-9 white-bck">  
-                        <h1 class="text-center">
-                            What do you want <nobr>to do?</nobr>
-                        </h1>
-                        <div class="row  justify-content-center">
-                            <div class="col-xl-10 operations-box">
-                                <div class="accordion" id="accordionExample">
-                                    <div class="collapse-block">
-                                        <div class="operation-stroke" id="headingOne">
-                                            <a class="collapsed a-black" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                                <p class="h4 weight-normal">
-                                                    Send
-                                                <i class="p-grey more-less icon-fontello icon-right-open-big float-right"></i></p>
-                                            </a>
-                                        </div>
-                                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                            <div class="send-box">
-                                                <form class="send-form">
-                                                    <div class="row">
-                                                        <div class="col-md-6 form-group mb-2rem">
-                                                            <label for="sigbro_send_senderRS" class="p-medium">SenderRS</label>
-                                                            <input type="text" class="form-control" id="sigbro_send_senderRS" aria-describedby="emailHelp" readonly>
-                                                        </div>
-                                                        <div class="col-md-6 form-group mb-2rem">
-                                                            <label for="sigbro_send_recipientRS" class="p-medium">RecipientRS</label>
-                                                            <input type="text" class="form-control" id="sigbro_send_recipientRS" placeholder="ARDOR-ZZZZ-YYYY-XXXX-KKKK">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row no-gutters mb-2rem">
-                                                        <p class="p-medium">Type</p>
-                                                        <div class="w-100"></div>
-                                                        <div class="label-group btn-group-toggle" id="sigbro_send_currencie" data-toggle="buttons">
-                                                          <label class="col btn btn-label text-uppercase active">
-                                                            <input type="radio" name="sigbro_send_selector" value="nxt" autocomplete="off" checked> 
-                                                            <span class="checkmark2"></span>nxt
-                                                          </label>
-                                                          <label class="col btn btn-label text-uppercase">
-                                                            <input type="radio" name="sigbro_send_selector" value="ardor" autocomplete="off">
-                                                            <span class="checkmark2"></span> ardor
-                                                          </label>
-                                                          <label class="col btn btn-label text-uppercase">
-                                                            <input type="radio" name="sigbro_send_selector" value="aeur" autocomplete="off"> 
-                                                            <span class="checkmark2"></span> aeur
-                                                          </label>
-                                                          <label class="col btn btn-label text-uppercase">
-                                                            <input type="radio" name="sigbro_send_selector" value="ignis" autocomplete="off"> 
-                                                            <span class="checkmark2"></span> ignis
-                                                          </label>
-                                                          <label class="col btn btn-label text-uppercase">
-                                                            <input type="radio" name="sigbro_send_selector" value="bitswift" autocomplete="off"> 
-                                                            <span class="checkmark2"></span> bitswift
-                                                          </label>
-                                                        </div>
-                                                    </div>
-                                                        <div class="row align-items-end">
-                                                            <div class="col-md-6 form-group mb-2rem">
-                                                                <label for="InputAmount" class="p-medium">Amount</label>
-                                                                <input type="amount" class="form-control" id="sigbro_send_amount" aria-describedby="" placeholder="0.0">
-                                                            </div>
-                                                            <div class="col form-group mb-2rem">
-                                                                <label for="InputFee" class="p-medium">Fee</label>
-                                                                <input type="amount" class="form-control" id="sigbro_send_fee" placeholder="Auto" disabled>
-                                                            </div>
-                                                            <div class="col-auto form-group mb-2rem">
-                                                                <label class="lable-box lable-box-fee">Encrypt msg.
-                                                                  <input type="checkbox" id="sigbro_encrypt_message">
-                                                                  <span class="checkmark"></span>
-                                                                </label>
-                                                            </div>  
-                                                        </div>
-                                                        <div class="row mb-2rem">
-                                                            <div class="col">
-                                                                <label for="exampleFormControlTextarea1 p-media">Message</label>
-                                                                <textarea class="form-control" id="sigbro_send_message" rows="2"></textarea>
-                                                            </div>
-                                                            <div class="w-100"></div>
-                                                        </div>
-                                                        <div class="row mb-2rem" id="sigbro_send_messages_block" style="display: none;">
-                                                            <div class="col">
-                                                                <label for="exampleFormControlTextarea1 p-media">Status</label>
-                                                                <span class="form-control" id="sigbro_send_messages_text"></span>
-                                                            </div>
-                                                            <div class="w-100"></div>
-                                                        </div>
-
-                                                        <button type="button" class="btn btn-block p-medium btn-qr" id="sigbro_send_submit">Generate QR-Code</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- hide unused blocks 
-                                    <div class="collapse-block">
-                                        <div class="operation-stroke" id="headingTwo">
-                                            <a class="collapsed a-black" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne">
-                                                <p class="h4 weight-normal">
-                                                    Exchange
-                                                <i class="p-grey more-less icon-fontello icon-right-open-big float-right"></i></p>
-                                            </a>
-                                        </div>
-                                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                            <div class="send-box">
-                                                <form class="send-form">
-                                                    <p>form here</p>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="collapse-block">
-                                        <div class="operation-stroke" id="heading3">
-                                            <a class="collapsed a-black" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse3" aria-expanded="false" aria-controls="collapseOne">
-                                                <p class="h4 weight-normal">
-                                                    Buy / Sell Asset
-                                                
-                                                <i class="p-grey more-less icon-fontello icon-right-open-big float-right"></i></p>
-                                            </a>
-                                        </div>
-                                        <div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#accordionExample">
-                                              <div class="send-box">
-                                                <form class="send-form">
-                                                    <p>form here</p>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> 
+            <button class="btn btn-logout float-right" id="sigbro-logout">
+              log out
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="nav-wrapper shadow">
+      <ul class="nav justify-content-center this-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#profile">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#portfolio">Portfolio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#operations">Operations</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+  <div class="flex-grow-1">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-md-11 col-lg-10 col-xl-9 white-bck">
+          <h1 class="text-center">
+            What do you want <nobr>to do?</nobr>
+          </h1>
+          <div class="row  justify-content-center">
+            <div class="col-xl-10 operations-box">
+              <div class="accordion" id="accordionExample">
+                <div class="collapse-block">
+                  <!-- headingOne -->
+                  <div class="operation-stroke" id="headingOne">
+                    <a class="collapsed a-black" role="button" data-toggle="collapse" data-parent="#accordion"
+                      href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                      <p class="h4 weight-normal">
+                        Send Ardor / Ignis / etc...
+                        <i class="p-grey more-less icon-fontello icon-right-open-big float-right"></i>
+                      </p>
+                    </a>
+                  </div> <!-- /headingOne-->
+
+                  <!-- collapseOne -->
+                  <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="send-box">
+                      <form class="send-form">
+                        <div class="row">
+                          <div class="col-md-6 form-group mb-2rem">
+                            <label for="sigbro_send_senderRS" class="p-medium">SenderRS</label>
+                            <input type="text" class="form-control" id="sigbro_send_senderRS"
+                              aria-describedby="emailHelp" readonly>
+                          </div>
+                          <div class="col-md-6 form-group mb-2rem">
+                            <label for="sigbro_send_recipientRS" class="p-medium">RecipientRS</label>
+                            <input type="text" class="form-control" id="sigbro_send_recipientRS"
+                              placeholder="ARDOR-ZZZZ-YYYY-XXXX-KKKK">
+                          </div>
+                        </div>
+                        <div class="row no-gutters mb-2rem">
+                          <p class="p-medium">Type</p>
+                          <div class="w-100"></div>
+                          <div class="label-group btn-group-toggle" id="sigbro_send_currencie" data-toggle="buttons">
+                            <!-- <label class="col btn btn-label text-uppercase active">
+                              <input type="radio" name="sigbro_send_selector" value="nxt" autocomplete="off" checked>
+                              <span class="checkmark2"></span>nxt
+                            </label> -->
+                            <label class="col btn btn-label text-uppercase">
+                              <input type="radio" name="sigbro_send_selector" value="ardor" autocomplete="off">
+                              <span class="checkmark2"></span> ardor
+                            </label>
+                            <label class="col btn btn-label text-uppercase">
+                              <input type="radio" name="sigbro_send_selector" value="aeur" autocomplete="off">
+                              <span class="checkmark2"></span> aeur
+                            </label>
+                            <label class="col btn btn-label text-uppercase">
+                              <input type="radio" name="sigbro_send_selector" value="ignis" autocomplete="off">
+                              <span class="checkmark2"></span> ignis
+                            </label>
+                            <label class="col btn btn-label text-uppercase">
+                              <input type="radio" name="sigbro_send_selector" value="bitswift" autocomplete="off">
+                              <span class="checkmark2"></span> bitswift
+                            </label>
+                          </div>
+                        </div>
+                        <div class="row align-items-end">
+                          <div class="col-md-6 form-group mb-2rem">
+                            <label for="InputAmount" class="p-medium">Amount</label>
+                            <input type="amount" class="form-control" id="sigbro_send_amount" aria-describedby=""
+                              placeholder="0.0">
+                          </div>
+                          <div class="col form-group mb-2rem">
+                            <label for="InputFee" class="p-medium">Fee</label>
+                            <input type="amount" class="form-control" id="sigbro_send_fee" placeholder="Auto" disabled>
+                          </div>
+                          <div class="col-auto form-group mb-2rem">
+                            <label class="lable-box lable-box-fee">Encrypt msg.
+                              <input type="checkbox" id="sigbro_encrypt_message">
+                              <span class="checkmark"></span>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="row mb-2rem">
+                          <div class="col">
+                            <label for="exampleFormControlTextarea1 p-media">Message</label>
+                            <textarea class="form-control" id="sigbro_send_message" rows="2"></textarea>
+                          </div>
+                          <div class="w-100"></div>
+                        </div>
+                        <div class="row mb-2rem" id="sigbro_send_messages_block" style="display: none;">
+                          <div class="col">
+                            <label for="exampleFormControlTextarea1 p-media">Status</label>
+                            <span class="form-control" id="sigbro_send_messages_text"></span>
+                          </div>
+                          <div class="w-100"></div>
+                        </div>
+
+                        <button type="button" class="btn btn-block p-medium btn-qr" id="sigbro_send_submit">Generate
+                          QR-Code</button>
+                      </form>
+                    </div>
+                  </div> <!-- /collapseOne -->
+
+                  <!-- headingTemplate -->
+                  <div class="operation-stroke" id="headingTemplate">
+                    <a class="collapsed a-black" role="button" data-toggle="collapse" data-parent="#accordion"
+                      href="#collapseTemplate" aria-expanded="false" aria-controls="collapseTemplate">
+                      <p class="h4 weight-normal">
+                        Generate Template for Ardor / Ignis / etc...
+                        <br><small>Read more about templates on the <a href="https://www.nxter.org/sigbro/templates" target=_blank>Nxter.org</a></small>
+                        <i class="p-grey more-less icon-fontello icon-right-open-big float-right"></i>
+                      </p>
+                    </a>
+                  </div> <!-- /headingTemplate-->
+
+                  <!-- collapseTemplate -->
+                  <div id="collapseTemplate" class="collapse" aria-labelledby="headingTemplate" data-parent="#accordionExample">
+                    <div class="send-box">
+                      <form class="send-form">
+                        <div class="row">
+                          <div class="col-md-6 form-group mb-2rem">
+                            <label for="sigbro_template_recipientRS" class="p-medium">RecipientRS (always you)</label>
+                            <input type="text" class="form-control" id="sigbro_template_recipientRS" readonly>
+                          </div>
+                          <div class="col-md-6 form-group mb-2rem">
+                            <label for="InputAmount" class="p-medium">Amount</label>
+                            <input type="amount" class="form-control" id="sigbro_template_amount" aria-describedby="" placeholder="0.0">
+                          </div>
+                        </div>
+                        <div class="row mb-1rem">
+                          <div class="no-gutters mb-2rem col-md-6">
+                            <div class="input-group mb-3" >
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="sigbro_template_currencie">Childchain</label>
+                                </div>
+                                <select class="custom-select" id="sigbro_template_currencie">
+                                    <option value="ardor">Ardor</option>
+                                    <option value="ignis" selected>Ignis</option>
+                                    <option value="aeur">AEUR</option>
+                                    <option value="bitswift">Bitswift</option>
+                                </select>
+                            </div>
+                          </div>
+                          <div class="no-gutters mb-2rem col-md-6">
+                            <div class="input-group mb-3" >
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="sigbro_template_operation">Operation</label>
+                                </div>
+                                <select class="custom-select" id="sigbro_template_operation">
+                                    <option value="sendMoney" selected>Send Money</option>
+                                </select>
+                            </div>
+                          </div>
+
+
+                        </div>
+                        <div class="row mb-1rem">
+                          <div class="col">
+                            <label for="exampleFormControlTextarea1 p-media">Message</label>
+                            <textarea class="form-control" id="sigbro_template_message" rows="2"></textarea>
+                          </div>
+                          <div class="w-100"></div>
+                        </div>
+                        <div class="row align-items-end">
+                          <div class="col-auto form-group mb-2rem">
+                            <label class="lable-box lable-box-fee">Encrypt message
+                              <input type="checkbox" id="sigbro_template_encrypt_message">
+                              <span class="checkmark"></span>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="row mb-1rem" id="sigbro_template_messages_block" style="display: none;">
+                          <div class="col">
+                            <label for="exampleFormControlTextarea1 p-media">Status</label>
+                            <span class="form-control" id="sigbro_template_messages_text"></span>
+                          </div>
+                          <div class="w-100"></div>
+                        </div>
+
+                        <button type="button" class="btn btn-block p-medium btn-qr" id="sigbro_template_submit">Generate Template QR-Code</button>
+                      </form>
+                    </div>
+                  </div> <!-- /collapseTemplate -->
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

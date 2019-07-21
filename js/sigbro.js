@@ -227,6 +227,7 @@ function page_ops_set_accountRS() {
   var accRS = localStorage.getItem("sigbro_wallet_accountRS");
   if ( accRS == null ) { sigbro_clear_localstorage(); location.href = "/index.html"; }
   document.getElementById('sigbro_send_senderRS').value = accRS; 
+  document.getElementById('sigbro_template_recipientRS').value = accRS; 
 
   var senderPubKey= localStorage.getItem("sigbro_pubkey_" + accRS );
   if ( senderPubKey == null ) {
