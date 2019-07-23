@@ -1,6 +1,10 @@
 var ARDOR = "https://random.nxter.org/tstardor";
 var NXT   = "https://random.nxter.org/tstnxt"; 
 var APIURL = "http://localhost:8020"
+var TEMPLATEURL = "https://sigbro-template.api.nxter.org"
+//var TEMPLATEURL = "http://localhost:9060"
+var NETWORK = "test"
+var TIMEOUT = 10000;
 
 $(document).on('click', 'a.nav-link', function(e) {
   e.preventDefault();
@@ -237,6 +241,77 @@ function page_ops_set_accountRS() {
 
 }
 
+// template generator click
+/*
+template = {
+    'network' : 'test',
+    'chain' : 2, # ignis
+    'requestType' : 'sendMoney',
+    'recipientRS' : 'ARDOR-NYJW-6M4F-6LG2-76FR5',
+    'amountNQT' : 1000000000,
+    'message' : 'I love you, Sigbro Mobile'
+  }
+*/
+$(document).on('click', '#sigbro_template_submit', function(e) {
+  var msg_block = document.getElementById('sigbro_template_messages_block');
+  msg_block.setAttribute('style', 'display:none;');
+
+	var recipientRS   = document.getElementById('sigbro_template_recipientRS').value;
+  var amount        = document.getElementById('sigbro_template_amount').value;
+  var currencie     = document.getElementById('sigbro_template_currencie').value;
+  var operation     = document.getElementById('sigbro_template_operation').value;
+
+  /*
+  var encrypt_msg = 0;
+  if ( document.getElementById('sigbro_template_encrypt_message').checked ) {
+    encrypt_msg = 1;
+  }
+  */
+  
+  var msg         = document.getElementById('sigbro_template_message').value;
+
+
+  var url = TEMPLATEURL + "/api/v1/add/";
+
+  template = {  
+                  "network" : NETWORK,
+                  "chain" : currencie, 
+                  "requestType" : operation,
+                  "recipientRS" : recipientRS, 
+                  "amount" : amount, 
+                  "message" : msg
+                }; 
+
+  param = JSON.stringify(
+    { "template" : template }
+  );
+
+  console.log( "url: " + url); 
+  console.log( "params: " + param );
+
+  sendJSON( url, param, TIMEOUT, page_ops_template_show_result );
+});
+
+// template operator response
+function page_ops_template_show_result() {
+  var resp = this.responseText;
+  var resp_j = JSON.parse(resp);
+    
+  console.log("RESULT:");
+  console.log(resp_j);
+
+  if ( resp_j.error  ) { 
+    page_ops_show_alert( resp_j.error );
+  } else if ( resp_j.uuid ) { 
+    var resp_url = "https://sigbro-template.api.nxter.org/api/v1/get/" + resp_j.uuid + "/";
+    console.log( "URL: " + resp_url );
+    localStorage.setItem("sigbro_wallet_url", resp_url);
+    show_qr();
+  }
+}
+
+
+
 $(document).on('click', '#sigbro_send_submit', function(e) {
   var msg_block = document.getElementById('sigbro_send_messages_block');
   msg_block.setAttribute('style', 'display:none;');
@@ -247,15 +322,11 @@ $(document).on('click', '#sigbro_send_submit', function(e) {
 
   if ( senderPubKey == null ) {
     page_ops_show_alert ("Your account does not have PublicKey. You can not send any transaction with SIGBRO WALLET, sorry");
-    //alert ("Your account does not have PublicKey.\nYou can not send any transaction with SIGBRO WALLET, sorry");
     return;
   }
   
   var recipientRS = document.getElementById('sigbro_send_recipientRS').value; 
   var amount      = document.getElementById('sigbro_send_amount').value;
-
-  // remove fee field. Now we are using autofee always
-  //var fee         = document.getElementById('sigbro_send_fee').value;
   var fee = -1;
 
   var encrypt_msg = 0;
@@ -276,7 +347,7 @@ $(document).on('click', '#sigbro_send_submit', function(e) {
   console.log( "url: " + url);
   console.log( "params: " + param );
 
-  sendJSON( url, param, 10000, page_ops_show_result );
+  sendJSON( url, param, TIMEOUT, page_ops_show_result );
 });
 
 
