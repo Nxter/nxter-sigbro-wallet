@@ -1,10 +1,17 @@
+// testnet or main net for main functionality
 var ARDOR = "https://random.nxter.org/tstardor";
 var NXT   = "https://random.nxter.org/tstnxt"; 
-var APIURL = "http://localhost:8020"
+
+// PRODUCTION
+var APIURL = "https://sigbro-wallet.api.nxter.org"
 var TEMPLATEURL = "https://sigbro-template.api.nxter.org"
+
+// DEVELOPMENT
 //var TEMPLATEURL = "http://localhost:9060"
-var NETWORK = "test"
-var TIMEOUT = 10000;
+//var APIURL = "http://localhost:8020"
+
+var NETWORK = "test"; // testnet for template functionality
+var TIMEOUT = 10000; // timeount for all network operations
 
 $(document).on('click', 'a.nav-link', function(e) {
   e.preventDefault();
