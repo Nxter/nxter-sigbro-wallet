@@ -60,6 +60,7 @@ function show_qr() {
       // show page
       $('#sigbro_spa').html( response );
       // load data
+      page_show_network_type();
       page_qr_show_qrcode();
     },
 
@@ -84,6 +85,7 @@ function show_operations() {
       // show page
       $('#sigbro_spa').html( response );
       // load data
+      page_show_network_type();
       page_ops_set_accountRS();
     },
 
@@ -107,6 +109,7 @@ function show_portfolio() {
       // show page
       $('#sigbro_spa').html( response );
       // load data
+      page_show_network_type();
       page_portfolio_show_assets();
       page_portfolio_show_currencies();
     },
@@ -135,6 +138,7 @@ function show_profile() {
       // show page
       $('#sigbro_spa').html( response );
       // load data
+      page_show_network_type();
       page_profile_set_accountRS();
       page_profile_set_userinfo();
       page_profile_show_balance_nxt();
@@ -186,8 +190,8 @@ function show_index() {
 
         if ( ardorRegex.test ( accRS ) || nxtRegex.test( accRS ) ) {
           localStorage.setItem("sigbro_wallet_accountRS", accRS);
-          getPublicKey(accRS, NXT);
-          getPublicKey(accRS, ARDOR);
+          getPublicKey_v2(accRS, 'ardor');
+          getPublicKey_v2(accRS, 'nxt');
           if ( document.getElementById('sigbro_index-rememberme').checked ) { 
             // save account 
             localStorage.setItem("sigbro_wallet_autologin", accRS);
@@ -242,8 +246,8 @@ function page_ops_set_accountRS() {
 
   var senderPubKey= localStorage.getItem("sigbro_pubkey_" + accRS );
   if ( senderPubKey == null ) {
-    getPublicKey(accRS, NXT);
-    getPublicKey(accRS, ARDOR);
+    getPublicKey_v2(accRS, 'ardor');
+    getPublicKey_v2(accRS, 'nxt');
   }
 
 }
@@ -703,11 +707,43 @@ function sigbro_clear_localstorage() {
   localStorage.removeItem("sigbro_uuid"); // uuid from last logon
 }
 
+function sigbro_clear_balances() {
+  localStorage.removeItem("sigbro_wallet_assets");
+  localStorage.removeItem("sigbro_wallet_currencies");
+
+  localStorage.removeItem("sigbro_wallet_balance_nxt");
+  localStorage.removeItem("sigbro_wallet_balance_aeur");
+  localStorage.removeItem("sigbro_wallet_balance_ardor");
+  localStorage.removeItem("sigbro_wallet_balance_ignis");
+  localStorage.removeItem("sigbro_wallet_balance_bitswift");
+
+  localStorage.removeItem("sigbro_wallet_url"); // last created url
+  localStorage.removeItem("sigbro_uuid"); // uuid from last logon
+}
+
 $(document).on('click', '#sigbro-logout', function(e) {
   e.preventDefault();
   localStorage.setItem("sigbro_wallet_page", "index");
   sigbro_clear_localstorage();
   show_index();
+});
+
+$(document).on('click', '#sigbro-change-network', function(e) {
+  e.preventDefault();
+
+  var network = localStorage.getItem("sigbro_wallet_network");
+  if ( network == null ) {
+    localStorage.setItem("sigbro_wallet_network", "testnet");
+    network = "testnet";
+  }
+  if ( network == 'mainnet' ) { 
+    localStorage.setItem("sigbro_wallet_network", "testnet");
+  } else {
+    localStorage.setItem("sigbro_wallet_network", "mainnet");
+  }
+
+  sigbro_clear_balances();
+  location.reload();
 });
 
 // change auth type: accountRS or SIGBRO MOBILE
@@ -812,8 +848,8 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function(e) {
 
     if ( data2.type == 'success' && data2.accountRS ) {
       localStorage.setItem("sigbro_wallet_accountRS", data2.accountRS);
-      getPublicKey(data2.accountRS, NXT);
-      getPublicKey(data2.accountRS, ARDOR);
+      getPublicKey_v2(data2.accountRS, 'ardor');
+      getPublicKey_v2(data2.accountRS, 'nxt');
       localStorage.setItem("sigbro_wallet_page", "profile");
       localStorage.removeItem("sigbro_uuid");
       show_profile(); 
@@ -895,8 +931,8 @@ $(document).on('click', '#sigbo_index--btn_scan_qr_code', function(e) {
 
     if ( data2.type == 'success' && data2.accountRS ) {
       localStorage.setItem("sigbro_wallet_accountRS", data2.accountRS);
-      getPublicKey(data2.accountRS, NXT);
-      getPublicKey(data2.accountRS, ARDOR);
+      getPublicKey_v2(data2.accountRS, 'ardor');
+      getPublicKey_v2(data2.accountRS, 'nxt');
       localStorage.setItem("sigbro_wallet_page", "profile");
       localStorage.removeItem("sigbro_uuid");
       show_profile(); 
@@ -965,6 +1001,23 @@ function getPublicKey(accountRS, network) {
   }
 }
 
+function getPublicKey_v2(accountRS, network) {
+  // network = ardor / nxt
+  // prefix from localstorage
+  var pubKey = localStorage.getItem("sigbro_pubkey_"+accountRS);
+  if ( pubKey == null ) {
+    var _network  = localStorage.getItem("sigbro_wallet_network");
+    if ( _network == 'mainnet' ) {
+      _prefix = '';
+    } else {
+      _prefix = 'tst';
+    }
+
+    var url = "https://random.nxter.org/" + _prefix + network + "?requestType=getAccountPublicKey&account=" + accountRS;
+    getJSON(url, 3000, savePublicKey, accountRS);
+  }
+}
+
 function savePublicKey(accountRS) {
   // accountRS getting from getJSON additional param (last)
   var resp = this.responseText;
@@ -988,6 +1041,21 @@ function uuidv4() { // Public Domain/MIT
       d = Math.floor(d / 16);
       return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
   });
+}
+
+function page_show_network_type() {
+  // check localstorage for network type and update button
+  var network = localStorage.getItem("sigbro_wallet_network");
+  console.log('Network: ' + network)
+  if ( network == null ) {
+    localStorage.setItem("sigbro_wallet_network", "testnet");
+  }
+  if ( network == 'mainnet' ) { 
+    network = 'mainnet';
+  } else {
+    network = 'testnet';
+  }
+  document.getElementById('sigbro-change-network').innerHTML = network; 
 }
 
 
