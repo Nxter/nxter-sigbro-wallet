@@ -1,7 +1,3 @@
-// testnet or main net for main functionality
-var ARDOR = "https://random.nxter.org/tstardor";
-var NXT   = "https://random.nxter.org/tstnxt"; 
-
 // PRODUCTION
 var APIURL = "https://sigbro-wallet.api.nxter.org"
 var TEMPLATEURL = "https://sigbro-template.api.nxter.org"
@@ -10,7 +6,6 @@ var TEMPLATEURL = "https://sigbro-template.api.nxter.org"
 //var TEMPLATEURL = "http://localhost:9060"
 //var APIURL = "http://localhost:8020"
 
-var NETWORK = "test"; // testnet for template functionality
 var TIMEOUT = 10000; // timeount for all network operations
 
 $(document).on('click', 'a.nav-link', function(e) {
@@ -284,6 +279,13 @@ $(document).on('click', '#sigbro_template_submit', function(e) {
 
   var url = TEMPLATEURL + "/api/v1/add/";
 
+  var _network = localStorage.getItem("sigbro_wallet_network");
+  if ( _network == 'mainnet' ) {
+    NETWORK = "main";
+  } else {
+    NETWORK = "test";
+  }
+
   template = {  
                   "network" : NETWORK,
                   "chain" : currencie, 
@@ -350,7 +352,7 @@ $(document).on('click', '#sigbro_send_submit', function(e) {
   var msg         = document.getElementById('sigbro_send_message').value;
 
 
-  var url = APIURL + "/api/v2/sendmoney/";
+  var url = APIURL + "/api/v2/sendmoney/" + _get_network_prefix() + "/";
 
   param_json = { "currencie" : currencie, "recipient" : recipientRS, "amount" : amount, "publicKey" : senderPubKey, "fee" : fee, "msg" : msg, "encrypt_msg" : encrypt_msg }; 
   param = JSON.stringify(param_json);
@@ -461,7 +463,7 @@ function page_portfolio_show_assets() {
   var assets  = localStorage.getItem("sigbro_wallet_assets");
 
   if ( assets == null ) {
-    var url = APIURL + "/api/v2/assets/" + accRS + "/en/";
+    var url = APIURL + "/api/v2/assets/" + accRS + "/en/" + _get_network_prefix() + "/";
     getJSON(url, 3000, page_portfolio_save_assets, "assets");
     return;
   }
@@ -472,7 +474,7 @@ function page_portfolio_show_assets() {
   var delta = Date.now() - assets_data.timestamp;
   console.log("Delta: " + delta/1000 + " sec.");
   if ( delta > 5*60*1000 ) {
-    var url = APIURL + "/api/v2/assets/" + accRS + "/en/";
+    var url = APIURL + "/api/v2/assets/" + accRS + "/en/" + _get_network_prefix() + "/";
     getJSON(url, 3000, page_portfolio_save_assets, "assets");
     return;
   }
@@ -503,7 +505,7 @@ function page_portfolio_show_currencies() {
   var currencies  = localStorage.getItem("sigbro_wallet_currencies");
 
   if ( currencies == null ) {
-    var url = APIURL + "/api/v2/currencies/" + accRS + "/en/";
+    var url = APIURL + "/api/v2/currencies/" + accRS + "/en/" + _get_network_prefix() + "/";
     getJSON(url, 3000, page_portfolio_save_currencies, "currencies");
     return;
   }
@@ -514,7 +516,7 @@ function page_portfolio_show_currencies() {
   var delta = Date.now() - curr_data.timestamp;
   console.log("Delta: " + delta/1000 + " sec.");
   if ( delta > 5*60*1000 ) {
-    var url = APIURL + "/api/v2/currencies/" + accRS + "/en/";
+    var url = APIURL + "/api/v2/currencies/" + accRS + "/en/" + _get_network_prefix() + "/";
     getJSON(url, 3000, page_portfolio_save_currencies, "currencies");
     return;
   }
@@ -561,7 +563,7 @@ function page_profile_set_userinfo() {
 
   if ( accName == null || accDesc == null ) {
     // need to get info from blockchain
-    var url = ARDOR + "?requestType=getAccount&account=" + accRS;
+    var url = _get_network_url('ardor') + "?requestType=getAccount&account=" + accRS;
     getJSON(url, 3000, page_profile_save_userinfo, "custom text");
     return;
   } 
@@ -594,7 +596,7 @@ function page_profile_show_balance_nxt() {
   var accBalanceNxt = localStorage.getItem('sigbro_wallet_balance_nxt');
 
   if ( accBalanceNxt == null ) {
-    var url = NXT + "?requestType=getAccount&account=" + accRS;
+    var url = _get_network_url('nxt') + "?requestType=getAccount&account=" + accRS;
     getJSON(url, 3000, page_profile_set_balance_nxt, "balance NXT");
     return;
   }
@@ -602,7 +604,7 @@ function page_profile_show_balance_nxt() {
   // If delta > 5 min need to get new balances
   var delta = Date.now() - accBalanceNxt.timestamp;
   if ( delta > 5*60*1000 ) {
-    var url = NXT + "?requestType=getAccount&account=" + accRS;
+    var url = _get_network_url('nxt') + "?requestType=getAccount&account=" + accRS;
     getJSON(url, 3000, page_profile_set_balance_nxt, "balance NXT");
     return;
   }
@@ -657,7 +659,7 @@ function page_profile_show_balance_ardor() {
   var accBalanceBitswift  = localStorage.getItem('sigbro_wallet_balance_bitswift');
 
   if ( accBalanceArdor == null || accBalanceIgnis == null || accBalanceAeur == null || accBalanceBitswift == null ) {
-    var url = ARDOR + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4";
+    var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4";
     getJSON(url, 3000, page_profile_set_balance_ardor, "balance ARDOR");
     return;
   }
@@ -672,7 +674,7 @@ function page_profile_show_balance_ardor() {
   var delta = Date.now() - accBalanceArdor.timestamp;
   console.log("Delta: " + delta/1000 + " sec.");
   if ( delta > 5*60*1000 ) {
-    var url = ARDOR + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4";
+    var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4";
     getJSON(url, 3000, page_profile_set_balance_ardor, "balance ARDOR");
     return;
   }
@@ -993,14 +995,6 @@ function sendJSON(url, params, timeout, callback) {
   xhr.send(params);
 }
 
-function getPublicKey(accountRS, network) {
-  var pubKey = localStorage.getItem("sigbro_pubkey_"+accountRS);
-  if ( pubKey == null ) {
-    var url = network + "?requestType=getAccountPublicKey&account="+accountRS;
-    getJSON(url, 3000, savePublicKey, accountRS);
-  }
-}
-
 function getPublicKey_v2(accountRS, network) {
   // network = ardor / nxt
   // prefix from localstorage
@@ -1058,4 +1052,29 @@ function page_show_network_type() {
   document.getElementById('sigbro-change-network').innerHTML = network; 
 }
 
+function _get_network_url(network) {
+    // network = ardor/nxt
+    // prefix - from localstorage
+    var url = "https://random.nxter.org";
+    var _network = localStorage.getItem("sigbro_wallet_network");
+    if ( _network == 'mainnet' ) {
+      url = url + "/" + network;
+    } else {
+      url = url + "/tst" + network;
+    }
+
+    return url;
+}
+
+function _get_network_prefix() {
+  // return main or test depends on localstorage
+  var _network = localStorage.getItem("sigbro_wallet_network");
+  if ( _network == 'mainnet' ) {
+    return 'main';
+  } else {
+    return 'test';
+  }
+
+  return 'test';
+}
 
