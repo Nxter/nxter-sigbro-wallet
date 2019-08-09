@@ -145,18 +145,18 @@
                   <div id="collapseTemplate" class="collapse" aria-labelledby="headingTemplate" data-parent="#accordionExample">
                     <div class="send-box">
                       <form class="send-form">
-                        <div class="row">
-                          <div class="col-md-6 form-group mb-2rem">
+                        <div class="row mb-1rem">
+                          <div class="col-md-6 form-group">
                             <label for="sigbro_template_recipientRS" class="p-medium">RecipientRS (always you)</label>
-                            <input type="text" class="form-control" id="sigbro_template_recipientRS" readonly>
+                            <input type="text" class="form-control sigbro-input" id="sigbro_template_recipientRS" readonly>
                           </div>
-                          <div class="col-md-6 form-group mb-2rem">
+                          <div class="col-md-6 form-group sigbro-module-sendmoney">
                             <label for="InputAmount" class="p-medium">Amount</label>
-                            <input type="amount" class="form-control" id="sigbro_template_amount" aria-describedby="" placeholder="0.0">
+                            <input type="amount" class="form-control sigbro-input" id="sigbro_template_amount" aria-describedby="" placeholder="0.0">
                           </div>
                         </div>
                         <div class="row mb-1rem">
-                          <div class="no-gutters mb-2rem col-md-6">
+                          <div class="no-gutters col-md-6">
                             <div class="input-group mb-3" >
                                 <div class="input-group-prepend">
                                   <label class="input-group-text" for="sigbro_template_currencie">Childchain</label>
@@ -169,18 +169,40 @@
                                 </select>
                             </div>
                           </div>
-                          <div class="no-gutters mb-2rem col-md-6">
+                          <div class="no-gutters col-md-6">
                             <div class="input-group mb-3" >
                                 <div class="input-group-prepend">
                                   <label class="input-group-text" for="sigbro_template_operation">Operation</label>
                                 </div>
-                                <select class="custom-select" id="sigbro_template_operation">
+                                <select class="custom-select" id="sigbro_template_operation" onchange="showRightFields()">
                                     <option value="sendMoney" selected>Send Money</option>
+                                    <option value="leaseBalance">Lease Balance</option>
                                 </select>
                             </div>
                           </div>
                         </div>
-                        <div class="row mb-2rem">
+                        <div class="row mb-1rem">
+                            <div class="no-gutters col-md-6 sigbro-module-leasebalance" style="visibility: hidden;">
+                              <div class="input-group mb-3" >
+                                  <div class="input-group-prepend">
+                                    <label class="input-group-text" for="sigbro_template_lease_period">Lease Period</label>
+                                  </div>
+                                  <select class="custom-select" id="sigbro_template_lease_period">
+                                      <option value="10080">One week</option>
+                                      <option value="20160">Two weeks</option>
+                                      <option value="30240">Three weeks</option>
+                                      <option value="40320">Four weeks</option>
+                                      <option value="50400">Five weeks</option>
+                                      <option value="60480">Six weeks</option>
+                                      <option value="65535" selected>Seven weeks (max)</option>
+                                  </select>
+                              </div>
+                            </div>
+                          </div>
+
+
+
+                        <div class="row mb-2rem sigbro-module-sendmoney">
                           <div class="col">
                             <label for="exampleFormControlTextarea1 p-media">Message</label>
                             <textarea class="form-control" id="sigbro_template_message" rows="2"></textarea>

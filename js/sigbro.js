@@ -263,7 +263,6 @@ $(document).on('click', '#sigbro_template_submit', function(e) {
   msg_block.setAttribute('style', 'display:none;');
 
 	var recipientRS   = document.getElementById('sigbro_template_recipientRS').value;
-  var amount        = document.getElementById('sigbro_template_amount').value;
   var currencie     = document.getElementById('sigbro_template_currencie').value;
   var operation     = document.getElementById('sigbro_template_operation').value;
 
@@ -274,9 +273,6 @@ $(document).on('click', '#sigbro_template_submit', function(e) {
   }
   */
   
-  var msg         = document.getElementById('sigbro_template_message').value;
-
-
   var url = TEMPLATEURL + "/api/v1/add/";
 
   var _network = localStorage.getItem("sigbro_wallet_network");
@@ -286,7 +282,11 @@ $(document).on('click', '#sigbro_template_submit', function(e) {
     NETWORK = "test";
   }
 
-  template = {  
+  if ( operation == 'sendMoney'  ) {
+    var amount        = document.getElementById('sigbro_template_amount').value;
+    var msg         = document.getElementById('sigbro_template_message').value;
+
+    template = {  
                   "network" : NETWORK,
                   "chain" : currencie, 
                   "requestType" : operation,
@@ -294,6 +294,23 @@ $(document).on('click', '#sigbro_template_submit', function(e) {
                   "amount" : amount, 
                   "message" : msg
                 }; 
+
+  }
+
+  if ( operation == 'leaseBalance' ) {
+    var period         = document.getElementById('sigbro_template_lease_period').value;
+
+    template = {  
+                  "network" : NETWORK,
+                  "chain" : currencie, 
+                  "requestType" : operation,
+                  "recipientRS" : recipientRS, 
+                  "period" : period
+                }; 
+
+  }
+
+
 
   param = JSON.stringify(
     { "template" : template }
@@ -1076,5 +1093,33 @@ function _get_network_prefix() {
   }
 
   return 'test';
+}
+
+function hide_module(name) {
+  [].forEach.call(document.querySelectorAll(name), function (el) {
+    el.style.visibility = 'hidden';
+  });
+}
+
+function show_module(name) {
+  [].forEach.call(document.querySelectorAll(name), function (el) {
+    el.style.visibility = '';
+  });
+}
+
+function showRightFields() {
+  item = document.getElementById("sigbro_template_operation").value;
+  console.log('Selected: ' + item);
+  if ( item == 'sendMoney' ) {
+    hide_module('.sigbro-module-leasebalance');
+    show_module('.sigbro-module-sendmoney');
+  }
+  if ( item == 'leaseBalance' ) {
+    show_module('.sigbro-module-leasebalance');
+    hide_module('.sigbro-module-sendmoney');
+    // set ardor
+    document.getElementById("sigbro_template_currencie").value = 1;
+  }
+
 }
 
