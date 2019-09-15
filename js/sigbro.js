@@ -57,6 +57,7 @@ function show_qr() {
       // load data
       page_show_network_type();
       page_qr_show_qrcode();
+      page_qr_set_right_color();
     },
 
     error: function ( error ) {
@@ -1052,6 +1053,17 @@ function uuidv4() { // Public Domain/MIT
       d = Math.floor(d / 16);
       return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
   });
+}
+
+function page_qr_set_right_color() {
+  // check network type and set backgroud color for logo inside qr-code
+  var network = localStorage.getItem("sigbro_wallet_network");
+  if ( network == null ) { localStorage.setItem("sigbro_wallet_network", "testnet"); }
+  if ( network == 'mainnet' ) { 
+    document.getElementById('sigbro_qr-logo_background').style.fill="#c0392b";
+  } else { 
+    document.getElementById('sigbro_qr-logo_background').style.fill="#000000";
+  }
 }
 
 function page_show_network_type() {

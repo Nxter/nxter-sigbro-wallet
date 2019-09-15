@@ -4,6 +4,9 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
 
 ## Change log
 
+*3.3.0*
+ - added sigbro logo to qr-codes. black for the testnet and red for the mainnet
+
 *3.2.0*
  - leaseBalance operation
 
