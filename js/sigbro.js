@@ -47,7 +47,7 @@ $( document ).ready(function() {
 
 function show_qr() {
   $.ajax({ 
-    url:        'qr.html',
+    url:        'qr.html?_' + new Date().getTime(),
     type:       'GET',
     dataType:   'text', 
 
@@ -73,7 +73,7 @@ function show_qr() {
 
 function show_operations() {
   $.ajax({ 
-    url:        'operations.html',
+    url:        'operations.html?_' + new Date().getTime(),
     type:       'GET',
     dataType:   'text', 
 
@@ -97,7 +97,7 @@ function show_operations() {
 
 function show_portfolio() {
   $.ajax({ 
-    url:        'portfolio.html',
+    url:        'portfolio.html?_' + new Date().getTime(),
     type:       'GET',
     dataType:   'text', 
 
@@ -126,7 +126,7 @@ function show_portfolio() {
 function show_profile() {
 
   $.ajax({ 
-    url:        'profile.html',
+    url:        'profile.html?_' + new Date().getTime(),
     type:       'GET',
     dataType:   'text', 
 
@@ -156,7 +156,7 @@ function show_profile() {
 
 function show_index() {
   $.ajax({ 
-    url:        'main.html',
+    url:        'main.html?_' + new Date().getTime(),
     type:       'GET',
     dataType:   'text', 
 
@@ -206,7 +206,7 @@ function show_index() {
 
 function show_auth() {
   $.ajax({ 
-    url:        'auth.html',
+    url:        'auth.html?_' + new Date().getTime(),
     type:       'GET',
     dataType:   'text', 
 

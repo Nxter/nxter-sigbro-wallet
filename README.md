@@ -3,6 +3,8 @@
 Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sigbro Mobile App [https://www.nxter.org/sigbro/] 
 
 ## Change log
+*3.3.1*
+ - disabled cache for html pages
 
 *3.3.0*
  - added sigbro logo to qr-codes. black for the testnet and red for the mainnet
