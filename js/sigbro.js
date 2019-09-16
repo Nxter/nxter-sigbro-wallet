@@ -1119,18 +1119,41 @@ function show_module(name) {
   });
 }
 
+function enable_all_childchain() {
+  var list = document.getElementById("sigbro_template_currencie");
+  for ( var i = 0; i < list.length; i++ ) {
+    list[i].disabled = false;
+  }
+}
+
+function disable_all_childchain_except(name) {
+  var list = document.getElementById("sigbro_template_currencie");
+  for ( var i = 0; i < list.length; i++ ) {
+    if ( list[i].text.toLowerCase() == name.toLowerCase() ) {
+      list[i].disabled = false;
+    } else {
+      list[i].disabled = true;
+    }
+  }
+}
+
+
 function showRightFields() {
   item = document.getElementById("sigbro_template_operation").value;
   console.log('Selected: ' + item);
   if ( item == 'sendMoney' ) {
     hide_module('.sigbro-module-leasebalance');
     show_module('.sigbro-module-sendmoney');
+    enable_all_childchain();
+    // set ignis the first
+    document.getElementById("sigbro_template_currencie").value = 2;
   }
   if ( item == 'leaseBalance' ) {
     show_module('.sigbro-module-leasebalance');
     hide_module('.sigbro-module-sendmoney');
     // set ardor
     document.getElementById("sigbro_template_currencie").value = 1;
+    disable_all_childchain_except('ardor');
   }
 
 }
