@@ -3,6 +3,9 @@
 Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sigbro Mobile App [https://www.nxter.org/sigbro/] 
 
 ## Change log
+*3.3.3*
+ - update qr logos
+
 *3.3.2*
  - disabled all childchains from leasing list except ardor
 

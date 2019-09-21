@@ -1060,9 +1060,9 @@ function page_qr_set_right_color() {
   var network = localStorage.getItem("sigbro_wallet_network");
   if ( network == null ) { localStorage.setItem("sigbro_wallet_network", "testnet"); }
   if ( network == 'mainnet' ) { 
-    document.getElementById('sigbro_qr-logo_background').style.fill="#c0392b";
+    document.getElementById('sigbro_qr--qr_logo').src="img/sigbro_red.png";
   } else { 
-    document.getElementById('sigbro_qr-logo_background').style.fill="#000000";
+    document.getElementById('sigbro_qr--qr_logo').src="img/sigbro_black.png";
   }
 }
 
