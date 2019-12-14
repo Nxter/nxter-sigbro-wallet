@@ -137,7 +137,6 @@ function show_profile() {
       page_show_network_type();
       page_profile_set_accountRS();
       page_profile_set_userinfo();
-      page_profile_show_balance_nxt();
       page_profile_show_balance_ardor();
     },
 
@@ -187,7 +186,6 @@ function show_index() {
         if (ardorRegex.test(accRS) || nxtRegex.test(accRS)) {
           localStorage.setItem("sigbro_wallet_accountRS", accRS);
           getPublicKey_v2(accRS, 'ardor');
-          getPublicKey_v2(accRS, 'nxt');
           if (document.getElementById('sigbro_index-rememberme').checked) {
             // save account 
             localStorage.setItem("sigbro_wallet_autologin", accRS);
@@ -243,7 +241,6 @@ function page_ops_set_accountRS() {
   var senderPubKey = localStorage.getItem("sigbro_pubkey_" + accRS);
   if (senderPubKey == null) {
     getPublicKey_v2(accRS, 'ardor');
-    getPublicKey_v2(accRS, 'nxt');
   }
 
 }
@@ -591,46 +588,6 @@ function page_profile_set_userinfo() {
 
 }
 
-// callback function for NXT balance
-function page_profile_set_balance_nxt(data) {
-  var resp = this.responseText;
-  var respJSON = JSON.parse(resp);
-  if (respJSON.balanceNQT) {
-    var nxt = respJSON.balanceNQT / Math.pow(10, 8);
-    var tmp = { 'value': nxt, 'timestamp': Date.now() };
-    localStorage.setItem('sigbro_wallet_balance_nxt', JSON.stringify(tmp));
-    page_profile_show_balance_nxt()
-  } else {
-    // problem while getting balance
-    document.getElementById('sigbro_profile-balance-nxt').textContent = 'NaN';
-    console.log(respJSON);
-  }
-
-}
-
-// show nxt balance on the page
-function page_profile_show_balance_nxt() {
-  var accRS = localStorage.getItem("sigbro_wallet_accountRS");
-  var accBalanceNxt = localStorage.getItem('sigbro_wallet_balance_nxt');
-
-  if (accBalanceNxt == null) {
-    var url = _get_network_url('nxt') + "?requestType=getAccount&account=" + accRS;
-    getJSON(url, 3000, page_profile_set_balance_nxt, "balance NXT");
-    return;
-  }
-
-  // If delta > 5 min need to get new balances
-  var delta = Date.now() - accBalanceNxt.timestamp;
-  if (delta > 5 * 60 * 1000) {
-    var url = _get_network_url('nxt') + "?requestType=getAccount&account=" + accRS;
-    getJSON(url, 3000, page_profile_set_balance_nxt, "balance NXT");
-    return;
-  }
-
-  accBalanceNxt = JSON.parse(accBalanceNxt);
-  document.getElementById('sigbro_profile-balance-nxt').textContent = accBalanceNxt.value;
-}
-
 // callback function for ARDOR balance
 function page_profile_set_balance_ardor(data) {
   var resp = this.responseText;
@@ -717,7 +674,6 @@ function sigbro_clear_localstorage() {
   localStorage.removeItem("sigbro_wallet_assets");
   localStorage.removeItem("sigbro_wallet_currencies");
 
-  localStorage.removeItem("sigbro_wallet_balance_nxt");
   localStorage.removeItem("sigbro_wallet_balance_aeur");
   localStorage.removeItem("sigbro_wallet_balance_ardor");
   localStorage.removeItem("sigbro_wallet_balance_ignis");
@@ -731,7 +687,6 @@ function sigbro_clear_balances() {
   localStorage.removeItem("sigbro_wallet_assets");
   localStorage.removeItem("sigbro_wallet_currencies");
 
-  localStorage.removeItem("sigbro_wallet_balance_nxt");
   localStorage.removeItem("sigbro_wallet_balance_aeur");
   localStorage.removeItem("sigbro_wallet_balance_ardor");
   localStorage.removeItem("sigbro_wallet_balance_ignis");
@@ -869,7 +824,6 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
     if (data2.type == 'success' && data2.accountRS) {
       localStorage.setItem("sigbro_wallet_accountRS", data2.accountRS);
       getPublicKey_v2(data2.accountRS, 'ardor');
-      getPublicKey_v2(data2.accountRS, 'nxt');
       localStorage.setItem("sigbro_wallet_page", "profile");
       localStorage.removeItem("sigbro_uuid");
       show_profile();
@@ -952,7 +906,6 @@ $(document).on('click', '#sigbo_index--btn_scan_qr_code', function (e) {
     if (data2.type == 'success' && data2.accountRS) {
       localStorage.setItem("sigbro_wallet_accountRS", data2.accountRS);
       getPublicKey_v2(data2.accountRS, 'ardor');
-      getPublicKey_v2(data2.accountRS, 'nxt');
       localStorage.setItem("sigbro_wallet_page", "profile");
       localStorage.removeItem("sigbro_uuid");
       show_profile();
