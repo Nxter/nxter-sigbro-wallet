@@ -4,9 +4,11 @@ var TEMPLATEURL = "https://sigbro-template.api.nxter.org"
 
 // DEVELOPMENT
 //var TEMPLATEURL = "http://localhost:9060"
-//var APIURL = "http://localhost:8020"
+var APIURL = "http://localhost:8020"
 
-var TIMEOUT = 10000; // timeount for all network operations
+var TIMEOUT_TEMPLATE = 10000;
+var TIMEOUT_SUBMIT = 10000;
+var TIMEOUT_ARDR = 3000;
 
 $(document).on('click', 'a.nav-link', function (e) {
   e.preventDefault();
@@ -30,6 +32,12 @@ $(document).on('click', 'a.nav-link', function (e) {
     return;
   }
 
+  if (open_page == 'alerts' ) {
+    localStorage.setItem("sigbro_wallet_page", "alerts");
+    show_alerts();
+    return;
+  }
+
 
 });
 
@@ -42,8 +50,138 @@ $(document).ready(function () {
   if (page == 'profile') { show_profile(); return; }
   if (page == 'portfolio') { show_portfolio(); return; }
   if (page == 'operations') { show_operations(); return; }
+  if (page == 'alerts') { show_alerts(); return; }
 
 });
+
+function page_alerts_hide_alert() {
+  var msg_block = document.getElementById('sigbro_alerts--alerts');
+  msg_block.setAttribute('style', 'display:none;');
+}
+
+function page_alerts_show_alert(msg) {
+  var msg_block = document.getElementById('sigbro_alerts--alerts');
+  msg_block.setAttribute('style', 'display:none;');
+
+  document.getElementById('sigbro_alerts--alerts_text').innerHTML = msg;
+  msg_block.setAttribute('style', '');
+}
+
+function show_alerts() {
+  var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
+  var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email")
+
+  if ( sigbro_alerts_token && sigbro_alerts_email ) {
+
+    $.ajax({
+      url: 'alerts.html?_' + new Date().getTime(),
+      type: 'GET',
+      dataType: 'text',
+
+      success: function (response) {
+        $('#sigbro_spa').html(response);
+        page_show_network_type();
+      },
+
+      error: function (error) {
+        console.log('ERROR: ', error);
+      },
+
+      complete: function (xhr, status) {
+        console.log('DONE');
+      }
+    });
+
+  } else if ( sigbro_alerts_email && ! sigbro_alerts_token ) {
+    $.ajax({
+      url: 'alerts_pin.html?_' + new Date().getTime(),
+      type: 'GET',
+      dataType: 'text',
+
+      success: function (response) {
+        $('#sigbro_spa').html(response);
+        page_show_network_type();
+        document.getElementById('sigbro_alerts--user_email').value = sigbro_alerts_email;
+      },
+
+      error: function (error) {
+        console.log('ERROR: ', error);
+      },
+
+      complete: function (xhr, status) {
+        console.log('DONE');
+      }
+    });
+
+  } else {
+    $.ajax({
+      url: 'alerts_login.html?_' + new Date().getTime(),
+      type: 'GET',
+      dataType: 'text',
+
+      success: function (response) {
+        $('#sigbro_spa').html(response);
+        page_show_network_type();
+      },
+
+      error: function (error) {
+        console.log('ERROR: ', error);
+      },
+
+      complete: function (xhr, status) {
+
+        function validateEmail(email) {
+          var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return re.test(String(email).toLowerCase());
+        }
+
+        // index // LOG IN CLICK
+        $(document).on('click', '#sigbro_alerts--button_submit_email', function (e) {
+          e.preventDefault();
+          document.getElementById('sigbro_alerts--button_submit_email').disabled = true;
+
+          var email = document.getElementById('sigbro_alerts--user_email').value;
+          var is_valid = validateEmail(email);
+          if ( ! is_valid ) {
+            page_alerts_show_alert("Email is not correct.");
+            setTimeout(function () {
+              document.getElementById('sigbro_alerts--button_submit_email').disabled = false;
+              page_alerts_hide_alert();
+            }, 2000);
+          } else {
+
+            payload = JSON.stringify({ "email" : email });
+            url = APIURL + "/api/v2/wallet/sendpin/";
+
+            sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_show_pincode)
+            //page_alerts_show_alert("Okay. Check your mail for PIN code.");
+          }
+        });
+
+      }
+
+    });
+
+  }
+
+} 
+
+function page_alerts_show_pincode() {
+  // response from API after send PIN request
+  var resp = this.responseText;
+  var resp_j = JSON.parse(resp);
+
+  console.log("RESULT:");
+  console.log(resp_j);
+
+  if (resp_j.result && resp_j.result == "fail") {
+    page_alerts_show_alert(resp_j.msg);
+  } else {
+    localStorage.setItem("sigbro_alerts_email", resp_j.email);
+    show_alerts();
+  }
+
+}
 
 function show_qr() {
   $.ajax({
@@ -317,7 +455,7 @@ $(document).on('click', '#sigbro_template_submit', function (e) {
   console.log("url: " + url);
   console.log("params: " + param);
 
-  sendJSON(url, param, TIMEOUT, page_ops_template_show_result);
+  sendJSON(url, param, TIMEOUT_TEMPLATE, page_ops_template_show_result);
 });
 
 // template operator response
@@ -375,7 +513,7 @@ $(document).on('click', '#sigbro_send_submit', function (e) {
   console.log("url: " + url);
   console.log("params: " + param);
 
-  sendJSON(url, param, TIMEOUT, page_ops_show_result);
+  sendJSON(url, param, TIMEOUT_SUBMIT, page_ops_show_result);
 });
 
 
@@ -479,7 +617,7 @@ function page_portfolio_show_assets() {
 
   if (assets == null) {
     var url = APIURL + "/api/v2/assets/" + accRS + "/en/" + _get_network_prefix() + "/";
-    getJSON(url, 3000, page_portfolio_save_assets, "assets");
+    getJSON(url, TIMEOUT_ARDR, page_portfolio_save_assets, "assets");
     return;
   }
 
@@ -490,11 +628,12 @@ function page_portfolio_show_assets() {
   console.log("Delta: " + delta / 1000 + " sec.");
   if (delta > 5 * 60 * 1000) {
     var url = APIURL + "/api/v2/assets/" + accRS + "/en/" + _get_network_prefix() + "/";
-    getJSON(url, 3000, page_portfolio_save_assets, "assets");
+    getJSON(url, TIMEOUT_ARDR, page_portfolio_save_assets, "assets");
     return;
   }
-
-  document.getElementById('sigbro_wallet_assets').innerHTML = assets_data.value;
+  if ( document.getElementById('sigbro_wallet_assets') ) {
+    document.getElementById('sigbro_wallet_assets').innerHTML = assets_data.value;
+  }
 }
 
 // save currencies
@@ -521,7 +660,7 @@ function page_portfolio_show_currencies() {
 
   if (currencies == null) {
     var url = APIURL + "/api/v2/currencies/" + accRS + "/en/" + _get_network_prefix() + "/";
-    getJSON(url, 3000, page_portfolio_save_currencies, "currencies");
+    getJSON(url, TIMEOUT_ARDR, page_portfolio_save_currencies, "currencies");
     return;
   }
 
@@ -532,11 +671,14 @@ function page_portfolio_show_currencies() {
   console.log("Delta: " + delta / 1000 + " sec.");
   if (delta > 5 * 60 * 1000) {
     var url = APIURL + "/api/v2/currencies/" + accRS + "/en/" + _get_network_prefix() + "/";
-    getJSON(url, 3000, page_portfolio_save_currencies, "currencies");
+    getJSON(url, TIMEOUT_ARDR, page_portfolio_save_currencies, "currencies");
     return;
   }
 
-  document.getElementById('sigbro_wallet_currencies').innerHTML = curr_data.value;
+  if ( document.getElementById('sigbro_wallet_currencies') ) {
+    document.getElementById('sigbro_wallet_currencies').innerHTML = curr_data.value;
+  }
+
 }
 
 
@@ -579,7 +721,7 @@ function page_profile_set_userinfo() {
   if (accName == null || accDesc == null) {
     // need to get info from blockchain
     var url = _get_network_url('ardor') + "?requestType=getAccount&account=" + accRS;
-    getJSON(url, 3000, page_profile_save_userinfo, "custom text");
+    getJSON(url, TIMEOUT_ARDR, page_profile_save_userinfo, "custom text");
     return;
   }
 
@@ -635,7 +777,7 @@ function page_profile_show_balance_ardor() {
 
   if (accBalanceArdor == null || accBalanceIgnis == null || accBalanceAeur == null || accBalanceBitswift == null) {
     var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4";
-    getJSON(url, 3000, page_profile_set_balance_ardor, "balance ARDOR");
+    getJSON(url, TIMEOUT_ARDR, page_profile_set_balance_ardor, "balance ARDOR");
     return;
   }
 
@@ -650,7 +792,7 @@ function page_profile_show_balance_ardor() {
   console.log("Delta: " + delta / 1000 + " sec.");
   if (delta > 5 * 60 * 1000) {
     var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4";
-    getJSON(url, 3000, page_profile_set_balance_ardor, "balance ARDOR");
+    getJSON(url, TIMEOUT_ARDR, page_profile_set_balance_ardor, "balance ARDOR");
     return;
   }
 
@@ -796,7 +938,7 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
     param_json = { "uuid": uuid };
     param = JSON.stringify(param_json);
 
-    sendJSON(url, param, 3000, add_new_uuid_result);
+    sendJSON(url, param, TIMEOUT_ARDR, add_new_uuid_result);
   }
 
   var source = new EventSource('https://random.nxter.org:9040/stream');
@@ -877,7 +1019,7 @@ $(document).on('click', '#sigbo_index--btn_scan_qr_code', function (e) {
     param_json = { "uuid": uuid };
     param = JSON.stringify(param_json);
 
-    sendJSON(url, param, 3000, add_new_uuid_result);
+    sendJSON(url, param, TIMEOUT_ARDR, add_new_uuid_result);
   }
 
   show_auth();
@@ -952,6 +1094,11 @@ function sendJSON(url, params, timeout, callback) {
   };
   xhr.onload = function () {
     if (xhr.readyState === 4) {
+      if ( xhr.status === 404 ) {
+        console.log('URL Not Found: ' + url);
+        return;
+      }
+
       if (xhr.status === 200) {
         console.log('post: ' + url + ' success.');
         callback.apply(xhr, args);
@@ -962,6 +1109,7 @@ function sendJSON(url, params, timeout, callback) {
   };
   xhr.open("POST", url);
   xhr.setRequestHeader('Content-type', 'application/json');
+  xhr.setRequestHeader('X-Sigbro-Wallet', 'sigbro-wallet-web-app');
   xhr.timeout = timeout;
   xhr.send(params);
 }
@@ -979,7 +1127,7 @@ function getPublicKey_v2(accountRS, network) {
     }
 
     var url = "https://random.nxter.org/" + _prefix + network + "?requestType=getAccountPublicKey&account=" + accountRS;
-    getJSON(url, 3000, savePublicKey, accountRS);
+    getJSON(url, TIMEOUT_ARDR, savePublicKey, accountRS);
   }
 }
 
