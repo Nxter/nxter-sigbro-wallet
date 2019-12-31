@@ -32,7 +32,7 @@ $(document).on('click', 'a.nav-link', function (e) {
     return;
   }
 
-  if (open_page == 'alerts' ) {
+  if (open_page == 'alerts') {
     localStorage.setItem("sigbro_wallet_page", "alerts");
     show_alerts();
     return;
@@ -67,11 +67,52 @@ function page_alerts_show_alert(msg) {
   msg_block.setAttribute('style', '');
 }
 
+function check_session() {
+  var resp = this.responseText;
+
+  if ( resp ) {
+    var resp_j = JSON.parse(resp);
+
+    console.log(resp_j);
+
+    if (resp_j.result && resp_j.result == "fail") {
+      // clear email and reload page
+      localStorage.removeItem("sigbro_alerts_email");
+      localStorage.removeItem("sigbro_alerts_token")
+
+      page_alerts_show_alert(resp_j.msg);
+      setTimeout(function () {
+        show_alerts();
+      }, 2000);
+      return false;
+    }
+
+    return true;
+  }
+
+  var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
+  var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email")
+
+  payload = JSON.stringify(
+    { 
+      "email": sigbro_alerts_email,
+      "session" : sigbro_alerts_token
+    }
+  );
+
+  url = APIURL + "/api/v2/wallet/session/";
+
+  sendJSON(url, payload, TIMEOUT_SUBMIT, check_session);
+
+}
+
 function show_alerts() {
   var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
   var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email")
 
-  if ( sigbro_alerts_token && sigbro_alerts_email ) {
+  if (sigbro_alerts_token && sigbro_alerts_email) {
+    //TODO: Check session and email
+    
 
     $.ajax({
       url: 'alerts.html?_' + new Date().getTime(),
@@ -80,6 +121,7 @@ function show_alerts() {
 
       success: function (response) {
         $('#sigbro_spa').html(response);
+        check_session();
         page_show_network_type();
       },
 
@@ -92,7 +134,7 @@ function show_alerts() {
       }
     });
 
-  } else if ( sigbro_alerts_email && ! sigbro_alerts_token ) {
+  } else if (sigbro_alerts_email && !sigbro_alerts_token) {
     $.ajax({
       url: 'alerts_pin.html?_' + new Date().getTime(),
       type: 'GET',
@@ -109,7 +151,58 @@ function show_alerts() {
       },
 
       complete: function (xhr, status) {
-        console.log('DONE');
+
+        function validateEmail(email) {
+          var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return re.test(String(email).toLowerCase());
+        }
+
+        // alerts // LOGIN CLICK
+        $(document).on('click', '#sigbro_alerts--button_submit_PIN', function (e) {
+          e.preventDefault();
+          document.getElementById('sigbro_alerts--button_submit_PIN').disabled = true;
+
+          var email = document.getElementById('sigbro_alerts--user_email').value;
+          var is_valid = validateEmail(email);
+          if (!is_valid) {
+            page_alerts_show_alert("Email is not correct.");
+            setTimeout(function () {
+              document.getElementById('sigbro_alerts--button_submit_PIN').disabled = false;
+              page_alerts_hide_alert();
+            }, 2000);
+          } else {
+
+            // checking PIN
+            var pin = document.getElementById('sigbro_alerts--user_PIN').value;
+
+            if (pin.length == 0) {
+
+              page_alerts_show_alert("Check you mail and enter PIN code.");
+              setTimeout(function () {
+                document.getElementById('sigbro_alerts--button_submit_PIN').disabled = false;
+                page_alerts_hide_alert();
+              }, 2000);
+
+            } else {
+              payload = JSON.stringify(
+              { 
+                "email": email,
+                "pin" : pin
+              }
+              );
+              url = APIURL + "/api/v2/wallet/checkpin/";
+
+              sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_check_pincode)
+
+            }
+
+          }
+        });
+
+
+
+
+
       }
     });
 
@@ -135,14 +228,14 @@ function show_alerts() {
           return re.test(String(email).toLowerCase());
         }
 
-        // index // LOG IN CLICK
+        // alerts // send pin CLICK
         $(document).on('click', '#sigbro_alerts--button_submit_email', function (e) {
           e.preventDefault();
           document.getElementById('sigbro_alerts--button_submit_email').disabled = true;
 
           var email = document.getElementById('sigbro_alerts--user_email').value;
           var is_valid = validateEmail(email);
-          if ( ! is_valid ) {
+          if (!is_valid) {
             page_alerts_show_alert("Email is not correct.");
             setTimeout(function () {
               document.getElementById('sigbro_alerts--button_submit_email').disabled = false;
@@ -150,11 +243,10 @@ function show_alerts() {
             }, 2000);
           } else {
 
-            payload = JSON.stringify({ "email" : email });
+            payload = JSON.stringify({ "email": email });
             url = APIURL + "/api/v2/wallet/sendpin/";
 
-            sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_show_pincode)
-            //page_alerts_show_alert("Okay. Check your mail for PIN code.");
+            sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_show_pincode);
           }
         });
 
@@ -164,7 +256,43 @@ function show_alerts() {
 
   }
 
-} 
+}
+
+function page_alerts_check_pincode() {
+  // response from API after send PIN request
+  var resp = this.responseText;
+  var resp_j = JSON.parse(resp);
+
+  console.log("RESULT:");
+  console.log(resp_j);
+
+  if (resp_j.result && resp_j.result == "fail") {
+    // clear email and reload page
+    localStorage.removeItem("sigbro_alerts_email");
+    page_alerts_show_alert(resp_j.msg);
+    setTimeout(function () {
+      show_alerts();
+    }, 2000);
+
+    return true;
+  } 
+  if (resp_j.result && resp_j.result == "retry") {
+    page_alerts_show_alert(resp_j.msg);
+    setTimeout(function () {
+      show_alerts();
+    }, 2000);
+    return true;
+  } else {
+    // save session
+    if ( resp_j.session ) { 
+      localStorage.setItem("sigbro_alerts_token", resp_j.session);
+      show_alerts();
+    }
+
+  }
+
+}
+
 
 function page_alerts_show_pincode() {
   // response from API after send PIN request
@@ -176,6 +304,7 @@ function page_alerts_show_pincode() {
 
   if (resp_j.result && resp_j.result == "fail") {
     page_alerts_show_alert(resp_j.msg);
+
   } else {
     localStorage.setItem("sigbro_alerts_email", resp_j.email);
     show_alerts();
@@ -631,7 +760,7 @@ function page_portfolio_show_assets() {
     getJSON(url, TIMEOUT_ARDR, page_portfolio_save_assets, "assets");
     return;
   }
-  if ( document.getElementById('sigbro_wallet_assets') ) {
+  if (document.getElementById('sigbro_wallet_assets')) {
     document.getElementById('sigbro_wallet_assets').innerHTML = assets_data.value;
   }
 }
@@ -675,7 +804,7 @@ function page_portfolio_show_currencies() {
     return;
   }
 
-  if ( document.getElementById('sigbro_wallet_currencies') ) {
+  if (document.getElementById('sigbro_wallet_currencies')) {
     document.getElementById('sigbro_wallet_currencies').innerHTML = curr_data.value;
   }
 
@@ -1094,7 +1223,7 @@ function sendJSON(url, params, timeout, callback) {
   };
   xhr.onload = function () {
     if (xhr.readyState === 4) {
-      if ( xhr.status === 404 ) {
+      if (xhr.status === 404) {
         console.log('URL Not Found: ' + url);
         return;
       }
