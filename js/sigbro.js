@@ -106,9 +106,49 @@ function check_session() {
 
 }
 
-function show_alerts() {
+function page_alerts_get_accounts() {
+  var resp = this.responseText;
+
+  if ( resp ) {
+    var resp_j = JSON.parse(resp);
+
+    console.log(resp_j);
+
+    if (resp_j.result && resp_j.result == "ok" ) {
+      if (resp_j.data) {
+        document.getElementById('sigbro_alerts--account_list').innerHTML = resp_j.data;
+      }
+
+    } else {
+      page_alerts_show_alert(resp_j.msg);
+      setTimeout(function () {
+        show_alerts();
+      }, 2000);
+      return false;
+    }
+
+    return true;
+  }
+
   var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
   var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email")
+
+  payload = JSON.stringify(
+    { 
+      "email": sigbro_alerts_email,
+      "session" : sigbro_alerts_token
+    }
+  );
+
+  url = APIURL + "/api/v2/wallet/get_accounts/";
+
+  sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_get_accounts);
+
+}
+
+function show_alerts() {
+  var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
+  var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");
 
   if (sigbro_alerts_token && sigbro_alerts_email) {
     //TODO: Check session and email
@@ -123,6 +163,8 @@ function show_alerts() {
         $('#sigbro_spa').html(response);
         check_session();
         page_show_network_type();
+        page_alerts_update_header();
+        page_alerts_get_accounts();
       },
 
       error: function (error) {
@@ -131,6 +173,93 @@ function show_alerts() {
 
       complete: function (xhr, status) {
         console.log('DONE');
+
+        $(document).on('click', '#sigbro_alerts--add_acount', function (e) {
+          e.preventDefault();
+          document.getElementById("sigbro_alerts--add_acount").disabled = true;
+          var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
+          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");    
+          var sigbro_alerts_account = document.getElementById("sigbro_alerts--account_name").value;
+
+          if ( sigbro_alerts_account.length != 26) {
+            page_alerts_show_alert("Wrong account format.");
+            setTimeout(function () {
+              document.getElementById("sigbro_alerts--add_acount").disabled = false;
+            }, 2000);
+            return false;
+          }
+
+          url = APIURL + "/api/v2/wallet/add_account/";
+          payload = JSON.stringify({
+            "email": sigbro_alerts_email,
+            "session" : sigbro_alerts_token,
+            "accountRS": sigbro_alerts_account
+          });
+
+          sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_add_account);
+        });
+
+        $(document).on('click', '.sigbro-alerts-update-button', function (e) {
+          e.preventDefault();
+          this.disabled = true;
+          var button = this;
+
+          var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
+          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");    
+
+          var account_name = this.id.replace("sigbro_alerts--update_", "");
+          var active = document.getElementById("sigbro_alerts--active_" + account_name).checked;
+          var tx = document.getElementById("sigbro_alerts--transaction_" + account_name).checked;
+          var block = document.getElementById("sigbro_alerts--block_" + account_name).checked;
+
+          url = APIURL + "/api/v2/wallet/update_account/";
+          payload = JSON.stringify({
+            "email": sigbro_alerts_email,
+            "session" : sigbro_alerts_token,
+            "accountRS": account_name,
+            "active" : active,
+            "alert_tx" : tx,
+            "alert_block" : block
+          });
+
+          sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_update_account);
+
+          setTimeout(function () {
+            button.disabled = false;
+          }, 5000);
+
+        });
+
+        $(document).on('click', '.sigbro-alerts-remove-button', function (e) {
+          e.preventDefault();
+          var button = this;
+          button.disabled = true;
+
+          console.log(button);
+
+          var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
+          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");    
+
+          var account_name = button.id.replace("sigbro_alerts--remove_", "");
+
+          url = APIURL + "/api/v2/wallet/remove_account/";
+          payload = JSON.stringify({
+            "email": sigbro_alerts_email,
+            "session" : sigbro_alerts_token,
+            "accountRS": account_name
+          });
+
+          console.log(payload);
+
+          sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_remove_account);
+          setTimeout(function () {
+            button.disabled = false;
+          }, 6000);
+
+        });
+
+
+
       }
     });
 
@@ -256,6 +385,78 @@ function show_alerts() {
 
   }
 
+}
+
+function page_alerts_add_account() {
+  var resp = this.responseText;
+
+  if ( resp ) {
+    var resp_j = JSON.parse(resp);
+
+    console.log(resp_j);
+
+    if (resp_j.result && resp_j.result == "ok" ) {
+      show_alerts();
+
+    } else {
+      page_alerts_show_alert(resp_j.msg);
+      setTimeout(function () {
+        document.getElementById("sigbro_alerts--add_acount").disabled = false;
+      }, 2000);
+      return false;
+    }
+
+    return true;
+  }
+}
+
+function page_alerts_remove_account() {
+  var resp = this.responseText;
+
+  if ( resp ) {
+    var resp_j = JSON.parse(resp);
+
+    console.log(resp_j);
+
+    if (resp_j.result && resp_j.result == "ok" ) {
+      show_alerts();
+
+    } else {
+      page_alerts_show_alert(resp_j.msg);
+      setTimeout(function () {
+        page_alerts_hide_alert();
+      }, 5000);
+      return false;
+    }
+
+    return true;
+  }
+}
+
+function page_alerts_update_account() {
+  var resp = this.responseText;
+
+  if ( resp ) {
+    var resp_j = JSON.parse(resp);
+
+    console.log(resp_j);
+
+    if (resp_j.result && resp_j.result == "ok" ) {
+      page_alerts_show_alert("Account updated");
+      setTimeout(function () {
+        page_alerts_hide_alert();
+      }, 2000);
+      return true;
+    } else {
+      page_alerts_show_alert(resp_j.msg);
+      setTimeout(function () {
+        page_alerts_hide_alert();
+      }, 2000);
+      return false;
+    }
+
+    return true;
+  }
 }
 
 function page_alerts_check_pincode() {
@@ -974,6 +1175,15 @@ $(document).on('click', '#sigbro-logout', function (e) {
   show_index();
 });
 
+$(document).on('click', '#sigbro_alerts--logout', function (e) {
+  e.preventDefault();
+  localStorage.removeItem("sigbro_alerts_email");
+  localStorage.removeItem("sigbro_alerts_token")
+  show_alerts();
+});
+
+
+
 $(document).on('click', '#sigbro-change-network', function (e) {
   e.preventDefault();
 
@@ -1309,6 +1519,12 @@ function page_show_network_type() {
     network = 'testnet';
   }
   document.getElementById('sigbro-change-network').innerHTML = network;
+}
+
+function page_alerts_update_header() {
+  // check localstorage for email and update header
+  var email = localStorage.getItem("sigbro_alerts_email");
+  document.getElementById('sigbro_alerts--header').innerHTML = "[ " + email + " ]";
 }
 
 function _get_network_url(network) {
