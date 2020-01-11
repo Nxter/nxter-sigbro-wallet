@@ -4,7 +4,7 @@ var TEMPLATEURL = "https://sigbro-template.api.nxter.org"
 
 // DEVELOPMENT
 //var TEMPLATEURL = "http://localhost:9060"
-var APIURL = "http://localhost:8020"
+//var APIURL = "http://localhost:8020"
 
 var TIMEOUT_TEMPLATE = 10000;
 var TIMEOUT_SUBMIT = 10000;
@@ -43,7 +43,7 @@ $(document).on('click', 'a.nav-link', function (e) {
 
 $(document).ready(function () {
   var page = localStorage.getItem("sigbro_wallet_page");
-  console.log("Last page: " + page);
+  //console.log("Last page: " + page);
   if (page == null) { page = 'index'; }
 
   if (page == 'index') { show_index(); return; }
@@ -73,7 +73,7 @@ function check_session() {
   if ( resp ) {
     var resp_j = JSON.parse(resp);
 
-    console.log(resp_j);
+    //console.log(resp_j);
 
     if (resp_j.result && resp_j.result == "fail") {
       // clear email and reload page
@@ -112,7 +112,7 @@ function page_alerts_get_accounts() {
   if ( resp ) {
     var resp_j = JSON.parse(resp);
 
-    console.log(resp_j);
+    //console.log(resp_j);
 
     if (resp_j.result && resp_j.result == "ok" ) {
       if (resp_j.data) {
@@ -168,11 +168,11 @@ function show_alerts() {
       },
 
       error: function (error) {
-        console.log('ERROR: ', error);
+        //console.log('ERROR: ', error);
       },
 
       complete: function (xhr, status) {
-        console.log('DONE');
+        //console.log('DONE');
 
         $(document).on('click', '#sigbro_alerts--add_acount', function (e) {
           e.preventDefault();
@@ -235,7 +235,7 @@ function show_alerts() {
           var button = this;
           button.disabled = true;
 
-          console.log(button);
+          //console.log(button);
 
           var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
           var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");    
@@ -249,7 +249,7 @@ function show_alerts() {
             "accountRS": account_name
           });
 
-          console.log(payload);
+          //console.log(payload);
 
           sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_remove_account);
           setTimeout(function () {
@@ -276,7 +276,7 @@ function show_alerts() {
       },
 
       error: function (error) {
-        console.log('ERROR: ', error);
+        //console.log('ERROR: ', error);
       },
 
       complete: function (xhr, status) {
@@ -347,7 +347,7 @@ function show_alerts() {
       },
 
       error: function (error) {
-        console.log('ERROR: ', error);
+        //console.log('ERROR: ', error);
       },
 
       complete: function (xhr, status) {
@@ -369,13 +369,25 @@ function show_alerts() {
             setTimeout(function () {
               document.getElementById('sigbro_alerts--button_submit_email').disabled = false;
               page_alerts_hide_alert();
-            }, 2000);
+            }, 5000);
           } else {
 
             payload = JSON.stringify({ "email": email });
             url = APIURL + "/api/v2/wallet/sendpin/";
 
-            sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_show_pincode);
+            var is_mail_send = localStorage.getItem("sigbro_alerts_mail_send");
+
+            if  (is_mail_send) {
+
+            } else {
+              sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_show_pincode);
+              localStorage.setItem("sigbro_alerts_mail_send","ok");
+              setTimeout(function () {
+                localStorage.removeItem("sigbro_alerts_mail_send");
+              }, 5000);
+            }
+
+            
           }
         });
 
@@ -393,7 +405,7 @@ function page_alerts_add_account() {
   if ( resp ) {
     var resp_j = JSON.parse(resp);
 
-    console.log(resp_j);
+    //console.log(resp_j);
 
     if (resp_j.result && resp_j.result == "ok" ) {
       show_alerts();
@@ -416,7 +428,7 @@ function page_alerts_remove_account() {
   if ( resp ) {
     var resp_j = JSON.parse(resp);
 
-    console.log(resp_j);
+    //console.log(resp_j);
 
     if (resp_j.result && resp_j.result == "ok" ) {
       show_alerts();
@@ -439,7 +451,7 @@ function page_alerts_update_account() {
   if ( resp ) {
     var resp_j = JSON.parse(resp);
 
-    console.log(resp_j);
+    //console.log(resp_j);
 
     if (resp_j.result && resp_j.result == "ok" ) {
       page_alerts_show_alert("Account updated");
@@ -464,8 +476,8 @@ function page_alerts_check_pincode() {
   var resp = this.responseText;
   var resp_j = JSON.parse(resp);
 
-  console.log("RESULT:");
-  console.log(resp_j);
+  //console.log("RESULT:");
+  //console.log(resp_j);
 
   if (resp_j.result && resp_j.result == "fail") {
     // clear email and reload page
@@ -500,8 +512,8 @@ function page_alerts_show_pincode() {
   var resp = this.responseText;
   var resp_j = JSON.parse(resp);
 
-  console.log("RESULT:");
-  console.log(resp_j);
+  //console.log("RESULT:");
+  //console.log(resp_j);
 
   if (resp_j.result && resp_j.result == "fail") {
     page_alerts_show_alert(resp_j.msg);
@@ -529,11 +541,11 @@ function show_qr() {
     },
 
     error: function (error) {
-      console.log('ERROR: ', error);
+      //console.log('ERROR: ', error);
     },
 
     complete: function (xhr, status) {
-      console.log('DONE');
+      //console.log('DONE');
     }
   });
 
@@ -554,11 +566,11 @@ function show_operations() {
     },
 
     error: function (error) {
-      console.log('ERROR: ', error);
+      //console.log('ERROR: ', error);
     },
 
     complete: function (xhr, status) {
-      console.log('DONE');
+      //console.log('DONE');
     }
   });
 }
@@ -579,11 +591,11 @@ function show_portfolio() {
     },
 
     error: function (error) {
-      console.log('ERROR: ', error);
+      //console.log('ERROR: ', error);
     },
 
     complete: function (xhr, status) {
-      console.log('DONE');
+      //console.log('DONE');
     }
   });
 
@@ -609,11 +621,11 @@ function show_profile() {
     },
 
     error: function (error) {
-      console.log('ERROR: ', error);
+      //console.log('ERROR: ', error);
     },
 
     complete: function (xhr, status) {
-      console.log('DONE');
+      //console.log('DONE');
     }
   });
 
@@ -637,7 +649,7 @@ function show_index() {
     },
 
     error: function (error) {
-      console.log('ERROR: ', error);
+      //console.log('ERROR: ', error);
     },
 
     complete: function (xhr, status) {
@@ -646,7 +658,7 @@ function show_index() {
       $(document).on('click', '#sigbro_index-button-login', function (e) {
         e.preventDefault();
         var accRS = $('#sigbro_index-input-account').val();
-        console.log(accRS);
+        //console.log(accRS);
         // ARDOR-ZZZZ-48G3-9F9W-4CLJZ
         var ardorRegex = /^ARDOR-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{5}/ig
         var nxtRegex = /^NXT-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{5}/ig
@@ -681,7 +693,7 @@ function show_auth() {
       $('#sigbro_spa').html(response);
     },
     error: function (error) {
-      console.log('ERROR: ', error);
+      //console.log('ERROR: ', error);
     },
     complete: function (xhr, status) {
       // generate QR code
@@ -782,8 +794,8 @@ $(document).on('click', '#sigbro_template_submit', function (e) {
     { "template": template }
   );
 
-  console.log("url: " + url);
-  console.log("params: " + param);
+  //console.log("url: " + url);
+  //console.log("params: " + param);
 
   sendJSON(url, param, TIMEOUT_TEMPLATE, page_ops_template_show_result);
 });
@@ -793,14 +805,14 @@ function page_ops_template_show_result() {
   var resp = this.responseText;
   var resp_j = JSON.parse(resp);
 
-  console.log("RESULT:");
-  console.log(resp_j);
+  //console.log("RESULT:");
+  //console.log(resp_j);
 
   if (resp_j.error) {
     page_ops_show_alert(resp_j.error);
   } else if (resp_j.uuid) {
     var resp_url = "https://sigbro-template.api.nxter.org/api/v1/get/" + resp_j.uuid + "/";
-    console.log("URL: " + resp_url);
+    //console.log("URL: " + resp_url);
     localStorage.setItem("sigbro_wallet_url", resp_url);
     show_qr();
   }
@@ -840,8 +852,8 @@ $(document).on('click', '#sigbro_send_submit', function (e) {
   param_json = { "currencie": currencie, "recipient": recipientRS, "amount": amount, "publicKey": senderPubKey, "fee": fee, "msg": msg, "encrypt_msg": encrypt_msg };
   param = JSON.stringify(param_json);
 
-  console.log("url: " + url);
-  console.log("params: " + param);
+  //console.log("url: " + url);
+  //console.log("params: " + param);
 
   sendJSON(url, param, TIMEOUT_SUBMIT, page_ops_show_result);
 });
@@ -851,14 +863,14 @@ function page_ops_show_result() {
   var resp = this.responseText;
   var resp_j = JSON.parse(resp);
 
-  console.log("RESULT:");
-  console.log(resp_j);
+  //console.log("RESULT:");
+  //console.log(resp_j);
 
   if (resp_j.error) {
     page_ops_show_alert(resp_j.error);
     //alert ( resp_j.error ); 
   } else if (resp_j.url) {
-    console.log("URL: " + resp_j.url);
+    //console.log("URL: " + resp_j.url);
     localStorage.setItem("sigbro_wallet_url", resp_j.url);
     show_qr();
   }
@@ -906,7 +918,7 @@ function page_qr_show_qrcode_for_auth() {
 
   var uuid = sigbroUUID.uuid;
   var url = "sigbro://" + uuid;
-  console.log(url);
+  //console.log(url);
 
   var QRC = qrcodegen.QrCode;
   var qr0 = QRC.encodeText(url, QRC.Ecc.HIGH);
@@ -926,7 +938,7 @@ function page_qr_show_qrcode_for_auth() {
 function page_portfolio_save_assets() {
   var resp = this.responseText;
   var respJSON = JSON.parse(resp);
-  // console.log(respJSON);
+  // //console.log(respJSON);
 
   if (respJSON.data) {
     var timestamp = Date.now();
@@ -935,7 +947,7 @@ function page_portfolio_save_assets() {
 
     page_portfolio_show_assets();
   } else {
-    console.log(respJSON);
+    //console.log(respJSON);
   }
 
 }
@@ -955,7 +967,7 @@ function page_portfolio_show_assets() {
 
   // If delta > 5 min need to get new balances
   var delta = Date.now() - assets_data.timestamp;
-  console.log("Delta: " + delta / 1000 + " sec.");
+  //console.log("Delta: " + delta / 1000 + " sec.");
   if (delta > 5 * 60 * 1000) {
     var url = APIURL + "/api/v2/assets/" + accRS + "/en/" + _get_network_prefix() + "/";
     getJSON(url, TIMEOUT_ARDR, page_portfolio_save_assets, "assets");
@@ -970,7 +982,7 @@ function page_portfolio_show_assets() {
 function page_portfolio_save_currencies() {
   var resp = this.responseText;
   var respJSON = JSON.parse(resp);
-  // console.log(respJSON);
+  // //console.log(respJSON);
 
   if (respJSON.data) {
     var timestamp = Date.now();
@@ -979,7 +991,7 @@ function page_portfolio_save_currencies() {
 
     page_portfolio_show_currencies();
   } else {
-    console.log(respJSON);
+    //console.log(respJSON);
   }
 
 }
@@ -998,7 +1010,7 @@ function page_portfolio_show_currencies() {
 
   // If delta > 5 min need to get new balances
   var delta = Date.now() - curr_data.timestamp;
-  console.log("Delta: " + delta / 1000 + " sec.");
+  //console.log("Delta: " + delta / 1000 + " sec.");
   if (delta > 5 * 60 * 1000) {
     var url = APIURL + "/api/v2/currencies/" + accRS + "/en/" + _get_network_prefix() + "/";
     getJSON(url, TIMEOUT_ARDR, page_portfolio_save_currencies, "currencies");
@@ -1064,7 +1076,7 @@ function page_profile_set_userinfo() {
 function page_profile_set_balance_ardor(data) {
   var resp = this.responseText;
   var respJSON = JSON.parse(resp);
-  console.log(respJSON);
+  //console.log(respJSON);
 
   if (respJSON.balances) {
     // get correct response
@@ -1092,7 +1104,7 @@ function page_profile_set_balance_ardor(data) {
     document.getElementById('sigbro_profile-balance-ignis').textContent = "NaN";
     document.getElementById('sigbro_profile-balance-aeur').textContent = "NaN";
     document.getElementById('sigbro_profile-balance-bitswift').textContent = "NaN";
-    console.log(respJSON);
+    //console.log(respJSON);
   }
 
 }
@@ -1119,7 +1131,7 @@ function page_profile_show_balance_ardor() {
 
   // If delta > 5 min need to get new balances
   var delta = Date.now() - accBalanceArdor.timestamp;
-  console.log("Delta: " + delta / 1000 + " sec.");
+  //console.log("Delta: " + delta / 1000 + " sec.");
   if (delta > 5 * 60 * 1000) {
     var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4";
     getJSON(url, TIMEOUT_ARDR, page_profile_set_balance_ardor, "balance ARDOR");
@@ -1238,7 +1250,7 @@ function add_new_uuid_result() {
   var resp = this.responseText;
   var resp_j = JSON.parse(resp);
 
-  console.log(resp_j);
+  //console.log(resp_j);
 }
 
 // click on OPEN SIGBRO MOBILE
@@ -1256,17 +1268,17 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
     old_timestamp = uuid_from_localstorage.timestamp;
     old_uuid = uuid_from_localstorage.uuid;
   } catch (err) {
-    console.log("Incorrect json in localstorage");
+    //console.log("Incorrect json in localstorage");
   }
 
-  console.log("Delta: " + (timestamp - old_timestamp));
+  //console.log("Delta: " + (timestamp - old_timestamp));
 
   if (timestamp - old_timestamp < 15 * 60 * 1000) {
     uuid = old_uuid;
-    console.log("Using old UUID: " + uuid);
+    //console.log("Using old UUID: " + uuid);
   } else {
     uuid = uuidv4();
-    console.log("Using new UUID: " + uuid);
+    //console.log("Using new UUID: " + uuid);
 
     var uuid_timestamp = { "uuid": uuid, "timestamp": timestamp }
     localStorage.setItem("sigbro_uuid", JSON.stringify(uuid_timestamp));
@@ -1284,10 +1296,10 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
 
   // subscribe to global events from auth-sse
   source.addEventListener('greeting', function (event) {
-    console.log('Gloabal event');
+    //console.log('Gloabal event');
     var data = JSON.parse(event.data);
-    console.log(data);
-    console.log(event);
+    //console.log(data);
+    //console.log(event);
   }, false);
 
   // subscribe to personal events from auth-sse
@@ -1300,7 +1312,7 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
       var data2 = data;
     }
 
-    console.log(data2);
+    //console.log(data2);
 
     if (data2.type == 'success' && data2.accountRS) {
       localStorage.setItem("sigbro_wallet_accountRS", data2.accountRS);
@@ -1337,17 +1349,17 @@ $(document).on('click', '#sigbo_index--btn_scan_qr_code', function (e) {
     old_timestamp = uuid_from_localstorage.timestamp;
     old_uuid = uuid_from_localstorage.uuid;
   } catch (err) {
-    console.log("Incorrect json in localstorage");
+    //console.log("Incorrect json in localstorage");
   }
 
-  console.log("Delta: " + (timestamp - old_timestamp));
+  //console.log("Delta: " + (timestamp - old_timestamp));
 
   if (timestamp - old_timestamp < 15 * 60 * 1000) {
     uuid = old_uuid;
-    console.log("Using old UUID: " + uuid);
+    //console.log("Using old UUID: " + uuid);
   } else {
     uuid = uuidv4();
-    console.log("Using new UUID: " + uuid);
+    //console.log("Using new UUID: " + uuid);
 
     var uuid_timestamp = { "uuid": uuid, "timestamp": timestamp }
     localStorage.setItem("sigbro_uuid", JSON.stringify(uuid_timestamp));
@@ -1366,10 +1378,10 @@ $(document).on('click', '#sigbo_index--btn_scan_qr_code', function (e) {
 
   // subscribe to global events from auth-sse
   source.addEventListener('greeting', function (event) {
-    console.log('Gloabal event');
+    //console.log('Gloabal event');
     var data = JSON.parse(event.data);
-    console.log(data);
-    console.log(event);
+    //console.log(data);
+    //console.log(event);
   }, false);
 
   // subscribe to personal events from auth-sse
@@ -1382,7 +1394,7 @@ $(document).on('click', '#sigbo_index--btn_scan_qr_code', function (e) {
       var data2 = data;
     }
 
-    console.log(data2);
+    //console.log(data2);
 
     if (data2.type == 'success' && data2.accountRS) {
       localStorage.setItem("sigbro_wallet_accountRS", data2.accountRS);
@@ -1408,15 +1420,15 @@ function getJSON(url, timeout, callback) {
   var args = Array.prototype.slice.call(arguments, 3);
   var xhr = new XMLHttpRequest();
   xhr.ontimeout = function () {
-    console.log("The request for " + url + " timed out.");
+    //console.log("The request for " + url + " timed out.");
   };
   xhr.onload = function () {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        console.log('get: ' + url + ' success.');
+        //console.log('get: ' + url + ' success.');
         callback.apply(xhr, args);
       } else {
-        console.log(xhr.statusText);
+        //console.log(xhr.statusText);
       }
     }
   };
@@ -1429,20 +1441,20 @@ function sendJSON(url, params, timeout, callback) {
   var args = Array.prototype.slice.call(arguments, 3);
   var xhr = new XMLHttpRequest();
   xhr.ontimeout = function () {
-    console.log("The POST request for " + url + " timed out.");
+    //console.log("The POST request for " + url + " timed out.");
   };
   xhr.onload = function () {
     if (xhr.readyState === 4) {
       if (xhr.status === 404) {
-        console.log('URL Not Found: ' + url);
+        //console.log('URL Not Found: ' + url);
         return;
       }
 
       if (xhr.status === 200) {
-        console.log('post: ' + url + ' success.');
+        //console.log('post: ' + url + ' success.');
         callback.apply(xhr, args);
       } else {
-        console.log(xhr.statusText);
+        //console.log(xhr.statusText);
       }
     }
   };
@@ -1476,7 +1488,7 @@ function savePublicKey(accountRS) {
   resp = JSON.parse(resp);
 
   if (resp.publicKey) {
-    console.log('Saving public key.');
+    //console.log('Saving public key.');
     localStorage.setItem("sigbro_pubkey_" + accountRS, resp.publicKey);
   }
 }
@@ -1509,7 +1521,7 @@ function page_qr_set_right_color() {
 function page_show_network_type() {
   // check localstorage for network type and update button
   var network = localStorage.getItem("sigbro_wallet_network");
-  console.log('Network: ' + network)
+  //console.log('Network: ' + network)
   if (network == null) {
     localStorage.setItem("sigbro_wallet_network", "testnet");
   }
@@ -1586,7 +1598,7 @@ function disable_all_childchain_except(name) {
 
 function showRightFields() {
   item = document.getElementById("sigbro_template_operation").value;
-  console.log('Selected: ' + item);
+  //console.log('Selected: ' + item);
   if (item == 'sendMoney') {
     hide_module('.sigbro-module-leasebalance');
     show_module('.sigbro-module-sendmoney');
