@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VER='3.5.0'
+VER='3.5.1'
 
 IMAGE_NAME='nxter-sigbro-wallet-web'
 
