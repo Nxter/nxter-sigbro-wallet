@@ -525,7 +525,7 @@ function page_alerts_show_pincode() {
 
 }
 
-function show_qr() {
+function show_qr(is_template) {
   $.ajax({
     url: 'qr.html?_' + new Date().getTime(),
     type: 'GET',
@@ -536,7 +536,7 @@ function show_qr() {
       $('#sigbro_spa').html(response);
       // load data
       page_show_network_type();
-      page_qr_show_qrcode();
+      page_qr_show_qrcode(is_template);
       page_qr_set_right_color();
     },
 
@@ -807,7 +807,7 @@ function page_ops_template_show_result() {
     var resp_url = "https://sigbro-template.api.nxter.org/api/v1/get/" + resp_j.uuid + "/";
     //console.log("URL: " + resp_url);
     localStorage.setItem("sigbro_wallet_url", resp_url);
-    show_qr();
+    show_qr(true);
   }
 }
 
@@ -861,24 +861,26 @@ function page_ops_show_result() {
   } else if (resp_j.url) {
     //console.log("URL: " + resp_j.url);
     localStorage.setItem("sigbro_wallet_url", resp_j.url);
-    show_qr();
+    show_qr(false);
   }
 }
 
 /////////////////////////////////// QR
-function page_qr_show_qrcode() {
+function page_qr_show_qrcode(is_template) {
   var accURL = localStorage.getItem("sigbro_wallet_url");
 
   if (accURL == null) {
-    //document.getElementById('sigbro_qr-code').textContent = "You does not have any relevant data for QR code"; 
     return;
   }
 
-  var link = document.getElementById("sigbro_qr-url");
-  //link.textContent = accURL;
-  link.textContent = "Open Tx in Browser";
-  link.setAttribute("href", accURL);
+  if (is_template == false) {
+    var link = document.getElementById("sigbro_qr-url");
+    link.textContent = "Show transaction details in browser";
+    link.setAttribute("href", accURL);
+  } else {
 
+  }
+  
   var sigbroURL = accURL.replace("https", "sigbro");
   var link_sigbro = document.getElementById("sigbro_qr--mobile_url");
   link_sigbro.setAttribute("href", sigbroURL);
