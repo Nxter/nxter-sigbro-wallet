@@ -744,13 +744,6 @@ $(document).on('click', '#sigbro_template_submit', function (e) {
   var currencie = document.getElementById('sigbro_template_currencie').value;
   var operation = document.getElementById('sigbro_template_operation').value;
 
-  /*
-  var encrypt_msg = 0;
-  if ( document.getElementById('sigbro_template_encrypt_message').checked ) {
-    encrypt_msg = 1;
-  }
-  */
-
   var url = TEMPLATEURL + "/api/v1/add/";
 
   var _network = localStorage.getItem("sigbro_wallet_network");
@@ -838,10 +831,6 @@ $(document).on('click', '#sigbro_send_submit', function (e) {
   var fee = -1;
 
   var encrypt_msg = 0;
-  // check encrypt or plain text for msg
-  if (document.getElementById('sigbro_encrypt_message').checked) {
-    encrypt_msg = 1;
-  }
 
   var currencie = document.querySelector('input[name = "sigbro_send_selector"]:checked').value;
   var msg = document.getElementById('sigbro_send_message').value;
