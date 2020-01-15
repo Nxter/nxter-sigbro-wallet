@@ -875,7 +875,7 @@ function page_qr_show_qrcode(is_template) {
 
   if (is_template == false) {
     var link = document.getElementById("sigbro_qr-url");
-    link.textContent = "Show transaction details in browser";
+    link.textContent = "Show transaction details in browser.";
     link.setAttribute("href", accURL);
   } else {
 
