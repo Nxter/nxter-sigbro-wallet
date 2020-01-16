@@ -1559,12 +1559,14 @@ function _get_network_prefix() {
 function hide_module(name) {
   [].forEach.call(document.querySelectorAll(name), function (el) {
     el.style.visibility = 'hidden';
+    el.style.display = 'none';
   });
 }
 
 function show_module(name) {
   [].forEach.call(document.querySelectorAll(name), function (el) {
     el.style.visibility = '';
+    el.style.display = '';
   });
 }
 
