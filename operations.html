@@ -47,9 +47,10 @@
                     <a class="collapsed a-black" role="button" data-toggle="collapse" data-parent="#accordion"
                       href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                       <p class="h4 weight-normal">
-                        Send Ardor / Ignis / etc...
+                        Send tokens
                         <i class="p-grey more-less icon-fontello icon-right-open-big float-right"></i>
                       </p>
+
                     </a>
                   </div> <!-- /headingOne-->
 
@@ -59,43 +60,40 @@
                       <form class="send-form">
                         <div class="row">
                           <div class="col-md-6 form-group mb-2rem">
-                            <label for="sigbro_send_senderRS" class="p-medium">SenderRS</label>
+                            <label for="sigbro_send_senderRS" class="p-medium">Your account</label>
                             <input type="text" class="form-control" id="sigbro_send_senderRS"
                               aria-describedby="emailHelp" readonly>
                           </div>
                           <div class="col-md-6 form-group mb-2rem">
-                            <label for="sigbro_send_recipientRS" class="p-medium">RecipientRS</label>
+                            <label for="sigbro_send_recipientRS" class="p-medium">Receiving account</label>
                             <input type="text" class="form-control" id="sigbro_send_recipientRS"
                               placeholder="ARDOR-ZZZZ-YYYY-XXXX-KKKK">
                           </div>
                         </div>
                         <div class="row no-gutters mb-2rem">
-                          <p class="p-medium">Type</p>
+                          <p class="p-medium">Select token</p>
                           <div class="w-100"></div>
                           <div class="label-group btn-group-toggle" id="sigbro_send_currencie" data-toggle="buttons">
-                            <!-- <label class="col btn btn-label text-uppercase active">
-                              <input type="radio" name="sigbro_send_selector" value="nxt" autocomplete="off" checked>
-                              <span class="checkmark2"></span>nxt
-                            </label> -->
                             <label class="col btn btn-label text-uppercase">
-                              <input type="radio" name="sigbro_send_selector" value="ardor" autocomplete="off">
-                              <span class="checkmark2"></span> ardor
+                              <input type="radio" name="sigbro_send_selector" value="ignis" autocomplete="off">
+                              <span class="checkmark2"></span> ignis
                             </label>
                             <label class="col btn btn-label text-uppercase">
                               <input type="radio" name="sigbro_send_selector" value="aeur" autocomplete="off">
                               <span class="checkmark2"></span> aeur
                             </label>
                             <label class="col btn btn-label text-uppercase">
-                              <input type="radio" name="sigbro_send_selector" value="ignis" autocomplete="off">
-                              <span class="checkmark2"></span> ignis
-                            </label>
-                            <label class="col btn btn-label text-uppercase">
                               <input type="radio" name="sigbro_send_selector" value="bitswift" autocomplete="off">
                               <span class="checkmark2"></span> bitswift
+                            </label>
+                            <label class="col btn btn-label text-uppercase">
+                              <input type="radio" name="sigbro_send_selector" value="ardor" autocomplete="off">
+                              <span class="checkmark2"></span> ardor
                             </label>
                           </div>
                         </div>
                         <div class="row align-items-end">
+
                           <div class="col-md-6 form-group mb-2rem">
                             <label for="InputAmount" class="p-medium">Amount</label>
                             <input type="amount" class="form-control" id="sigbro_send_amount" aria-describedby=""
@@ -108,7 +106,7 @@
                         </div>
                         <div class="row mb-2rem">
                           <div class="col">
-                            <label for="exampleFormControlTextarea1 p-media">Message</label>
+                            <label for="exampleFormControlTextarea1 p-media">Public message (optional)</label>
                             <textarea class="form-control" id="sigbro_send_message" rows="2"></textarea>
                           </div>
                           <div class="w-100"></div>
@@ -132,8 +130,8 @@
                     <a class="collapsed a-black" role="button" data-toggle="collapse" data-parent="#accordion"
                       href="#collapseTemplate" aria-expanded="false" aria-controls="collapseTemplate">
                       <p class="h4 weight-normal">
-                        Generate Template for Ardor / Ignis / etc...
-                        <br><small>Read more about templates on the <a href="https://www.nxter.org/sigbro/templates" target=_blank>Nxter.org</a></small>
+                        Generate a transaction template QR
+                        <br><small>Read more about templates on the <a href="https://sigbro.app/faq/" target=_blank>Sigbro.app</a></small>
                         <i class="p-grey more-less icon-fontello icon-right-open-big float-right"></i>
                       </p>
                     </a>
@@ -144,29 +142,6 @@
                     <div class="send-box">
                       <form class="send-form">
                         <div class="row mb-1rem">
-                          <div class="col-md-6 form-group">
-                            <label for="sigbro_template_recipientRS" class="p-medium">RecipientRS (always you)</label>
-                            <input type="text" class="form-control sigbro-input" id="sigbro_template_recipientRS" readonly>
-                          </div>
-                          <div class="col-md-6 form-group sigbro-module-sendmoney">
-                            <label for="InputAmount" class="p-medium">Amount</label>
-                            <input type="amount" class="form-control sigbro-input" id="sigbro_template_amount" aria-describedby="" placeholder="0.0">
-                          </div>
-                        </div>
-                        <div class="row mb-1rem">
-                          <div class="no-gutters col-md-6">
-                            <div class="input-group mb-3" >
-                                <div class="input-group-prepend">
-                                  <label class="input-group-text" for="sigbro_template_currencie">Childchain</label>
-                                </div>
-                                <select class="custom-select" id="sigbro_template_currencie">
-                                    <option value="1">Ardor</option>
-                                    <option value="2" selected>Ignis</option>
-                                    <option value="3">AEUR</option>
-                                    <option value="4">Bitswift</option>
-                                </select>
-                            </div>
-                          </div>
                           <div class="no-gutters col-md-6">
                             <div class="input-group mb-3" >
                                 <div class="input-group-prepend">
@@ -178,9 +153,33 @@
                                 </select>
                             </div>
                           </div>
+
+                          <div class="no-gutters col-md-6">
+                            <div class="input-group mb-3" >
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="sigbro_template_currencie">Token</label>
+                                </div>
+                                <select class="custom-select" id="sigbro_template_currencie">
+                                    <option value="2" selected>Ignis</option>
+                                    <option value="3">AEUR</option>
+                                    <option value="4">Bitswift</option>
+                                    <option value="1">Ardor</option>
+                                </select>
+                            </div>
+                          </div>
+                  
                         </div>
                         <div class="row mb-1rem">
-                            <div class="no-gutters col-md-6 sigbro-module-leasebalance" style="visibility: hidden;">
+                          <div class="col-md-6 form-group">
+                            <label for="sigbro_template_recipientRS" class="p-medium">Receiving account</label>
+                            <input type="text" class="form-control sigbro-input" id="sigbro_template_recipientRS" readonly>
+                          </div>
+                          <div class="col-md-6 form-group sigbro-module-sendmoney">
+
+                            <label for="InputAmount" class="p-medium">Amount</label>
+                            <input type="amount" class="form-control sigbro-input" id="sigbro_template_amount" aria-describedby="" placeholder="0.0">
+                          </div>
+                          <div class="col-md-6 form-group sigbro-module-leasebalance" style="visibility: hidden;">
                               <div class="input-group mb-3" >
                                   <div class="input-group-prepend">
                                     <label class="input-group-text" for="sigbro_template_lease_period">Lease Period</label>
@@ -196,13 +195,17 @@
                                   </select>
                               </div>
                             </div>
+                        </div>
+                        
+                        <div class="row mb-1rem">
+                            
                           </div>
 
 
 
                         <div class="row mb-2rem sigbro-module-sendmoney">
                           <div class="col">
-                            <label for="exampleFormControlTextarea1 p-media">Message</label>
+                            <label for="exampleFormControlTextarea1 p-media">Public message</label>
                             <textarea class="form-control" id="sigbro_template_message" rows="2"></textarea>
                           </div>
                           <div class="w-100"></div>
@@ -225,7 +228,7 @@
                           <div class="w-100"></div>
                         </div>
 
-                        <button type="button" class="btn btn-block p-medium btn-qr" id="sigbro_template_submit">Generate Template QR-Code</button>
+                        <button type="button" class="btn btn-block p-medium btn-qr" id="sigbro_template_submit">Generate QR-Code</button>
                       </form>
                     </div>
                   </div> <!-- /collapseTemplate -->
