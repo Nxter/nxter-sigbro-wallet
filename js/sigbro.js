@@ -38,6 +38,11 @@ $(document).on('click', 'a.nav-link', function (e) {
     return;
   }
 
+  if (open_page == 'offline') {
+    localStorage.setItem("sigbro_wallet_page", "offline");
+    show_offline_page();
+    return;
+  }
 
 });
 
@@ -51,9 +56,25 @@ $(document).ready(function () {
   if (page == 'portfolio') { show_portfolio(); return; }
   if (page == 'operations') { show_operations(); return; }
   if (page == 'alerts') { show_alerts(); return; }
+  if (page == 'offline') { show_offline_page(); return; }
 
 });
 
+// alerts for the offline page
+function page_offline_hide_alert() {
+  var msg_block = document.getElementById('sigbro_offline--alerts');
+  msg_block.setAttribute('style', 'display:none;');
+}
+
+function page_offline_show_alert(msg) {
+  var msg_block = document.getElementById('sigbro_offline--alerts');
+  msg_block.setAttribute('style', 'display:none;');
+
+  document.getElementById('sigbro_offline--alerts_text').innerHTML = msg;
+  msg_block.setAttribute('style', '');
+}
+
+// alerts for the alerts page
 function page_alerts_hide_alert() {
   var msg_block = document.getElementById('sigbro_alerts--alerts');
   msg_block.setAttribute('style', 'display:none;');
@@ -549,6 +570,53 @@ function show_qr(is_template) {
     }
   });
 
+}
+
+function show_offline_page() {
+  $.ajax({
+    url: 'offline.html?_' + new Date().getTime(),
+    type: 'GET',
+    dataType: 'text',
+
+    success: function (response) {
+      // show page
+      $('#sigbro_spa').html(response);
+      // load data
+      page_show_network_type();
+    },
+
+    error: function (error) {
+      //console.log('ERROR: ', error);
+    },
+
+    complete: function (xhr, status) {
+      //console.log('DONE');
+      $(document).on('click', '#sigbro_offline--broadcast', function (e) {
+        e.preventDefault();
+        var bytes = document.getElementById('sigbro_offline--signed_bytes').value;
+        var url = _get_network_url('ardor');
+        
+        var param = "requestType=broadcastTransaction&transactionBytes=" + bytes ;
+        sendPOST(url, param, TIMEOUT_SUBMIT, page_offline_show_broadcast_result);
+        return;
+      });
+
+    }
+  });
+}
+
+function page_offline_show_broadcast_result() {
+  var resp = this.responseText;
+  var resp_j = JSON.parse(resp);
+
+  console.log("BROADCAST RESULT:");
+  console.log(resp_j);
+
+  if (resp_j.errorDescription) {
+    page_offline_show_alert(resp_j.errorDescription);
+  } else if (resp_j.fullHash) {
+    page_offline_show_alert("Success: " + resp_j.fullHash);
+  }
 }
 
 function show_operations() {
@@ -1427,6 +1495,34 @@ function getJSON(url, timeout, callback) {
   xhr.timeout = timeout;
   xhr.send(null);
 }
+
+function sendPOST(url, params, timeout, callback) {
+  var args = Array.prototype.slice.call(arguments, 3);
+  var xhr = new XMLHttpRequest();
+  xhr.ontimeout = function () {
+    //console.log("The POST request for " + url + " timed out.");
+  };
+  xhr.onload = function () {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 404) {
+        //console.log('URL Not Found: ' + url);
+        return;
+      }
+
+      if (xhr.status === 200) {
+        //console.log('post: ' + url + ' success.');
+        callback.apply(xhr, args);
+      } else {
+        //console.log(xhr.statusText);
+      }
+    }
+  };
+  xhr.open("POST", url);
+  xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  xhr.timeout = timeout;
+  xhr.send(params);
+}
+
 
 function sendJSON(url, params, timeout, callback) {
   var args = Array.prototype.slice.call(arguments, 3);

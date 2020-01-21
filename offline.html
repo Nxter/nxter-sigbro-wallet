@@ -1,0 +1,98 @@
+<div class="wrapper d-flex flex-column">
+  <header>
+    <div class="red-header">
+      <div class="container-fluid">
+        <div class="row justify-content-center mb-2rem">
+          <div class="col-md-11 col-lg-10 col-xl-9">
+            <div class="logo-box">
+              <img src="img/logo.svg" alt="" />
+            </div>
+            <button class="btn btn-logout float-right" id="sigbro-logout">
+              log out
+            </button>
+            <button class="btn btn-logout float-right" id="sigbro-change-network">
+              network
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-wrapper shadow">
+      <ul class="nav justify-content-center this-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#profile">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#portfolio">Portfolio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#operations">Operations</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#alerts">Alerts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#offline">OFFLINE</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+  <div class="flex-grow-1">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-md-11 col-lg-10 col-xl-9 white-bck">
+          <div class="row mb-2rem" id="sigbro_offline--alerts" style="display: none;">
+            <div class="col">
+              <span class="form-control" id="sigbro_offline--alerts_text"></span>
+            </div>
+            <div class="w-100"></div>
+          </div>
+
+          <h1 class="text-center">SIGBRO Offline</h1>
+          <h3>About SIGBRO Offline</h3>
+          <ul>
+            <li>Create accounts offline</li>
+            <li>Get a passphrase QR code</li>
+            <li>Print your account's paperwallet</li>
+            <li>Prove ownership of your account without risk</li>
+            <li>Sign and make transactions from Cold Storage accounts</li>
+          </ul>
+          <h3 style="margin-top: 1rem;">Broadcast a transaction</h3>
+          <div class="row mb-2rem">
+            <div class="col">
+              <label for="exampleFormControlTextarea1 p-media">
+                Paste your Signed Transaction Bytes here:
+              </label>
+              <textarea class="form-control" id="sigbro_offline--signed_bytes" rows="4"></textarea>
+              <button type="button" class="btn btn-block btn-qr" id="sigbro_offline--broadcast" style="margin-top: 0.2rem;">
+                Broadcast
+              </button>
+
+            </div>
+            <div class="w-100"></div>
+          </div>
+          <a href="https://github.com/Nxter/ARDOR-SigBro-Offline" target="_blank">Download SIGBRO Offline </a> *
+
+          <p style="font-size: small;">*) Use at your own risk. SIGBRO Offline does not send data (like your passphrase) over the internet and does not store your passphrase in any form! Still, it doesn't protect you against key loggers or screen recording malware either, and anyone with your passphrase can access (and empty) your account. Therefore we highly recommend that you download and use the SIGBRO Offline client in an offline environment; hackers cannot steal your passphrase or your digital assets when you are not connected to the internet. </p>
+
+          <h3>How to make transactions from cold storage</h3>
+          <ul>
+            <li> Log in to a public node with your account address and initiate a transaction</li>
+            <li> Click ‘Advanced’ → ‘Do Not Broadcast’ → ‘Do Not Sign’ → ‘SUBMIT’</li>
+            <li> Copy the ‘Unsigned Transaction Bytes’ into a text document, save on USB</li>
+            <li> Open SIGBRO Offline on an offline device, insert the USB key</li>
+            <li> Enter your passphrase into the form field</li>
+            <li> Paste the Unsigned Transaction Bytes from USB into the form field</li>
+            <li> Click ‘CHECK’. You will now see your transaction details – verify them!</li>
+            <li> Once verified → Click ’SIGN’</li>
+            <li> Save your signed transaction bytes on the USB key</li>
+            <li> On your ONLINE device, insert USB and copy the `Signed Transaction Bytes’</li>
+            <li> Paste them into the form field above and click ‘BROADCAST’</li>
+            <li> You’re done.</li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
