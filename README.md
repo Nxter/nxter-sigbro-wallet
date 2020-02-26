@@ -4,6 +4,10 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
 
 ## Change log
 
+### 3.7.0
+ - Updated structure (merged portfolio and profile into balances)
+ - Removed AEUR
+
 ### 3.6.1
  - Updated text on the SIGBRO mobile login form
 

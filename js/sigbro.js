@@ -16,13 +16,13 @@ $(document).on('click', 'a.nav-link', function (e) {
 
   if (open_page == 'portfolio') {
     localStorage.setItem("sigbro_wallet_page", "portfolio");
-    show_portfolio();
+    show_balances();
     return;
   }
 
   if (open_page == 'profile') {
     localStorage.setItem("sigbro_wallet_page", "profile");
-    show_profile();
+    show_balances();
     return;
   }
 
@@ -52,8 +52,8 @@ $(document).ready(function () {
   if (page == null) { page = 'index'; }
 
   if (page == 'index') { show_index(); return; }
-  if (page == 'profile') { show_profile(); return; }
-  if (page == 'portfolio') { show_portfolio(); return; }
+  if (page == 'profile') { show_balances(); return; }
+  if (page == 'portfolio') { show_balances(); return; }
   if (page == 'operations') { show_operations(); return; }
   if (page == 'alerts') { show_alerts(); return; }
   if (page == 'offline') { show_offline_page(); return; }
@@ -643,7 +643,7 @@ function show_operations() {
   });
 }
 
-function show_portfolio() {
+function show_portfolio() { /* DEPRECATED */
   $.ajax({
     url: 'portfolio.html?_' + new Date().getTime(),
     type: 'GET',
@@ -671,10 +671,10 @@ function show_portfolio() {
 }
 
 
-function show_profile() {
+function show_balances() {
 
   $.ajax({
-    url: 'profile.html?_' + new Date().getTime(),
+    url: 'balances.html?_' + new Date().getTime(),
     type: 'GET',
     dataType: 'text',
 
@@ -686,6 +686,9 @@ function show_profile() {
       page_profile_set_accountRS();
       page_profile_set_userinfo();
       page_profile_show_balance_ardor();
+
+      page_portfolio_show_assets();
+      page_portfolio_show_currencies();
     },
 
     error: function (error) {
@@ -740,7 +743,7 @@ function show_index() {
           }
 
           localStorage.setItem("sigbro_wallet_page", "profile");
-          show_profile();
+          show_balances();
         } else {
           alert("Check your accountRS and try again.");
         }
@@ -1378,7 +1381,7 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
       getPublicKey_v2(data2.accountRS, 'ardor');
       localStorage.setItem("sigbro_wallet_page", "profile");
       localStorage.removeItem("sigbro_uuid");
-      show_profile();
+      show_balances();
     } else {
       localStorage.removeItem("sigbro_uuid");
       alert(data2.message);
@@ -1460,7 +1463,7 @@ $(document).on('click', '#sigbo_index--btn_scan_qr_code', function (e) {
       getPublicKey_v2(data2.accountRS, 'ardor');
       localStorage.setItem("sigbro_wallet_page", "profile");
       localStorage.removeItem("sigbro_uuid");
-      show_profile();
+      show_balances();
     } else {
       localStorage.removeItem("sigbro_uuid");
       alert(data2.message);
