@@ -1617,10 +1617,12 @@ function page_show_network_type() {
   }
   if (network == 'mainnet') {
     network = 'mainnet';
+    network_caption = 'switch to the testnet';
   } else {
     network = 'testnet';
+    network_caption = 'switch to the mainnet';
   }
-  document.getElementById('sigbro-change-network').innerHTML = network;
+  document.getElementById('sigbro-change-network').innerHTML = network_caption;
 }
 
 function page_alerts_update_header() {
