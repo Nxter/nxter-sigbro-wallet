@@ -14,14 +14,14 @@ $(document).on('click', 'a.nav-link', function (e) {
   e.preventDefault();
   var open_page = $(this).attr('href').replace('#', '');
 
-  if (open_page == 'portfolio') {
-    localStorage.setItem("sigbro_wallet_page", "portfolio");
-    show_balances();
+  if (open_page == 'profile') {
+    localStorage.setItem("sigbro_wallet_page", "profile");
+    show_profile();
     return;
   }
 
-  if (open_page == 'profile') {
-    localStorage.setItem("sigbro_wallet_page", "profile");
+  if (open_page == 'balances') {
+    localStorage.setItem("sigbro_wallet_page", "balances");
     show_balances();
     return;
   }
@@ -52,8 +52,8 @@ $(document).ready(function () {
   if (page == null) { page = 'index'; }
 
   if (page == 'index') { show_index(); return; }
-  if (page == 'profile') { show_balances(); return; }
-  if (page == 'portfolio') { show_balances(); return; }
+  if (page == 'balances') { show_balances(); return; }
+  if (page == 'profile') { show_profile(); return; }
   if (page == 'operations') { show_operations(); return; }
   if (page == 'alerts') { show_alerts(); return; }
   if (page == 'offline') { show_offline_page(); return; }
@@ -643,34 +643,6 @@ function show_operations() {
   });
 }
 
-function show_portfolio() { /* DEPRECATED */
-  $.ajax({
-    url: 'portfolio.html?_' + new Date().getTime(),
-    type: 'GET',
-    dataType: 'text',
-
-    success: function (response) {
-      // show page
-      $('#sigbro_spa').html(response);
-      // load data
-      page_show_network_type();
-      page_portfolio_show_assets();
-      page_portfolio_show_currencies();
-    },
-
-    error: function (error) {
-      //console.log('ERROR: ', error);
-    },
-
-    complete: function (xhr, status) {
-      //console.log('DONE');
-    }
-  });
-
-
-}
-
-
 function show_balances() {
 
   $.ajax({
@@ -683,12 +655,12 @@ function show_balances() {
       $('#sigbro_spa').html(response);
       // load data
       page_show_network_type();
-      page_profile_set_accountRS();
-      page_profile_set_userinfo();
-      page_profile_show_balance_ardor();
+      page_balances_set_accountRS();
+      page_balances_set_userinfo();
+      page_balances_show_balance_ardor();
 
-      page_portfolio_show_assets();
-      page_portfolio_show_currencies();
+      page_balances_show_assets();
+      page_balances_show_currencies();
     },
 
     error: function (error) {
@@ -742,7 +714,7 @@ function show_index() {
             localStorage.setItem("sigbro_wallet_autologin", accRS);
           }
 
-          localStorage.setItem("sigbro_wallet_page", "profile");
+          localStorage.setItem("sigbro_wallet_page", "balances");
           show_balances();
         } else {
           alert("Check your accountRS and try again.");
@@ -994,10 +966,10 @@ function page_qr_show_qrcode_for_auth() {
 
 
 
-/////////////////////////////////// PORTFOLIO
+/////////////////////////////////// BALANCES
 
 // save assets info
-function page_portfolio_save_assets() {
+function page_balances_save_assets() {
   var resp = this.responseText;
   var respJSON = JSON.parse(resp);
   // //console.log(respJSON);
@@ -1007,7 +979,7 @@ function page_portfolio_save_assets() {
     var tmp = { 'value': respJSON.data, 'timestamp': timestamp };
     localStorage.setItem('sigbro_wallet_assets', JSON.stringify(tmp));
 
-    page_portfolio_show_assets();
+    page_balances_show_assets();
   } else {
     //console.log(respJSON);
   }
@@ -1015,13 +987,13 @@ function page_portfolio_save_assets() {
 }
 
 //show assets
-function page_portfolio_show_assets() {
+function page_balances_show_assets() {
   var accRS = localStorage.getItem("sigbro_wallet_accountRS");
   var assets = localStorage.getItem("sigbro_wallet_assets");
 
   if (assets == null) {
     var url = APIURL + "/api/v2/assets/" + accRS + "/en/" + _get_network_prefix() + "/";
-    getJSON(url, TIMEOUT_ARDR, page_portfolio_save_assets, "assets");
+    getJSON(url, TIMEOUT_ARDR, page_balances_save_assets, "assets");
     return;
   }
 
@@ -1032,7 +1004,7 @@ function page_portfolio_show_assets() {
   //console.log("Delta: " + delta / 1000 + " sec.");
   if (delta > 5 * 60 * 1000) {
     var url = APIURL + "/api/v2/assets/" + accRS + "/en/" + _get_network_prefix() + "/";
-    getJSON(url, TIMEOUT_ARDR, page_portfolio_save_assets, "assets");
+    getJSON(url, TIMEOUT_ARDR, page_balances_save_assets, "assets");
     return;
   }
   if (document.getElementById('sigbro_wallet_assets')) {
@@ -1041,7 +1013,7 @@ function page_portfolio_show_assets() {
 }
 
 // save currencies
-function page_portfolio_save_currencies() {
+function page_balances_save_currencies() {
   var resp = this.responseText;
   var respJSON = JSON.parse(resp);
   // //console.log(respJSON);
@@ -1051,20 +1023,20 @@ function page_portfolio_save_currencies() {
     var tmp = { 'value': respJSON.data, 'timestamp': timestamp };
     localStorage.setItem('sigbro_wallet_currencies', JSON.stringify(tmp));
 
-    page_portfolio_show_currencies();
+    page_balances_show_currencies();
   } else {
     //console.log(respJSON);
   }
 
 }
 
-function page_portfolio_show_currencies() {
+function page_balances_show_currencies() {
   var accRS = localStorage.getItem("sigbro_wallet_accountRS");
   var currencies = localStorage.getItem("sigbro_wallet_currencies");
 
   if (currencies == null) {
     var url = APIURL + "/api/v2/currencies/" + accRS + "/en/" + _get_network_prefix() + "/";
-    getJSON(url, TIMEOUT_ARDR, page_portfolio_save_currencies, "currencies");
+    getJSON(url, TIMEOUT_ARDR, page_balances_save_currencies, "currencies");
     return;
   }
 
@@ -1075,7 +1047,7 @@ function page_portfolio_show_currencies() {
   //console.log("Delta: " + delta / 1000 + " sec.");
   if (delta > 5 * 60 * 1000) {
     var url = APIURL + "/api/v2/currencies/" + accRS + "/en/" + _get_network_prefix() + "/";
-    getJSON(url, TIMEOUT_ARDR, page_portfolio_save_currencies, "currencies");
+    getJSON(url, TIMEOUT_ARDR, page_balances_save_currencies, "currencies");
     return;
   }
 
@@ -1086,17 +1058,17 @@ function page_portfolio_show_currencies() {
 }
 
 
-/////////////////////////////////// PROFILE
+/////////////////////////////////// balances
 
-function page_profile_set_accountRS() {
+function page_balances_set_accountRS() {
   var accRS = localStorage.getItem("sigbro_wallet_accountRS");
   if (accRS == null) { sigbro_clear_localstorage(); location.href = "/index.html"; }
 
-  document.getElementById('sigbro_profile-accountRS').textContent = accRS;
+  document.getElementById('sigbro_balances-accountRS').textContent = accRS;
 }
 
 // callback function for userinf
-function page_profile_save_userinfo(data) {
+function page_balances_save_userinfo(data) {
   var resp = this.responseText;
 
   var respJSON = JSON.parse(resp);
@@ -1113,10 +1085,10 @@ function page_profile_save_userinfo(data) {
     localStorage.setItem('sigbro_wallet_userdesc', '');
   }
 
-  page_profile_set_userinfo();
+  page_balances_set_userinfo();
 }
 
-function page_profile_set_userinfo() {
+function page_balances_set_userinfo() {
   // get username from localstorage
   var accRS = localStorage.getItem("sigbro_wallet_accountRS");
   var accName = localStorage.getItem('sigbro_wallet_username');
@@ -1125,17 +1097,17 @@ function page_profile_set_userinfo() {
   if (accName == null || accDesc == null) {
     // need to get info from blockchain
     var url = _get_network_url('ardor') + "?requestType=getAccount&account=" + accRS;
-    getJSON(url, TIMEOUT_ARDR, page_profile_save_userinfo, "custom text");
+    getJSON(url, TIMEOUT_ARDR, page_balances_save_userinfo, "custom text");
     return;
   }
 
-  document.getElementById('sigbro_profile-username').textContent = accName;
-  document.getElementById('sigbro_profile-userdesc').textContent = accDesc;
+  document.getElementById('sigbro_balances-username').textContent = accName;
+  document.getElementById('sigbro_balances-userdesc').textContent = accDesc;
 
 }
 
 // callback function for ARDOR balance
-function page_profile_set_balance_ardor(data) {
+function page_balances_set_balance_ardor(data) {
   var resp = this.responseText;
   var respJSON = JSON.parse(resp);
   //console.log(respJSON);
@@ -1160,19 +1132,19 @@ function page_profile_set_balance_ardor(data) {
     var tmp = { 'value': bitswift, 'timestamp': timestamp };
     localStorage.setItem('sigbro_wallet_balance_bitswift', JSON.stringify(tmp));
 
-    page_profile_show_balance_ardor()
+    page_balances_show_balance_ardor()
   } else {
-    document.getElementById('sigbro_profile-balance-ardor').textContent = "NaN";
-    document.getElementById('sigbro_profile-balance-ignis').textContent = "NaN";
-    document.getElementById('sigbro_profile-balance-aeur').textContent = "NaN";
-    document.getElementById('sigbro_profile-balance-bitswift').textContent = "NaN";
+    document.getElementById('sigbro_balances-balance-ardor').textContent = "NaN";
+    document.getElementById('sigbro_balances-balance-ignis').textContent = "NaN";
+    document.getElementById('sigbro_balances-balance-aeur').textContent = "NaN";
+    document.getElementById('sigbro_balances-balance-bitswift').textContent = "NaN";
     //console.log(respJSON);
   }
 
 }
 
 // set ardor, ignis, aeur, bitswift balance on the page
-function page_profile_show_balance_ardor() {
+function page_balances_show_balance_ardor() {
   var accRS = localStorage.getItem("sigbro_wallet_accountRS");
   var accBalanceArdor = localStorage.getItem('sigbro_wallet_balance_ardor');
   var accBalanceIgnis = localStorage.getItem('sigbro_wallet_balance_ignis');
@@ -1181,7 +1153,7 @@ function page_profile_show_balance_ardor() {
 
   if (accBalanceArdor == null || accBalanceIgnis == null || accBalanceAeur == null || accBalanceBitswift == null) {
     var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4";
-    getJSON(url, TIMEOUT_ARDR, page_profile_set_balance_ardor, "balance ARDOR");
+    getJSON(url, TIMEOUT_ARDR, page_balances_set_balance_ardor, "balance ARDOR");
     return;
   }
 
@@ -1196,14 +1168,14 @@ function page_profile_show_balance_ardor() {
   //console.log("Delta: " + delta / 1000 + " sec.");
   if (delta > 5 * 60 * 1000) {
     var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4";
-    getJSON(url, TIMEOUT_ARDR, page_profile_set_balance_ardor, "balance ARDOR");
+    getJSON(url, TIMEOUT_ARDR, page_balances_set_balance_ardor, "balance ARDOR");
     return;
   }
 
-  document.getElementById('sigbro_profile-balance-ardor').textContent = accBalanceArdor.value;
-  document.getElementById('sigbro_profile-balance-ignis').textContent = accBalanceIgnis.value;
-  document.getElementById('sigbro_profile-balance-aeur').textContent = accBalanceAeur.value;
-  document.getElementById('sigbro_profile-balance-bitswift').textContent = accBalanceBitswift.value;
+  document.getElementById('sigbro_balances-balance-ardor').textContent = accBalanceArdor.value;
+  document.getElementById('sigbro_balances-balance-ignis').textContent = accBalanceIgnis.value;
+  document.getElementById('sigbro_balances-balance-aeur').textContent = accBalanceAeur.value;
+  document.getElementById('sigbro_balances-balance-bitswift').textContent = accBalanceBitswift.value;
 
 }
 
@@ -1379,7 +1351,7 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
     if (data2.type == 'success' && data2.accountRS) {
       localStorage.setItem("sigbro_wallet_accountRS", data2.accountRS);
       getPublicKey_v2(data2.accountRS, 'ardor');
-      localStorage.setItem("sigbro_wallet_page", "profile");
+      localStorage.setItem("sigbro_wallet_page", "balances");
       localStorage.removeItem("sigbro_uuid");
       show_balances();
     } else {
@@ -1461,7 +1433,7 @@ $(document).on('click', '#sigbo_index--btn_scan_qr_code', function (e) {
     if (data2.type == 'success' && data2.accountRS) {
       localStorage.setItem("sigbro_wallet_accountRS", data2.accountRS);
       getPublicKey_v2(data2.accountRS, 'ardor');
-      localStorage.setItem("sigbro_wallet_page", "profile");
+      localStorage.setItem("sigbro_wallet_page", "balances");
       localStorage.removeItem("sigbro_uuid");
       show_balances();
     } else {
