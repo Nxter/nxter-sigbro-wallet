@@ -1,65 +1,70 @@
 <div class="wrapper d-flex flex-column">
-    <header>
-      <div class="red-header">
-        <div class="container-fluid">
-          <div class="row justify-content-center mb-2rem">
-            <div class="col-md-11 col-lg-10 col-xl-9">
-              <div class="logo-box">
-                <img src="img/logo.svg" alt="" class="d-none d-sm-block">
-              </div>
-              <button class="btn btn-logout float-right" id="sigbro-logout">log out</button>
-              <button class="btn btn-logout float-right" id="sigbro-change-network">network</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="nav-wrapper shadow">
-        <ul class="nav justify-content-center this-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#balances">Balances</a>
-          </li>
-          <li class="nav-item">
-  
-            <a class="nav-link" href="#operations">Operations</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="#alerts">Alerts</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#offline">OFFLINE</a>
-          </li>
-        </ul>
-      </div>
-    </header>
-    <div class="flex-grow-1">
+  <header>
+    <div class="red-header">
       <div class="container-fluid">
-        <div class="row justify-content-center">
-          <div class="col-md-11 col-lg-10 col-xl-9 white-bck">
-            <div class="row mb-2rem" id="sigbro_alerts--alerts" style="display: none;">
-                <div class="col">
-                    <span class="form-control" id="sigbro_alerts--alerts_text"></span>
-                </div>
-                <div class="w-100"></div>
+        <div class="row justify-content-center mb-2rem">
+          <div class="col-md-11 col-lg-10 col-xl-9">
+            <div class="logo-box">
+              <img src="img/logo.svg" alt="" class="d-none d-sm-block">
             </div>
-            <br>
-            <span style="position:absolute; top: 10px; right: 95px; color: silver;" id="sigbro_alerts--header" ></span>
-            <a href="#" style="position:absolute; top: -5px; right: 0px; color: silver;" class="btn btn-small" id="sigbro_alerts--logout" >[ logout ]</a>
-
-            <h1 class="text-center">Sigbro Alerts</h1>
-              <div class="input-group input-group-sm mb-3">
-              <input type="text" class="form-control" placeholder="Enter ARDOR account name" id="sigbro_alerts--account_name"  >
-
-              <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" type="button" style="margin-bottom: 0px;" id="sigbro_alerts--add_acount">Add</button>
-              </div>
-            </div>
-
-            <div id="sigbro_alerts--account_list">
-              
-            </div>
-            
+            <button class="btn btn-logout float-right" id="sigbro-logout">log out</button>
+            <button class="btn btn-logout float-right" id="sigbro-change-network">network</button>
           </div>
         </div>
       </div>
     </div>
+    <div class="nav-wrapper shadow">
+      <ul class="nav justify-content-center this-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#balances">Balances</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#profile">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#operations">Operations</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#alerts">Alerts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#offline">OFFLINE</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+  <div class="flex-grow-1">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-md-11 col-lg-10 col-xl-9 white-bck">
+          <div class="row mb-2rem" id="sigbro_alerts--alerts" style="display: none;">
+            <div class="col">
+              <span class="form-control" id="sigbro_alerts--alerts_text"></span>
+            </div>
+            <div class="w-100"></div>
+          </div>
+          <br>
+          <span style="position:absolute; top: 10px; right: 95px; color: silver;" id="sigbro_alerts--header"></span>
+          <a href="#" style="position:absolute; top: -5px; right: 0px; color: silver;" class="btn btn-small"
+            id="sigbro_alerts--logout">[ logout ]</a>
+
+          <h1 class="text-center">Sigbro Alerts</h1>
+          <div class="input-group input-group-sm mb-3">
+            <input type="text" class="form-control" placeholder="Enter ARDOR account name"
+              id="sigbro_alerts--account_name">
+
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" style="margin-bottom: 0px;"
+                id="sigbro_alerts--add_acount">Add</button>
+            </div>
+          </div>
+
+          <div id="sigbro_alerts--account_list">
+
+          </div>
+
+        </div>
+      </div>
+    </div>
   </div>
+</div>

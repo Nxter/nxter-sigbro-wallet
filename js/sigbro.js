@@ -643,6 +643,35 @@ function show_operations() {
   });
 }
 
+function show_profile() {
+  $.ajax({
+    url: 'profile.html?_' + new Date().getTime(),
+    type: 'GET',
+    dataType: 'text',
+
+    success: function (response) {
+      // show page
+      $('#sigbro_spa').html(response);
+      // load data
+      page_show_network_type();
+      page_profile_set_accountRS();
+      page_profile_set_userinfo();
+
+    },
+
+    error: function (error) {
+      //console.log('ERROR: ', error);
+    },
+
+    complete: function (xhr, status) {
+      //console.log('DONE');
+    }
+  });
+
+
+
+}
+
 function show_balances() {
 
   $.ajax({
@@ -656,9 +685,9 @@ function show_balances() {
       // load data
       page_show_network_type();
       page_balances_set_accountRS();
-      page_balances_set_userinfo();
+      //page_balances_set_userinfo();
+      
       page_balances_show_balance_ardor();
-
       page_balances_show_assets();
       page_balances_show_currencies();
     },
@@ -1055,6 +1084,52 @@ function page_balances_show_currencies() {
     document.getElementById('sigbro_wallet_currencies').innerHTML = curr_data.value;
   }
 
+}
+
+////////////////////////////////// profile
+function page_profile_set_accountRS() {
+  var accRS = localStorage.getItem("sigbro_wallet_accountRS");
+  if (accRS == null) { sigbro_clear_localstorage(); location.href = "/index.html"; }
+
+  document.getElementById('sigbro_profile-accountRS').textContent = accRS;
+}
+
+// callback function for userinf
+function page_profile_save_userinfo(data) {
+  var resp = this.responseText;
+
+  var respJSON = JSON.parse(resp);
+
+  if (respJSON.name) {
+    localStorage.setItem('sigbro_wallet_username', respJSON.name);
+  } else {
+    localStorage.setItem('sigbro_wallet_username', 'NoName');
+  }
+
+  if (respJSON.description) {
+    localStorage.setItem('sigbro_wallet_userdesc', respJSON.description);
+  } else {
+    localStorage.setItem('sigbro_wallet_userdesc', '');
+  }
+
+  page_profile_set_userinfo();
+}
+
+function page_profile_set_userinfo() {
+  // get username from localstorage
+  var accRS = localStorage.getItem("sigbro_wallet_accountRS");
+  var accName = localStorage.getItem('sigbro_wallet_username');
+  var accDesc = localStorage.getItem('sigbro_wallet_userdesc');
+
+  if (accName == null || accDesc == null) {
+    // need to get info from blockchain
+    var url = _get_network_url('ardor') + "?requestType=getAccount&account=" + accRS;
+    getJSON(url, TIMEOUT_ARDR, page_profile_save_userinfo, "");
+    return;
+  }
+
+  document.getElementById('sigbro_profile-username').textContent = accName;
+  document.getElementById('sigbro_profile-userdesc').textContent = accDesc;
 }
 
 

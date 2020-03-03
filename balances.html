@@ -1,117 +1,117 @@
-    <div class="wrapper d-flex flex-column">
+<div class="wrapper d-flex flex-column">
     <header>
-     <div class="red-header">
-        <div class="container-fluid">
-            <div class="row justify-content-center mb-2rem">
-                  <div class="col-md-11 col-lg-10 col-xl-9">
+        <div class="red-header">
+            <div class="container-fluid">
+                <div class="row justify-content-center mb-2rem">
+                    <div class="col-md-11 col-lg-10 col-xl-9">
                         <div class="logo-box">
-                          <img src="img/logo.svg" alt="" class="d-none d-sm-block">
+                            <img src="img/logo.svg" alt="" class="d-none d-sm-block">
                         </div>
                         <button class="btn btn-logout float-right" id="sigbro-logout">log out</button>
                         <button class="btn btn-logout float-right" id="sigbro-change-network">network</button>
-                  </div>
+                    </div>
+                </div>
             </div>
         </div>
-     </div>
-     <div class="nav-wrapper shadow">
-        <ul class="nav justify-content-center this-nav">
-            <li class="nav-item">
-                <a class="nav-link active" href="#balances">Balances</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#operations">Operations</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#alerts">Alerts</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#offline">OFFLINE</a>
-            </li>
-        </ul>
-     </div>
+        <div class="nav-wrapper shadow">
+            <ul class="nav justify-content-center this-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#balances">Balances</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#profile">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#operations">Operations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#alerts">Alerts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#offline">OFFLINE</a>
+                </li>
+            </ul>
+        </div>
     </header>
-        <div class="flex-grow-1">
-             <div class="container-fluid">
-                 <div class="row justify-content-center">
-                    <div class="col-md-11 col-lg-10 col-xl-9 white-bck">
-                        <div class="text-center">
-                            <img src="img/profile.png" alt="" class="img-profile">
-                            <p class="h5" id="sigbro_balances-username">
-                                No name
-                            </p>
-                            <p class="p-ardor">
-                                <span class="img-wallet"></span><span id="sigbro_balances-accountRS"></span>
-                            </p>
-                            <p class="p-descr" id="sigbro_balances-userdesc">
-                            </p>
-                        </div>
-                        <!-- <a name="balance"></a> -->
-                        <p class="caption p-24">Balance</p>
-                        
-                        <div class="balance-stroke">
-                            <div class="logo-crypto-box">
-                                <img src="img/ignis.png" alt="" class="logo-crypto">
-                            </div>
-                            <p class="p-crypto-name">
-                                Ignis
-                            </p>
-                            <p class="p-balance float-right">
-                                 <b id='sigbro_balances-balance-ignis'>0.0</b>  <span class="p-grey text-uppercase">ignis</span>
-                            </p>
-                        </div>
-                        <div class="balance-stroke">
-                            <div class="logo-crypto-box">
-                                <img src="img/aeur.png" alt="" class="logo-crypto">
-                            </div>
-                            <p class="p-crypto-name">
-                                Aeur
-                            </p>
-                            <p class="p-balance float-right">
-                                 <b id='sigbro_balances-balance-aeur'>0.0</b>  <span class="p-grey text-uppercase">aeur</span>
-                            </p>
-                        </div>
-                        <div class="balance-stroke">
+    <div class="flex-grow-1">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-11 col-lg-10 col-xl-9 white-bck">
+                    <div class="text-center">
+                        <p style="font-size: 2rem;">
+                            <span id="sigbro_balances-accountRS"></span>
+                        </p>
+                    </div>
+                    <!-- <a name="balance"></a> -->
+                    <p class="caption p-24">Balance</p>
 
-                            <div class="logo-crypto-box">
-                                <img src="img/bitswift.png" alt="" class="logo-crypto">
-                            </div>
-                            <p class="p-crypto-name">
-                                Bitswift
-                            </p>
-                            <p class="p-balance float-right">
-                                 <b id='sigbro_balances-balance-bitswift'>0.0</b>  <span class="p-grey text-uppercase">swift</span>
-                            </p>
+                    <div class="balance-stroke">
+                        <div class="logo-crypto-box">
+                            <img src="img/ignis.png" alt="" class="logo-crypto">
                         </div>
-                        <div class="balance-stroke">
-                            <div class="logo-crypto-box">
-                                <img src="img/ardor.png" alt="" class="logo-crypto">
-                            </div>
-                            <p class="p-crypto-name">
-                                Ardor
-                            </p>
-                            <p class="p-balance float-right">
-                                 <b id='sigbro_balances-balance-ardor'>0.0</b>  <span class="p-grey text-uppercase">ARDR</span>
-                            </p>
+                        <p class="p-crypto-name">
+                            Ignis
+                        </p>
+                        <p class="p-balance float-right">
+                            <b id='sigbro_balances-balance-ignis'>0.0</b> <span
+                                class="p-grey text-uppercase">ignis</span>
+                        </p>
+                    </div>
+                    <div class="balance-stroke">
+                        <div class="logo-crypto-box">
+                            <img src="img/aeur.png" alt="" class="logo-crypto">
                         </div>
+                        <p class="p-crypto-name">
+                            Aeur
+                        </p>
+                        <p class="p-balance float-right">
+                            <b id='sigbro_balances-balance-aeur'>0.0</b> <span class="p-grey text-uppercase">aeur</span>
+                        </p>
+                    </div>
+                    <div class="balance-stroke">
 
-                        <p class="caption p-24">Assets</p>
-                        <div class="accordion" id="sigbro_wallet_assets">
-                          <center>Loading...</center>
+                        <div class="logo-crypto-box">
+                            <img src="img/bitswift.png" alt="" class="logo-crypto">
                         </div>
-
-                        <p class="caption p-24">Currencies</p>
-                        <div class="accordion" id="sigbro_wallet_currencies">
-                          <center>Loading...</center>
+                        <p class="p-crypto-name">
+                            Bitswift
+                        </p>
+                        <p class="p-balance float-right">
+                            <b id='sigbro_balances-balance-bitswift'>0.0</b> <span
+                                class="p-grey text-uppercase">swift</span>
+                        </p>
+                    </div>
+                    <div class="balance-stroke">
+                        <div class="logo-crypto-box">
+                            <img src="img/ardor.png" alt="" class="logo-crypto">
                         </div>
+                        <p class="p-crypto-name">
+                            Ardor
+                        </p>
+                        <p class="p-balance float-right">
+                            <b id='sigbro_balances-balance-ardor'>0.0</b> <span
+                                class="p-grey text-uppercase">ARDR</span>
+                        </p>
+                    </div>
 
-                        <!--
+                    <p class="caption p-24">Assets</p>
+                    <div class="accordion" id="sigbro_wallet_assets">
+                        <center>Loading...</center>
+                    </div>
+
+                    <p class="caption p-24">Currencies</p>
+                    <div class="accordion" id="sigbro_wallet_currencies">
+                        <center>Loading...</center>
+                    </div>
+
+                    <!--
                         <p class="caption p-24">Airdrops</p>
                         <div class="accordion" id="sigbro_wallet_airdrops">
                           <center>Is comming</center>
                         </div>
                         -->
-                    </div>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
+</div>
