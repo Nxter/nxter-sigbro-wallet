@@ -656,6 +656,7 @@ function show_profile() {
       page_show_network_type();
       page_profile_set_accountRS();
       page_profile_set_userinfo();
+      page_profile_show_public_key_alert();
 
     },
 
@@ -1113,6 +1114,17 @@ function page_profile_save_userinfo(data) {
   }
 
   page_profile_set_userinfo();
+}
+
+function page_profile_show_public_key_alert() {
+  // show alert if user does not have public key
+  var accRS = localStorage.getItem("sigbro_wallet_accountRS");
+  var pubKey = localStorage.getItem("sigbro_pubkey_" + accRS);
+
+  if (pubKey == null) {
+    document.getElementById('sigbro_profile-username').textContent = "WARNING!";
+    document.getElementById('sigbro_profile--warning').textContent = "Your account does not have a public key. It is recommended to register new accounts by sending an outgoing transaction OR announcing its public key from another account or a faucet.";
+  }
 }
 
 function page_profile_set_userinfo() {
@@ -1625,7 +1637,6 @@ function savePublicKey(accountRS) {
   resp = JSON.parse(resp);
 
   if (resp.publicKey) {
-    //console.log('Saving public key.');
     localStorage.setItem("sigbro_pubkey_" + accountRS, resp.publicKey);
   }
 }
