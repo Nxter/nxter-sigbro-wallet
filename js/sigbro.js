@@ -1206,6 +1206,7 @@ function page_balances_set_balance_ardor(data) {
     var ignis = respJSON.balances[2].balanceNQT / Math.pow(10, 8);
     var aeur = respJSON.balances[3].balanceNQT / Math.pow(10, 4);
     var bitswift = respJSON.balances[4].balanceNQT / Math.pow(10, 8);
+    var mpg = respJSON.balances[5].balanceNQT / Math.pow(10, 8);
 
     var tmp = { 'value': ardor, 'timestamp': timestamp };
     localStorage.setItem('sigbro_wallet_balance_ardor', JSON.stringify(tmp));
@@ -1219,15 +1220,25 @@ function page_balances_set_balance_ardor(data) {
     var tmp = { 'value': bitswift, 'timestamp': timestamp };
     localStorage.setItem('sigbro_wallet_balance_bitswift', JSON.stringify(tmp));
 
+    var tmp = { 'value': mpg, 'timestamp': timestamp };
+    localStorage.setItem('sigbro_wallet_balance_mpg', JSON.stringify(tmp));
+
     page_balances_show_balance_ardor()
   } else {
     document.getElementById('sigbro_balances-balance-ardor').textContent = "NaN";
     document.getElementById('sigbro_balances-balance-ignis').textContent = "NaN";
     document.getElementById('sigbro_balances-balance-aeur').textContent = "NaN";
     document.getElementById('sigbro_balances-balance-bitswift').textContent = "NaN";
+    document.getElementById('sigbro_balances-balance-mpg').textContent = "NaN";
     //console.log(respJSON);
   }
 
+}
+
+function number_pretty_print(x) {
+  var parts = x.toString().split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return parts.join(".");
 }
 
 // set ardor, ignis, aeur, bitswift balance on the page
@@ -1237,9 +1248,10 @@ function page_balances_show_balance_ardor() {
   var accBalanceIgnis = localStorage.getItem('sigbro_wallet_balance_ignis');
   var accBalanceAeur = localStorage.getItem('sigbro_wallet_balance_aeur');
   var accBalanceBitswift = localStorage.getItem('sigbro_wallet_balance_bitswift');
+  var accBalanceMPG = localStorage.getItem('sigbro_wallet_balance_mpg');
 
-  if (accBalanceArdor == null || accBalanceIgnis == null || accBalanceAeur == null || accBalanceBitswift == null) {
-    var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4";
+  if (accBalanceArdor == null || accBalanceIgnis == null || accBalanceAeur == null || accBalanceBitswift == null || accBalanceMPG == null) {
+    var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4&chain=5";
     getJSON(url, TIMEOUT_ARDR, page_balances_set_balance_ardor, "balance ARDOR");
     return;
   }
@@ -1248,21 +1260,23 @@ function page_balances_show_balance_ardor() {
   accBalanceIgnis = JSON.parse(accBalanceIgnis);
   accBalanceAeur = JSON.parse(accBalanceAeur);
   accBalanceBitswift = JSON.parse(accBalanceBitswift);
+  accBalanceMPG = JSON.parse(accBalanceMPG);
 
 
   // If delta > 5 min need to get new balances
   var delta = Date.now() - accBalanceArdor.timestamp;
   //console.log("Delta: " + delta / 1000 + " sec.");
   if (delta > 5 * 60 * 1000) {
-    var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4";
+    var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4&chain=5";
     getJSON(url, TIMEOUT_ARDR, page_balances_set_balance_ardor, "balance ARDOR");
     return;
   }
 
-  document.getElementById('sigbro_balances-balance-ardor').textContent = accBalanceArdor.value;
-  document.getElementById('sigbro_balances-balance-ignis').textContent = accBalanceIgnis.value;
-  document.getElementById('sigbro_balances-balance-aeur').textContent = accBalanceAeur.value;
-  document.getElementById('sigbro_balances-balance-bitswift').textContent = accBalanceBitswift.value;
+  document.getElementById('sigbro_balances-balance-ardor').textContent = number_pretty_print(accBalanceArdor.value);
+  document.getElementById('sigbro_balances-balance-ignis').textContent = number_pretty_print(accBalanceIgnis.value);
+  document.getElementById('sigbro_balances-balance-aeur').textContent = number_pretty_print(accBalanceAeur.value);
+  document.getElementById('sigbro_balances-balance-bitswift').textContent = number_pretty_print(accBalanceBitswift.value);
+  document.getElementById('sigbro_balances-balance-mpg').textContent = number_pretty_print(accBalanceMPG.value);
 
 }
 
