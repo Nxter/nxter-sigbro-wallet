@@ -91,7 +91,7 @@ function page_alerts_show_alert(msg) {
 function check_session() {
   var resp = this.responseText;
 
-  if ( resp ) {
+  if (resp) {
     var resp_j = JSON.parse(resp);
 
     //console.log(resp_j);
@@ -115,9 +115,9 @@ function check_session() {
   var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email")
 
   payload = JSON.stringify(
-    { 
+    {
       "email": sigbro_alerts_email,
-      "session" : sigbro_alerts_token
+      "session": sigbro_alerts_token
     }
   );
 
@@ -130,12 +130,12 @@ function check_session() {
 function page_alerts_get_accounts() {
   var resp = this.responseText;
 
-  if ( resp ) {
+  if (resp) {
     var resp_j = JSON.parse(resp);
 
     //console.log(resp_j);
 
-    if (resp_j.result && resp_j.result == "ok" ) {
+    if (resp_j.result && resp_j.result == "ok") {
       if (resp_j.data) {
         document.getElementById('sigbro_alerts--account_list').innerHTML = resp_j.data;
       }
@@ -155,9 +155,9 @@ function page_alerts_get_accounts() {
   var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email")
 
   payload = JSON.stringify(
-    { 
+    {
       "email": sigbro_alerts_email,
-      "session" : sigbro_alerts_token
+      "session": sigbro_alerts_token
     }
   );
 
@@ -173,7 +173,7 @@ function show_alerts() {
 
   if (sigbro_alerts_token && sigbro_alerts_email) {
     //TODO: Check session and email
-    
+
 
     $.ajax({
       url: 'alerts.html?_' + new Date().getTime(),
@@ -199,10 +199,10 @@ function show_alerts() {
           e.preventDefault();
           document.getElementById("sigbro_alerts--add_acount").disabled = true;
           var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
-          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");    
+          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");
           var sigbro_alerts_account = document.getElementById("sigbro_alerts--account_name").value;
 
-          if ( sigbro_alerts_account.length != 26) {
+          if (sigbro_alerts_account.length != 26) {
             page_alerts_show_alert("Wrong account format.");
             setTimeout(function () {
               document.getElementById("sigbro_alerts--add_acount").disabled = false;
@@ -213,7 +213,7 @@ function show_alerts() {
           url = APIURL + "/api/v2/wallet/add_account/";
           payload = JSON.stringify({
             "email": sigbro_alerts_email,
-            "session" : sigbro_alerts_token,
+            "session": sigbro_alerts_token,
             "accountRS": sigbro_alerts_account
           });
 
@@ -226,7 +226,7 @@ function show_alerts() {
           var button = this;
 
           var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
-          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");    
+          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");
 
           var account_name = this.id.replace("sigbro_alerts--update_", "");
           var active = document.getElementById("sigbro_alerts--active_" + account_name).checked;
@@ -236,11 +236,11 @@ function show_alerts() {
           url = APIURL + "/api/v2/wallet/update_account/";
           payload = JSON.stringify({
             "email": sigbro_alerts_email,
-            "session" : sigbro_alerts_token,
+            "session": sigbro_alerts_token,
             "accountRS": account_name,
-            "active" : active,
-            "alert_tx" : tx,
-            "alert_block" : block
+            "active": active,
+            "alert_tx": tx,
+            "alert_block": block
           });
 
           sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_update_account);
@@ -259,14 +259,14 @@ function show_alerts() {
           //console.log(button);
 
           var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
-          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");    
+          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");
 
           var account_name = button.id.replace("sigbro_alerts--remove_", "");
 
           url = APIURL + "/api/v2/wallet/remove_account/";
           payload = JSON.stringify({
             "email": sigbro_alerts_email,
-            "session" : sigbro_alerts_token,
+            "session": sigbro_alerts_token,
             "accountRS": account_name
           });
 
@@ -335,10 +335,10 @@ function show_alerts() {
 
             } else {
               payload = JSON.stringify(
-              { 
-                "email": email,
-                "pin" : pin
-              }
+                {
+                  "email": email,
+                  "pin": pin
+                }
               );
               url = APIURL + "/api/v2/wallet/checkpin/";
 
@@ -398,17 +398,17 @@ function show_alerts() {
 
             var is_mail_send = localStorage.getItem("sigbro_alerts_mail_send");
 
-            if  (is_mail_send) {
+            if (is_mail_send) {
 
             } else {
               sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_show_pincode);
-              localStorage.setItem("sigbro_alerts_mail_send","ok");
+              localStorage.setItem("sigbro_alerts_mail_send", "ok");
               setTimeout(function () {
                 localStorage.removeItem("sigbro_alerts_mail_send");
               }, 5000);
             }
 
-            
+
           }
         });
 
@@ -423,12 +423,12 @@ function show_alerts() {
 function page_alerts_add_account() {
   var resp = this.responseText;
 
-  if ( resp ) {
+  if (resp) {
     var resp_j = JSON.parse(resp);
 
     //console.log(resp_j);
 
-    if (resp_j.result && resp_j.result == "ok" ) {
+    if (resp_j.result && resp_j.result == "ok") {
       show_alerts();
 
     } else {
@@ -446,12 +446,12 @@ function page_alerts_add_account() {
 function page_alerts_remove_account() {
   var resp = this.responseText;
 
-  if ( resp ) {
+  if (resp) {
     var resp_j = JSON.parse(resp);
 
     //console.log(resp_j);
 
-    if (resp_j.result && resp_j.result == "ok" ) {
+    if (resp_j.result && resp_j.result == "ok") {
       show_alerts();
 
     } else {
@@ -469,12 +469,12 @@ function page_alerts_remove_account() {
 function page_alerts_update_account() {
   var resp = this.responseText;
 
-  if ( resp ) {
+  if (resp) {
     var resp_j = JSON.parse(resp);
 
     //console.log(resp_j);
 
-    if (resp_j.result && resp_j.result == "ok" ) {
+    if (resp_j.result && resp_j.result == "ok") {
       page_alerts_show_alert("Account updated");
       setTimeout(function () {
         page_alerts_hide_alert();
@@ -509,7 +509,7 @@ function page_alerts_check_pincode() {
     }, 2000);
 
     return true;
-  } 
+  }
   if (resp_j.result && resp_j.result == "retry") {
     page_alerts_show_alert(resp_j.msg);
     setTimeout(function () {
@@ -518,7 +518,7 @@ function page_alerts_check_pincode() {
     return true;
   } else {
     // save session
-    if ( resp_j.session ) { 
+    if (resp_j.session) {
       localStorage.setItem("sigbro_alerts_token", resp_j.session);
       show_alerts();
     }
@@ -595,8 +595,8 @@ function show_offline_page() {
         e.preventDefault();
         var bytes = document.getElementById('sigbro_offline--signed_bytes').value;
         var url = _get_network_url('ardor');
-        
-        var param = "requestType=broadcastTransaction&transactionBytes=" + bytes ;
+
+        var param = "requestType=broadcastTransaction&transactionBytes=" + bytes;
         sendPOST(url, param, TIMEOUT_SUBMIT, page_offline_show_broadcast_result);
         return;
       });
@@ -687,7 +687,7 @@ function show_balances() {
       page_show_network_type();
       page_balances_set_accountRS();
       //page_balances_set_userinfo();
-      
+
       page_balances_show_balance_ardor();
       page_balances_show_assets();
       page_balances_show_currencies();
@@ -895,11 +895,24 @@ $(document).on('click', '#sigbro_send_submit', function (e) {
   var senderPubKey = localStorage.getItem("sigbro_pubkey_" + senderRS);
 
   if (senderPubKey == null) {
-    page_ops_show_alert("Your account does not have PublicKey. You can not send any transaction with SIGBRO WALLET, sorry");
+    page_ops_show_alert("Your account does not have PublicKey. You cannot send any transaction with SIGBRO WALLET, sorry");
     return;
   }
 
+  // check recipient publicKey
   var recipientRS = document.getElementById('sigbro_send_recipientRS').value;
+  getPublicKey_v2(recipientRS, 'ardor')
+  var recipientPublicKey = localStorage.getItem("sigbro_pubkey_" + recipientRS)
+
+  if (recipientPublicKey == null) {
+    recipientPublicKey = prompt("Recipient accountRS does not have a publicKey, please provide:")
+  }
+
+  if (recipientPublicKey == null) {
+    page_ops_show_alert("You cannot send money to the accountRS without PublicKey.");
+    return;
+  }
+
   var amount = document.getElementById('sigbro_send_amount').value;
   var fee = -1;
 
@@ -911,7 +924,16 @@ $(document).on('click', '#sigbro_send_submit', function (e) {
 
   var url = APIURL + "/api/v2/sendmoney/" + _get_network_prefix() + "/";
 
-  param_json = { "currencie": currencie, "recipient": recipientRS, "amount": amount, "publicKey": senderPubKey, "fee": fee, "msg": msg, "encrypt_msg": encrypt_msg };
+  param_json = {
+    "currencie": currencie,
+    "recipient": recipientRS,
+    "amount": amount,
+    "publicKey": senderPubKey,
+    "fee": fee,
+    "msg": msg,
+    "encrypt_msg": encrypt_msg,
+    "recipientPublicKey": recipientPublicKey
+  };
   param = JSON.stringify(param_json);
 
   //console.log("url: " + url);
@@ -953,7 +975,7 @@ function page_qr_show_qrcode(is_template) {
   } else {
 
   }
-  
+
   var sigbroURL = accURL.replace("https", "sigbro");
   var link_sigbro = document.getElementById("sigbro_qr--mobile_url");
   link_sigbro.setAttribute("href", sigbroURL);
@@ -1640,7 +1662,7 @@ function getPublicKey_v2(accountRS, network) {
       _prefix = 'tst';
     }
 
-    var url = "https://random.nxter.org/" + _prefix + network + "?requestType=getAccountPublicKey&account=" + accountRS;
+    var url = "https://random.api.nxter.org/" + _prefix + network + "?requestType=getAccountPublicKey&account=" + accountRS;
     getJSON(url, TIMEOUT_ARDR, savePublicKey, accountRS);
   }
 }
@@ -1706,7 +1728,7 @@ function page_alerts_update_header() {
 function _get_network_url(network) {
   // network = ardor/nxt
   // prefix - from localstorage
-  var url = "https://random.nxter.org";
+  var url = "https://random.api.nxter.org";
   var _network = localStorage.getItem("sigbro_wallet_network");
   if (_network == 'mainnet') {
     url = url + "/" + network;

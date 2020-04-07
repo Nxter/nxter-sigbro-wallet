@@ -3,6 +3,12 @@
 Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sigbro Mobile App [https://www.nxter.org/sigbro/] 
 
 ## Change log
+
+### 3.9.0
+ - Block outgoing transaction to the account without publicKey
+ - Ask for recipientPublicKey if not exists
+ - Replace random.nxter.org => random.api.nxter.org 
+
 ### 3.8.0
  - Added Max Property Group (MPG)
 
