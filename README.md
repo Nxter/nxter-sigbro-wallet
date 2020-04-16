@@ -4,6 +4,9 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
 
 ## Change log
 
+### 3.9.1
+ - Added warning msg
+
 ### 3.9.0
  - Block outgoing transaction to the account without publicKey
  - Ask for recipientPublicKey if not exists
