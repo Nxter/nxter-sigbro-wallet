@@ -134,11 +134,8 @@ function page_alerts_get_accounts() {
     //console.log(resp_j);
 
     if (resp_j.result && resp_j.result == "ok") {
-      if (resp_j.data) {
-        localStorage.setItem("sigbro_alerts_cache_active_accounts", resp_j.data);
-        document.getElementById('sigbro_alerts--account_list').innerHTML = resp_j.data;
-      }
-
+      localStorage.setItem("sigbro_alerts_cache_active_accounts", resp_j.data);
+      document.getElementById('sigbro_alerts--account_list').innerHTML = resp_j.data;
     } else {
       page_alerts_show_alert(resp_j.msg);
       setTimeout(function () {
@@ -180,10 +177,9 @@ function page_alerts_get_inactive_accounts() {
     //console.log(resp_j);
 
     if (resp_j.result && resp_j.result == "ok") {
-      if (resp_j.data) {
-        localStorage.setItem("sigbro_alerts_cache_inactive_accounts", resp_j.data);
-        document.getElementById('sigbro_alerts--inactive_account_list').innerHTML = resp_j.data;
-      }
+
+      localStorage.setItem("sigbro_alerts_cache_inactive_accounts", resp_j.data);
+      document.getElementById('sigbro_alerts--inactive_account_list').innerHTML = resp_j.data;
 
     } else {
       page_alerts_show_alert(resp_j.msg);
