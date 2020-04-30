@@ -3,8 +3,8 @@ var APIURL = "https://sigbro-wallet.api.nxter.org"
 var TEMPLATEURL = "https://sigbro-template.api.nxter.org"
 
 // DEVELOPMENT
-//var TEMPLATEURL = "http://localhost:9060"
-//var APIURL = "http://localhost:8020"
+// var TEMPLATEURL = "http://localhost:9060"
+// var APIURL = "http://localhost:8020"
 
 var TIMEOUT_TEMPLATE = 10000;
 var TIMEOUT_SUBMIT = 10000;
@@ -82,9 +82,7 @@ function page_alerts_hide_alert() {
 
 function page_alerts_show_alert(msg) {
   var msg_block = document.getElementById('sigbro_alerts--alerts');
-  msg_block.setAttribute('style', 'display:none;');
-
-  document.getElementById('sigbro_alerts--alerts_text').innerHTML = msg;
+  msg_block.innerHTML = msg;
   msg_block.setAttribute('style', '');
 }
 
@@ -137,6 +135,7 @@ function page_alerts_get_accounts() {
 
     if (resp_j.result && resp_j.result == "ok") {
       if (resp_j.data) {
+        localStorage.setItem("sigbro_alerts_cache_active_accounts", resp_j.data);
         document.getElementById('sigbro_alerts--account_list').innerHTML = resp_j.data;
       }
 
@@ -151,6 +150,57 @@ function page_alerts_get_accounts() {
     return true;
   }
 
+  var page_cache = localStorage.getItem("sigbro_alerts_cache_active_accounts");
+  if (page_cache != null) {
+    document.getElementById('sigbro_alerts--account_list').innerHTML = page_cache;
+  }
+
+  var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
+  var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");
+
+  payload = JSON.stringify(
+    {
+      "email": sigbro_alerts_email,
+      "session": sigbro_alerts_token
+    }
+  );
+
+  url = APIURL + "/api/v2/wallet/get-active-accounts/";
+
+  sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_get_accounts);
+
+}
+
+function page_alerts_get_inactive_accounts() {
+  var resp = this.responseText;
+
+  if (resp) {
+    var resp_j = JSON.parse(resp);
+
+    //console.log(resp_j);
+
+    if (resp_j.result && resp_j.result == "ok") {
+      if (resp_j.data) {
+        localStorage.setItem("sigbro_alerts_cache_inactive_accounts", resp_j.data);
+        document.getElementById('sigbro_alerts--inactive_account_list').innerHTML = resp_j.data;
+      }
+
+    } else {
+      page_alerts_show_alert(resp_j.msg);
+      setTimeout(function () {
+        show_alerts();
+      }, 2000);
+      return false;
+    }
+
+    return true;
+  }
+
+  var page_cache = localStorage.getItem("sigbro_alerts_cache_inactive_accounts");
+  if (page_cache != null) {
+    document.getElementById('sigbro_alerts--inactive_account_list').innerHTML = page_cache;
+  }
+
   var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
   var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email")
 
@@ -161,9 +211,9 @@ function page_alerts_get_accounts() {
     }
   );
 
-  url = APIURL + "/api/v2/wallet/get_accounts/";
+  url = APIURL + "/api/v2/wallet/get-inactive-accounts/";
 
-  sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_get_accounts);
+  sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_get_inactive_accounts);
 
 }
 
@@ -186,6 +236,7 @@ function show_alerts() {
         page_show_network_type();
         page_alerts_update_header();
         page_alerts_get_accounts();
+        page_alerts_get_inactive_accounts();
       },
 
       error: function (error) {
@@ -220,18 +271,19 @@ function show_alerts() {
           sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_add_account);
         });
 
-        $(document).on('click', '.sigbro-alerts-update-button', function (e) {
-          e.preventDefault();
+        // change tx status
+        $(document).on('click', '.sigbro-alerts-checkbox-transaction', function(e) {
           this.disabled = true;
           var button = this;
 
           var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
           var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");
+          var account_name = this.id.replace("sigbro_alerts--transaction_", "");
 
-          var account_name = this.id.replace("sigbro_alerts--update_", "");
           var active = document.getElementById("sigbro_alerts--active_" + account_name).checked;
           var tx = document.getElementById("sigbro_alerts--transaction_" + account_name).checked;
           var block = document.getElementById("sigbro_alerts--block_" + account_name).checked;
+          var approvals = document.getElementById("sigbro_alerts--approvals_" + account_name).checked;
 
           url = APIURL + "/api/v2/wallet/update_account/";
           payload = JSON.stringify({
@@ -240,14 +292,117 @@ function show_alerts() {
             "accountRS": account_name,
             "active": active,
             "alert_tx": tx,
-            "alert_block": block
+            "alert_block": block,
+            "alert_approvals" : approvals,
           });
 
           sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_update_account);
 
           setTimeout(function () {
             button.disabled = false;
-          }, 5000);
+          }, 2000);
+
+        });
+
+        // change forging status
+        $(document).on('click', '.sigbro-alerts-checkbox-forging', function(e) {
+          this.disabled = true;
+          var button = this;
+
+          var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
+          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");
+          var account_name = this.id.replace("sigbro_alerts--block_", "");
+
+          var active = document.getElementById("sigbro_alerts--active_" + account_name).checked;
+          var tx = document.getElementById("sigbro_alerts--transaction_" + account_name).checked;
+          var block = document.getElementById("sigbro_alerts--block_" + account_name).checked;
+          var approvals = document.getElementById("sigbro_alerts--approvals_" + account_name).checked;
+
+          url = APIURL + "/api/v2/wallet/update_account/";
+          payload = JSON.stringify({
+            "email": sigbro_alerts_email,
+            "session": sigbro_alerts_token,
+            "accountRS": account_name,
+            "active": active,
+            "alert_tx": tx,
+            "alert_block": block,
+            "alert_approvals" : approvals,
+          });
+
+          sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_update_account);
+
+          setTimeout(function () {
+            button.disabled = false;
+          }, 2000);
+
+        });
+
+        // change approvals status
+        $(document).on('click', '.sigbro-alerts-checkbox-approvals', function(e) {
+          this.disabled = true;
+          var button = this;
+
+          var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
+          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");
+          var account_name = this.id.replace("sigbro_alerts-approvals_", "");
+
+          var active = document.getElementById("sigbro_alerts--active_" + account_name).checked;
+          var tx = document.getElementById("sigbro_alerts--transaction_" + account_name).checked;
+          var block = document.getElementById("sigbro_alerts--block_" + account_name).checked;
+          var approvals = document.getElementById("sigbro_alerts--approvals_" + account_name).checked;
+
+          url = APIURL + "/api/v2/wallet/update_account/";
+          payload = JSON.stringify({
+            "email": sigbro_alerts_email,
+            "session": sigbro_alerts_token,
+            "accountRS": account_name,
+            "active": active,
+            "alert_tx": tx,
+            "alert_block": block,
+            "alert_approvals" : approvals,
+          });
+
+          sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_update_account);
+
+
+          setTimeout(function () {
+            button.disabled = false;
+          }, 2000);
+
+        });
+
+        // change active status
+        $(document).on('click', '.sigbro-alerts-checkbox-active', function(e) {
+          this.disabled = true;
+          var button = this;
+
+          var sigbro_alerts_token = localStorage.getItem("sigbro_alerts_token");
+          var sigbro_alerts_email = localStorage.getItem("sigbro_alerts_email");
+          var account_name = this.id.replace("sigbro_alerts--active_", "");
+
+          var active = document.getElementById("sigbro_alerts--active_" + account_name).checked;
+          var tx = document.getElementById("sigbro_alerts--transaction_" + account_name).checked;
+          var block = document.getElementById("sigbro_alerts--block_" + account_name).checked;
+          var approvals = document.getElementById("sigbro_alerts--approvals_" + account_name).checked;
+
+          url = APIURL + "/api/v2/wallet/update_account/";
+          payload = JSON.stringify({
+            "email": sigbro_alerts_email,
+            "session": sigbro_alerts_token,
+            "accountRS": account_name,
+            "active": active,
+            "alert_tx": tx,
+            "alert_block": block,
+            "alert_approvals" : approvals,
+          });
+
+          sendJSON(url, payload, TIMEOUT_SUBMIT, page_alerts_update_account);
+
+          setTimeout(function () {
+            button.disabled = false;
+            page_alerts_get_accounts();
+            page_alerts_get_inactive_accounts();
+          }, 1000);
 
         });
 
@@ -478,7 +633,7 @@ function page_alerts_update_account() {
       page_alerts_show_alert("Account updated");
       setTimeout(function () {
         page_alerts_hide_alert();
-      }, 2000);
+      }, 500);
       return true;
     } else {
       page_alerts_show_alert(resp_j.msg);
@@ -1322,6 +1477,9 @@ function sigbro_clear_localstorage() {
 
   localStorage.removeItem("sigbro_wallet_url"); // last created url
   localStorage.removeItem("sigbro_uuid"); // uuid from last logon
+
+  localStorage.removeItem("sigbro_alerts_cache_inactive_accounts"); // clear cache of the page
+  localStorage.removeItem("sigbro_alerts_cache_active_accounts"); // clear cache of the page
 }
 
 function sigbro_clear_balances() {
