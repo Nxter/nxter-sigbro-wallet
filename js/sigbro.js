@@ -47,16 +47,49 @@ $(document).on('click', 'a.nav-link', function (e) {
 });
 
 $(document).ready(function () {
-  var page = localStorage.getItem("sigbro_wallet_page");
-  //console.log("Last page: " + page);
-  if (page == null) { page = 'index'; }
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
 
-  if (page == 'index') { show_index(); return; }
-  if (page == 'balances') { show_balances(); return; }
-  if (page == 'profile') { show_profile(); return; }
-  if (page == 'operations') { show_operations(); return; }
-  if (page == 'alerts') { show_alerts(); return; }
-  if (page == 'offline') { show_offline_page(); return; }
+  // check if user wants to open custom page
+  const redirect_page = urlParams.get("page");
+  var page = null;
+
+  if (redirect_page !== null) {
+    page = redirect_page;
+    localStorage.setItem("page", page);
+    window.history.pushState({}, document.title, "/");
+  } else {
+    page = localStorage.getItem("sigbro_wallet_page");
+  }
+
+  // check if user wants to open custom account
+  const accountRS = urlParams.get("account");
+  if (accountRS !== null) {
+    var ardorRegex = /^ARDOR-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{5}/ig
+    var nxtRegex = /^NXT-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{5}/ig
+
+    if (ardorRegex.test(accountRS) || nxtRegex.test(accountRS)) {
+      localStorage.setItem("sigbro_wallet_accountRS", accountRS);
+      getPublicKey_v2(accountRS, 'ardor');
+      sigbro_clear_balances();
+    }
+
+    window.history.pushState({}, document.title, "/");
+  }
+
+  if (page == 'balances') { 
+    show_balances(); return; 
+  } else if (page == 'profile') { 
+    show_profile(); return; 
+  } else if (page == 'operations') { 
+    show_operations(); return; 
+  } else if (page == 'alerts') { 
+    show_alerts(); return; 
+  } else if (page == 'offline') { 
+    show_offline_page(); return; 
+  } else {
+    show_index(); return; 
+  }
 
 });
 
