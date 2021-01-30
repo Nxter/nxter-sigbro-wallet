@@ -1,8 +1,9 @@
 @font-face {
   font-family: "Brutal Type";
-  src: url("../fonts/Brownfox - Brutal Type.otf");
+  src: url('../fonts/brownfox_-_brutal_type.woff2') format('woff2'),
+       url('../fonts/brownfox_-_brutal_type.woff') format('woff');
   font-style: normal;
-  font-weight: 400;
+  font-weight: normal;
 }
 html {
   font-size: 14px;
@@ -14,7 +15,7 @@ html {
   }
 }
 body {
-  font-family: "Brutal Type", sans-serif;
+  font-family: "Brutal Type";
   font-size: 1rem;
   font-weight: 400;
   color: #262626;
