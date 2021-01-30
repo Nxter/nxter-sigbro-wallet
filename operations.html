@@ -50,7 +50,7 @@
                       href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                       <p class="h4 weight-normal">
                         Send tokens
-                        <i class="p-grey more-less icon-fontello icon-right-open-big float-right"></i>
+                        <i class="fas fa-angle-down"></i>
                       </p>
 
                     </a>
@@ -132,9 +132,9 @@
                     <a class="collapsed a-black" role="button" data-toggle="collapse" data-parent="#accordion"
                       href="#collapseTemplate" aria-expanded="false" aria-controls="collapseTemplate">
                       <p class="h4 weight-normal">
-                        Generate a transaction template QR
-                        <br><small>Read more about templates on the <a href="https://sigbro.app/faq/" target=_blank>Sigbro.app</a></small>
-                        <i class="p-grey more-less icon-fontello icon-right-open-big float-right"></i>
+                        Generate a transaction template QR-code
+                        <!--<br><small>Read more about templates on the <a href="https://sigbro.app/faq/" target=_blank>Sigbro.app</a></small> -->
+                        <i class="fas fa-angle-down"></i>
                       </p>
                     </a>
                   </div> <!-- /headingTemplate-->
@@ -235,6 +235,109 @@
                       </form>
                     </div>
                   </div> <!-- /collapseTemplate -->
+
+                  <!-- Upload File -->
+                  <div class="operation-stroke" id="headingUpload">
+                    <a class="collapsed a-black" role="button" data-toggle="collapse" data-parent="#accordion"
+                      href="#collapseUpload" aria-expanded="false" aria-controls="collapseUpload">
+                      <p class="h4 weight-normal">
+                        Upload a file to the Data Cloud
+                        <i class="fas fa-angle-down"></i>
+                      </p>
+
+                    </a>
+                  </div> <!-- /upload file-->
+
+
+                  <div id="collapseUpload" class="collapse" aria-labelledby="headingUpload" data-parent="#accordionExample">
+                    <div class="send-box">
+                      <form class="send-form" action="http://localhost:8000/data-storage/">
+
+                        <div class="row mb-1rem">
+                          <div class="no-gutters col-md-12">
+                            <div class="input-group mb-3" >
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_name">Entity Name</label>
+                                </div>
+                                <input type="text" class="form-control sigbro-input" id="sigbro_entity_name" aria-describedby="" placeholder="Entity name (max 100 characters)">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1rem">
+                          <div class="no-gutters col-md-12">
+                            <div class="input-group mb-3" >
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_descr">Description</label>
+                                </div>
+                                <input type="text" class="form-control sigbro-input" id="sigbro_entity_descr" aria-describedby="" placeholder="Entity Description (max 1000 characters)">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1rem">
+                          <div class="no-gutters col-md-12">
+                            <div class="input-group mb-3" >
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_channel">Channel</label>
+                                </div>
+                                <input type="text" class="form-control sigbro-input" id="sigbro_entity_channel" aria-describedby="" placeholder="Entity Channel (max 50 characters)">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1rem">
+                          <div class="no-gutters col-md-2">
+                            <div class="input-group mb-3" >
+                                <input type="text" class="form-control sigbro-input" id="sigbro_tag1" aria-describedby="" placeholder="Tag1">
+                            </div>
+                          </div>
+                          <div class="no-gutters col-md-2">
+                            <div class="input-group mb-3" >
+                                <input type="text" class="form-control sigbro-input" id="sigbro_tag2" aria-describedby="" placeholder="Tag2">
+                            </div>
+                          </div>
+                          <div class="no-gutters col-md-2">
+                            <div class="input-group mb-3" >
+                                <input type="text" class="form-control sigbro-input" id="sigbro_tag3" aria-describedby="" placeholder="Tag3">
+                            </div>
+                          </div>
+                          <div class="no-gutters col-md-2">
+                            <div class="input-group mb-3" >
+                                <input type="text" class="form-control sigbro-input" id="sigbro_tag4" aria-describedby="" placeholder="Tag4">
+                            </div>
+                          </div>
+                          <div class="no-gutters col-md-2">
+                            <div class="input-group mb-3" >
+                                <input type="text" class="form-control sigbro-input" id="sigbro_tag5" aria-describedby="" placeholder="Tag5">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1rem">
+                          <div class="no-gutters col-md-12">
+                            <div class="input-group mb-3" >
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" style="min-width: 120px;" for="sigbro_file">File</label>
+                                </div>
+                                <input type="file" class="form-control sigbro-input" id="sigbro_file" aria-describedby="" placeholder="File to upload (Max 1Mb)">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1rem" id="sigbro_upload_block" style="display: none;">
+                          <div class="col">
+                            <label for="exampleFormControlTextarea1 p-media">Status</label>
+                            <span class="form-control" id="sigbro_upload_status_text"></span>
+                          </div>
+                          <div class="w-100"></div>
+                        </div>
+
+                        <button type="submit" class="btn btn-block p-medium btn-qr" id="sigbro_upload_submit">Upload and Generate QR-Code</button>
+
+                      </form>
+                    </div>
+                  </div>
 
 
                 </div>
