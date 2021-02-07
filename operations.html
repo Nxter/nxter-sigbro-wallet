@@ -251,7 +251,9 @@
 
                   <div id="collapseUpload" class="collapse" aria-labelledby="headingUpload" data-parent="#accordionExample">
                     <div class="send-box">
-                      <form class="send-form" action="http://localhost:8000/data-storage/">
+                      <form class="send-form" action="http://localhost:8000/api/v1/data-storage/" method="POST" enctype=multipart/form-data>
+                        <input type="hidden" id="sigbro_dataupload_pubkey" name="sigbro_pubkey" />
+                        <input type="hidden" id="sigbro_dataupload_network" name="sigbro_network" />
 
                         <div class="row mb-1rem">
                           <div class="no-gutters col-md-12">
@@ -259,7 +261,7 @@
                                 <div class="input-group-prepend">
                                   <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_name">Entity Name</label>
                                 </div>
-                                <input type="text" class="form-control sigbro-input" id="sigbro_entity_name" aria-describedby="" placeholder="Entity name (max 100 characters)">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_name" id="sigbro_entity_name" aria-describedby="" placeholder="Entity name (max 100 characters)">
                             </div>
                           </div>
                         </div>
@@ -270,7 +272,7 @@
                                 <div class="input-group-prepend">
                                   <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_descr">Description</label>
                                 </div>
-                                <input type="text" class="form-control sigbro-input" id="sigbro_entity_descr" aria-describedby="" placeholder="Entity Description (max 1000 characters)">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_descr" id="sigbro_entity_descr" aria-describedby="" placeholder="Entity Description (max 1000 characters)">
                             </div>
                           </div>
                         </div>
@@ -281,7 +283,7 @@
                                 <div class="input-group-prepend">
                                   <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_channel">Channel</label>
                                 </div>
-                                <input type="text" class="form-control sigbro-input" id="sigbro_entity_channel" aria-describedby="" placeholder="Entity Channel (max 50 characters)">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_channel" id="sigbro_entity_channel" aria-describedby="" placeholder="Entity Channel (max 50 characters)">
                             </div>
                           </div>
                         </div>
@@ -289,27 +291,27 @@
                         <div class="row mb-1rem">
                           <div class="no-gutters col-md-2">
                             <div class="input-group mb-3" >
-                                <input type="text" class="form-control sigbro-input" id="sigbro_tag1" aria-describedby="" placeholder="Tag1">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_tag1" aria-describedby="" placeholder="Tag1">
                             </div>
                           </div>
                           <div class="no-gutters col-md-2">
                             <div class="input-group mb-3" >
-                                <input type="text" class="form-control sigbro-input" id="sigbro_tag2" aria-describedby="" placeholder="Tag2">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_tag2" aria-describedby="" placeholder="Tag2">
                             </div>
                           </div>
                           <div class="no-gutters col-md-2">
                             <div class="input-group mb-3" >
-                                <input type="text" class="form-control sigbro-input" id="sigbro_tag3" aria-describedby="" placeholder="Tag3">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_tag3" aria-describedby="" placeholder="Tag3">
                             </div>
                           </div>
                           <div class="no-gutters col-md-2">
                             <div class="input-group mb-3" >
-                                <input type="text" class="form-control sigbro-input" id="sigbro_tag4" aria-describedby="" placeholder="Tag4">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_tag4" aria-describedby="" placeholder="Tag4">
                             </div>
                           </div>
                           <div class="no-gutters col-md-2">
                             <div class="input-group mb-3" >
-                                <input type="text" class="form-control sigbro-input" id="sigbro_tag5" aria-describedby="" placeholder="Tag5">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_tag5" aria-describedby="" placeholder="Tag5">
                             </div>
                           </div>
                         </div>
@@ -320,7 +322,7 @@
                                 <div class="input-group-prepend">
                                   <label class="input-group-text" style="min-width: 120px;" for="sigbro_file">File</label>
                                 </div>
-                                <input type="file" class="form-control sigbro-input" id="sigbro_file" aria-describedby="" placeholder="File to upload (Max 1Mb)">
+                                <input type="file" class="form-control sigbro-input" name="sigbro_file" id="sigbro_file" aria-describedby="" placeholder="File to upload (Max 1Mb)">
                             </div>
                           </div>
                         </div>

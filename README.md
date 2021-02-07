@@ -4,6 +4,9 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
 
 ## Change log
 
+### 3.12.0
+  - Add new section "Upload a file to the Data Cloud"
+
 ### 3.11.0
  - Can use ?page= and ?account= get params
 

@@ -970,14 +970,19 @@ function page_ops_show_alert(msg) {
 }
 
 function page_ops_set_accountRS() {
+  var network = localStorage.getItem("sigbro_wallet_network");
   var accRS = localStorage.getItem("sigbro_wallet_accountRS");
+
   if (accRS == null) { sigbro_clear_localstorage(); location.href = "/index.html"; }
   document.getElementById('sigbro_send_senderRS').value = accRS;
   document.getElementById('sigbro_template_recipientRS').value = accRS;
+  document.getElementById('sigbro_dataupload_network').value = network;
 
   var senderPubKey = localStorage.getItem("sigbro_pubkey_" + accRS);
   if (senderPubKey == null) {
     getPublicKey_v2(accRS, 'ardor');
+  } else {
+    document.getElementById('sigbro_dataupload_pubkey').value = senderPubKey;
   }
 
 }
