@@ -4,7 +4,7 @@ stages:
 variables:
   USER_NAME: "scor2k"
   IMAGE_NAME: "nxter-sigbro-wallet-web"
-  VER: "3.12.0"
+  VER: "3.13.0"
 
 
 Build docker image:

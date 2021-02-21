@@ -241,7 +241,7 @@
                     <a class="collapsed a-black" role="button" data-toggle="collapse" data-parent="#accordion"
                       href="#collapseUpload" aria-expanded="false" aria-controls="collapseUpload">
                       <p class="h4 weight-normal">
-                        Upload a file to the Data Cloud
+                        Upload a NFTMagic file (Non Fungible Token)
                         <i class="fas fa-angle-down"></i>
                       </p>
 
@@ -259,9 +259,9 @@
                           <div class="no-gutters col-md-12">
                             <div class="input-group mb-3" >
                                 <div class="input-group-prepend">
-                                  <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_name">Entity Name</label>
+                                  <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_name">NFT Name</label>
                                 </div>
-                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_name" id="sigbro_entity_name" aria-describedby="" placeholder="Entity name (max 100 characters)">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_name" id="sigbro_entity_name" aria-describedby="" placeholder="NFT name (max 100 characters)">
                             </div>
                           </div>
                         </div>
@@ -272,11 +272,12 @@
                                 <div class="input-group-prepend">
                                   <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_descr">Description</label>
                                 </div>
-                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_descr" id="sigbro_entity_descr" aria-describedby="" placeholder="Entity Description (max 1000 characters)">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_descr" id="sigbro_entity_descr" aria-describedby="" placeholder="NFT Description (max 1000 characters)">
                             </div>
                           </div>
                         </div>
 
+                        <!--
                         <div class="row mb-1rem">
                           <div class="no-gutters col-md-12">
                             <div class="input-group mb-3" >
@@ -287,40 +288,46 @@
                             </div>
                           </div>
                         </div>
+                        -->
 
-                        <div class="row mb-1rem">
-                          <div class="no-gutters col-md-2">
-                            <div class="input-group mb-3" >
-                                <input type="text" class="form-control sigbro-input" name="sigbro_tag1" aria-describedby="" placeholder="Tag1">
+                        <div class="row mb-1rem" style="margin-bottom: 1rem;">
+                          <div class="no-gutters col-md-12">
+                            <h6>NFT Categories:</h6>
+                          </div>
+                          <div class="no-gutters col-md-12">
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="checkbox" id="sigbro_tag1" name="sigbro_tag1" value="Audio">
+                              <label class="form-check-label" for="sigbro_tag1">Audio</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="checkbox" id="sigbro_tag2" name="sigbro_tag2" value="Art">
+                              <label class="form-check-label" for="sigbro_tag2">Art</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="checkbox" id="sigbro_tag3" name="sigbro_tag3" value="Collectibles">
+                              <label class="form-check-label" for="sigbro_tag3">Collectibles</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="checkbox" id="sigbro_tag4" name="sigbro_tag4" value="Trading Cards">
+                              <label class="form-check-label" for="sigbro_tag4">Trading Cards</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="checkbox" id="sigbro_tag5" name="sigbro_tag5" value="Games">
+                              <label class="form-check-label" for="sigbro_tag5">Games</label>
                             </div>
                           </div>
-                          <div class="no-gutters col-md-2">
-                            <div class="input-group mb-3" >
-                                <input type="text" class="form-control sigbro-input" name="sigbro_tag2" aria-describedby="" placeholder="Tag2">
-                            </div>
-                          </div>
-                          <div class="no-gutters col-md-2">
-                            <div class="input-group mb-3" >
-                                <input type="text" class="form-control sigbro-input" name="sigbro_tag3" aria-describedby="" placeholder="Tag3">
-                            </div>
-                          </div>
-                          <div class="no-gutters col-md-2">
-                            <div class="input-group mb-3" >
-                                <input type="text" class="form-control sigbro-input" name="sigbro_tag4" aria-describedby="" placeholder="Tag4">
-                            </div>
-                          </div>
-                          <div class="no-gutters col-md-2">
-                            <div class="input-group mb-3" >
-                                <input type="text" class="form-control sigbro-input" name="sigbro_tag5" aria-describedby="" placeholder="Tag5">
-                            </div>
-                          </div>
+
                         </div>
 
                         <div class="row mb-1rem">
                           <div class="no-gutters col-md-12">
                             <div class="input-group mb-3" >
                                 <div class="input-group-prepend">
-                                  <label class="input-group-text" style="min-width: 120px;" for="sigbro_file">File</label>
+                                  <label class="input-group-text" style="min-width: 120px;" for="sigbro_file">NFT File</label>
                                 </div>
                                 <input type="file" class="form-control sigbro-input" name="sigbro_file" id="sigbro_file" aria-describedby="" placeholder="File to upload (Max 1Mb)">
                             </div>

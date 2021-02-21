@@ -4,6 +4,9 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
 
 ## Change log
 
+### 3.13.0
+  - Tranfromed "upload a file to the Data Clound" into "Upload a NFTMagic file"
+
 ### 3.12.0
   - Add new section "Upload a file to the Data Cloud"
 
