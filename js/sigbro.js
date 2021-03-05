@@ -2057,22 +2057,26 @@ function findCollections() {
           var selectCollection = document.getElementById("sigbro_entity_collection_old");
           selectCollection.innerHTML = ""; // clear
 
-          let option = document.createElement( 'option' );
-          option.value = "";
-          option.text = "A new one...";
-          selectCollection.add(option);
-
           for ( const [key, value] of Object.entries(collectionsCount)) {
             let option = document.createElement( 'option' );
             option.value = key;
             option.text = key + " (" + String(value) + "/" + String(collectionsSize[key]) + ")";
-            option.setAttribute("max", collectionsSize[key] );
+            option.dataset.max = collectionsSize[key];
 
             console.log(option);
             selectCollection.add(option);
           }
 
+          let option = document.createElement( 'option' );
+          option.value = "";
+          option.text = "A new one...";
+          selectCollection.add(option);
+
+
           show_module('.collection-only-old');
+          hide_module('.collection-only');
+          showHideCollectionFields();
+
         }
 
         //console.log(collectionsCount);
@@ -2090,14 +2094,19 @@ function findCollections() {
 }
 
 function showHideCollectionFields() {
-  collectionName = document.getElementById("sigbro_entity_collection_old").value;
-  maxSize = document.getElementById("sigbro_entity_collection_old").getAttribute('max');
+  collectionOldName = document.getElementById("sigbro_entity_collection_old");
 
-  if ( collectionName == "" ) {
+  if ( collectionOldName.value == "" ) {
+    $('#sigbro_entity_collection').val("testttt");
+    $('#sigbro_entity_collection_size').val(99);
     show_module('.collection-only');
   } else {
-    document.getElementById("sigbro_entity_collection_size").value = maxSize;
-    document.getElementById("sigbro_entity_collection").value = collectionName;
+    let colName = collectionOldName.value;
+    let colMax = collectionOldName.options[collectionOldName.selectedIndex].dataset.max;
+
+    $('#sigbro_entity_collection').val(colName);
+    $('#sigbro_entity_collection_size').val(colMax);
+
     hide_module('.collection-only');
   }
 }
