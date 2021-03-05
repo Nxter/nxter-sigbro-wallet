@@ -2097,8 +2097,8 @@ function showHideCollectionFields() {
   collectionOldName = document.getElementById("sigbro_entity_collection_old");
 
   if ( collectionOldName.value == "" ) {
-    $('#sigbro_entity_collection').val("testttt");
-    $('#sigbro_entity_collection_size').val(99);
+    $('#sigbro_entity_collection').val("");
+    $('#sigbro_entity_collection_size').val(10);
     show_module('.collection-only');
   } else {
     let colName = collectionOldName.value;
