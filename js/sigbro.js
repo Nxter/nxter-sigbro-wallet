@@ -815,6 +815,7 @@ function show_operations() {
       // load data
       page_show_network_type();
       page_ops_set_accountRS();
+      show_accountRS();
     },
 
     error: function (error) {
@@ -1996,3 +1997,107 @@ function showRightFields() {
 
 }
 
+function show_accountRS() {
+  var accRS = localStorage.getItem("sigbro_wallet_accountRS");
+  if (accRS == null) { sigbro_clear_localstorage(); location.href = "/index.html"; }
+
+  document.getElementById('sigbro-accountRS').textContent = accRS;
+}
+
+/* sigbro NFT section */
+
+// show or hide the section whti NFT collection
+function showCollections() {
+  checker = document.getElementById("sigbro_entity_is_collection");
+  if ( checker.checked == true) {
+    findCollections();
+    show_module('.collection-only');
+  } else {
+    hide_module('.collection-only');
+    hide_module('.collection-only-old');
+  }
+}
+
+function findCollections() {
+  var xhttp = new XMLHttpRequest();
+
+  var assets = [];
+  var accoutRS = localStorage.getItem("sigbro_wallet_accountRS");
+  var network = localStorage.getItem("sigbro_wallet_network");
+  var url;
+  if ( network == "mainnet" ) {
+    url = "https://random.api.nxter.org/ardor?requestType=getAssetsByIssuer&account=" + accoutRS;
+  } else {
+    url = "https://random.api.nxter.org/tstardor?requestType=getAssetsByIssuer&account=" + accoutRS;
+  }
+
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4) {
+      if ( this.status == 200 ) {
+        var assets=JSON.parse(this.responseText).assets[0];
+
+        //console.log(assets);
+        var collectionsCount = {}
+        var collectionsSize = {}
+
+        assets.forEach((item, _) => {
+            if (item.name.startsWith("NFT") && item.description.length > 128) {
+              let seriesName = item.description.substr(132);
+              let seriesSize = item.description.substr(130, 2);
+              if (seriesName in collectionsCount) {
+                collectionsCount[seriesName] += 1;
+              } else {
+                collectionsCount[seriesName] = 1;
+                collectionsSize[seriesName] = parseInt(seriesSize, 32); // convert base32 -> int
+              }
+            }
+          });
+
+        if ( Object.keys(collectionsSize).length > 0 ) {
+          var selectCollection = document.getElementById("sigbro_entity_collection_old");
+          selectCollection.innerHTML = ""; // clear
+
+          let option = document.createElement( 'option' );
+          option.value = "";
+          option.text = "A new one...";
+          selectCollection.add(option);
+
+          for ( const [key, value] of Object.entries(collectionsCount)) {
+            let option = document.createElement( 'option' );
+            option.value = key;
+            option.text = key + " (" + String(value) + "/" + String(collectionsSize[key]) + ")";
+            option.setAttribute("max", collectionsSize[key] );
+
+            console.log(option);
+            selectCollection.add(option);
+          }
+
+          show_module('.collection-only-old');
+        }
+
+        //console.log(collectionsCount);
+        //console.log(collectionsSize);
+
+      } else {
+        console.error(this.statusText);
+      }
+
+    } // end  readyState == 4
+  }
+
+  xhttp.open("POST", url, true);
+  xhttp.send();
+}
+
+function showHideCollectionFields() {
+  collectionName = document.getElementById("sigbro_entity_collection_old").value;
+  maxSize = document.getElementById("sigbro_entity_collection_old").getAttribute('max');
+
+  if ( collectionName == "" ) {
+    show_module('.collection-only');
+  } else {
+    document.getElementById("sigbro_entity_collection_size").value = maxSize;
+    document.getElementById("sigbro_entity_collection").value = collectionName;
+    hide_module('.collection-only');
+  }
+}

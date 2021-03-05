@@ -11,6 +11,7 @@
             <button class="btn btn-logout float-right" id="sigbro-change-network">network</button>
           </div>
         </div>
+        <span style="font-size: small; color: white; position: absolute; top: 1px; right: 1rem;" id="sigbro-accountRS"></span>
       </div>
     </div>
     <div class="nav-wrapper shadow">
@@ -255,13 +256,57 @@
                         <input type="hidden" id="sigbro_dataupload_pubkey" name="sigbro_pubkey" />
                         <input type="hidden" id="sigbro_dataupload_network" name="sigbro_network" />
 
+                        <div class="row mb-1rem" style="padding-bottom: 1rem;">
+                          <div class="no-gutters col-md-12">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" name="sigbro_entity_is_collection" value="1" id="sigbro_entity_is_collection" onclick="showCollections()">
+                              <label class="form-check-label" for="sigbro_entity_is_collection">
+                                Check it if this NFT is part of a collection only!
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1rem collection-only" style="display: none;">
+                          <div class="no-gutters col-md-8 col-xs-12">
+                            <div class="input-group mb-3" >
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_collection">Collection</label>
+                                </div>
+                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_collection" id="sigbro_entity_collection" aria-describedby="" placeholder="Collection name (max 28 characters)" maxlength="28">
+                            </div>
+                          </div>
+                          <div class="no-gutters col-md-4 col-xs-12">
+                            <div class="input-group mb-3" >
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="sigbro_entity_collection_size">Size</label>
+                                </div>
+                                <input type="number" class="form-control sigbro-input" name="sigbro_entity_collection_size" id="sigbro_entity_collection_size" aria-describedby="" placeholder="max 1000" min="1" max="1000">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1rem collection-only-old" style="display: none;">
+                          <div class="no-gutters col-md-12 col-xs-12">
+                            <div class="input-group mb-3" >
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_collection">Select one existing collection</label>
+                                </div>
+                                <select class="custom-select" name="sigbro_entity_collection_old"  id="sigbro_entity_collection_old" onchange="showHideCollectionFields();">
+                                  <option value="" selected>A new one...</option>
+                                </select>
+                            </div>
+                          </div>
+                        </div>
+
+
                         <div class="row mb-1rem">
                           <div class="no-gutters col-md-12">
                             <div class="input-group mb-3" >
                                 <div class="input-group-prepend">
                                   <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_name">NFT Name</label>
                                 </div>
-                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_name" id="sigbro_entity_name" aria-describedby="" placeholder="NFT name (max 100 characters)">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_name" id="sigbro_entity_name" aria-describedby="" placeholder="NFT name (max 100 characters)" maxlength="100">
                             </div>
                           </div>
                         </div>
@@ -272,23 +317,10 @@
                                 <div class="input-group-prepend">
                                   <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_descr">Description</label>
                                 </div>
-                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_descr" id="sigbro_entity_descr" aria-describedby="" placeholder="NFT Description (max 1000 characters)">
+                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_descr" id="sigbro_entity_descr" aria-describedby="" placeholder="NFT Description (max 1000 characters)" maxlength="1000">
                             </div>
                           </div>
                         </div>
-
-                        <!--
-                        <div class="row mb-1rem">
-                          <div class="no-gutters col-md-12">
-                            <div class="input-group mb-3" >
-                                <div class="input-group-prepend">
-                                  <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_channel">Channel</label>
-                                </div>
-                                <input type="text" class="form-control sigbro-input" name="sigbro_entity_channel" id="sigbro_entity_channel" aria-describedby="" placeholder="Entity Channel (max 50 characters)">
-                            </div>
-                          </div>
-                        </div>
-                        -->
 
                         <div class="row mb-1rem" style="margin-bottom: 1rem;">
                           <div class="no-gutters col-md-12">
@@ -324,12 +356,21 @@
                         </div>
 
                         <div class="row mb-1rem">
-                          <div class="no-gutters col-md-12">
+                          <div class="no-gutters col-md-8 col-xs-12">
                             <div class="input-group mb-3" >
                                 <div class="input-group-prepend">
                                   <label class="input-group-text" style="min-width: 120px;" for="sigbro_file">NFT File</label>
                                 </div>
                                 <input type="file" class="form-control sigbro-input" name="sigbro_file" id="sigbro_file" aria-describedby="" placeholder="File to upload (Max 1Mb)">
+                            </div>
+                          </div>
+
+                          <div class="no-gutters col-md-4 col-xs-12">
+                            <div class="input-group mb-3" >
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="sigbro_entity_nft_count">Count</label>
+                                </div>
+                                <input type="number" class="form-control sigbro-input" name="sigbro_entity_nft_count" id="sigbro_entity_nft_count" aria-describedby="" placeholder="" min="1" value="1">
                             </div>
                           </div>
                         </div>
