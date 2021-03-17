@@ -4,6 +4,13 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
 
 ## Change log
 
+### 3.16.0
+  - Sigbro Auth was updated
+
+### 3.15.0
+  - Added required fiels
+  - Disable collections that are already finished 
+
 ### 3.14.0
   - Added collection support
 

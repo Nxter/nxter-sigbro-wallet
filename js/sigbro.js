@@ -1,6 +1,7 @@
 // PRODUCTION
 var APIURL = "https://sigbro-wallet.api.nxter.org"
 var TEMPLATEURL = "https://sigbro-template.api.nxter.org"
+var AUTH_TIME = 1 * 60 * 1000
 
 // DEVELOPMENT
 // var TEMPLATEURL = "http://localhost:9060"
@@ -1596,12 +1597,64 @@ $(document).on('click', '#sigbo_index--btn_auth_sigbro', function (e) {
 
 });
 
-function add_new_uuid_result() {
+function callback_auth_new() {
   var resp = this.responseText;
   var resp_j = JSON.parse(resp);
 
-  //console.log(resp_j);
+  //console.log("callback_auth_new", resp_j);
+
+  if ( resp_j.result == "ok" ) {
+    let uuid_from_localstorage = JSON.parse(localStorage.getItem("sigbro_uuid"));
+    let old_uuid = uuid_from_localstorage.uuid;
+    waitForOkay(old_uuid);
+  } else {
+    localStorage.removeItem("sigbro_uuid");
+    console.error("Auth timeout has expired.")
+    alert("Something goes wrong. Try again in a few minutes.");
+  }
+
 }
+
+// will ask for the result
+function waitForOkay(uuid) {
+  console.log("Waiting for the confirmation...");
+  url = "https://random.nxter.org/api/auth/status";
+  param = JSON.stringify({ "uuid": uuid });
+  sendJSON(url, param, TIMEOUT_ARDR, callback_auth_status_ok);
+}
+
+function callback_auth_status_ok() {
+  var resp = this.responseText;
+  var resp_j = JSON.parse(resp);
+
+  //console.log("callback_auth_status_ok",resp_j);
+
+  if ( resp_j.result == "ok" ) {
+    localStorage.setItem("sigbro_wallet_accountRS", resp_j.accountRS);
+    getPublicKey_v2(resp_j.accountRS, 'ardor');
+    localStorage.setItem("sigbro_wallet_page", "balances");
+    localStorage.removeItem("sigbro_uuid");
+    show_balances();
+  } else if (resp_j.result == "wait") {
+    let timestamp = Date.now();
+    let uuid_from_localstorage = JSON.parse(localStorage.getItem("sigbro_uuid"));
+    old_timestamp = uuid_from_localstorage.timestamp;
+    old_uuid = uuid_from_localstorage.uuid;
+    if (timestamp - old_timestamp < AUTH_TIME) {
+      // retry
+      (function(uuid) {
+        setTimeout(function () {
+          waitForOkay(uuid);
+        }, Math.floor(Math.random() * 1000)*3 + 3000); // max 6 sec 
+      })(old_uuid);
+    } else {
+      localStorage.removeItem("sigbro_uuid");
+      console.error("Auth timeout has expired.")
+      alert("Auth timeout has expired.");
+    }
+  }
+}
+
 
 // click on OPEN SIGBRO MOBILE
 $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
@@ -1612,7 +1665,7 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
   var old_uuid = "";
   var uuid = "";
 
-  //TODO: Get uuid from localstorage and check time, if more than 15 min update uuid
+  //TODO: Get uuid from localstorage and check time, if more than 1 min update uuid
   try {
     var uuid_from_localstorage = JSON.parse(localStorage.getItem("sigbro_uuid"));
     old_timestamp = uuid_from_localstorage.timestamp;
@@ -1621,11 +1674,12 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
     //console.log("Incorrect json in localstorage");
   }
 
-  //console.log("Delta: " + (timestamp - old_timestamp));
+  // console.log("Delta: " + (timestamp - old_timestamp));
 
-  if (timestamp - old_timestamp < 15 * 60 * 1000) {
+  if (timestamp - old_timestamp < AUTH_TIME) {
     uuid = old_uuid;
     //console.log("Using old UUID: " + uuid);
+    waitForOkay(uuid)
   } else {
     uuid = uuidv4();
     //console.log("Using new UUID: " + uuid);
@@ -1634,53 +1688,16 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
     localStorage.setItem("sigbro_uuid", JSON.stringify(uuid_timestamp));
 
     // if uuid is new, send it to our API
-    url = "https://random.nxter.org/api/auth/new";
+    url = "https://random.api.nxter.org/api/auth/new";
 
     param_json = { "uuid": uuid };
     param = JSON.stringify(param_json);
 
-    sendJSON(url, param, TIMEOUT_ARDR, add_new_uuid_result);
+    sendJSON(url, param, TIMEOUT_ARDR, callback_auth_new);
   }
 
-  var source = new EventSource('https://random.nxter.org:9040/stream');
-
-  // subscribe to global events from auth-sse
-  source.addEventListener('greeting', function (event) {
-    //console.log('Gloabal event');
-    var data = JSON.parse(event.data);
-    //console.log(data);
-    //console.log(event);
-  }, false);
-
-  // subscribe to personal events from auth-sse
-  source.addEventListener(uuid, function (event) {
-    var data = JSON.parse(event.data);
-
-    try {
-      var data2 = JSON.parse(data);
-    } catch (err) {
-      var data2 = data;
-    }
-
-    //console.log(data2);
-
-    if (data2.type == 'success' && data2.accountRS) {
-      localStorage.setItem("sigbro_wallet_accountRS", data2.accountRS);
-      getPublicKey_v2(data2.accountRS, 'ardor');
-      localStorage.setItem("sigbro_wallet_page", "balances");
-      localStorage.removeItem("sigbro_uuid");
-      show_balances();
-    } else {
-      localStorage.removeItem("sigbro_uuid");
-      alert(data2.message);
-    }
-  }, false);
-
-
-  // need to open sigbro://UUIDv4 url
   var url_sigbro = "sigbro://" + uuid;
   window.open(url_sigbro, '_blank');
-
 });
 
 
@@ -1704,9 +1721,10 @@ $(document).on('click', '#sigbo_index--btn_scan_qr_code', function (e) {
 
   //console.log("Delta: " + (timestamp - old_timestamp));
 
-  if (timestamp - old_timestamp < 15 * 60 * 1000) {
+  if (timestamp - old_timestamp < AUTH_TIME) {
     uuid = old_uuid;
     //console.log("Using old UUID: " + uuid);
+    waitForOkay(uuid);
   } else {
     uuid = uuidv4();
     //console.log("Using new UUID: " + uuid);
@@ -1715,54 +1733,16 @@ $(document).on('click', '#sigbo_index--btn_scan_qr_code', function (e) {
     localStorage.setItem("sigbro_uuid", JSON.stringify(uuid_timestamp));
 
     // if uuid is new, send it to our API
-    url = "https://random.nxter.org/api/auth/new";
+    url = "https://random.api.nxter.org/api/auth/new";
 
     param_json = { "uuid": uuid };
     param = JSON.stringify(param_json);
 
-    sendJSON(url, param, TIMEOUT_ARDR, add_new_uuid_result);
+    sendJSON(url, param, TIMEOUT_ARDR, callback_auth_new);
   }
 
   show_auth();
-  var source = new EventSource('https://random.nxter.org:9040/stream');
-
-  // subscribe to global events from auth-sse
-  source.addEventListener('greeting', function (event) {
-    //console.log('Gloabal event');
-    var data = JSON.parse(event.data);
-    //console.log(data);
-    //console.log(event);
-  }, false);
-
-  // subscribe to personal events from auth-sse
-  source.addEventListener(uuid, function (event) {
-    var data = JSON.parse(event.data);
-
-    try {
-      var data2 = JSON.parse(data);
-    } catch (err) {
-      var data2 = data;
-    }
-
-    //console.log(data2);
-
-    if (data2.type == 'success' && data2.accountRS) {
-      localStorage.setItem("sigbro_wallet_accountRS", data2.accountRS);
-      getPublicKey_v2(data2.accountRS, 'ardor');
-      localStorage.setItem("sigbro_wallet_page", "balances");
-      localStorage.removeItem("sigbro_uuid");
-      show_balances();
-    } else {
-      localStorage.removeItem("sigbro_uuid");
-      alert(data2.message);
-    }
-  }, false);
-
-
 });
-
-
-
 
 // end change auth type: accountRS or SIGBRO MOBILE
 
@@ -2064,14 +2044,18 @@ function findCollections() {
             option.dataset.max = collectionsSize[key];
 
             console.log(option);
-            selectCollection.add(option);
+            if ( value >= collectionsSize[key]) {
+              option.disabled = true;
+              selectCollection.add(option);
+            } else {
+              selectCollection.options.add(option, selectCollection.options[0]);
+            }
           }
 
           let option = document.createElement( 'option' );
           option.value = "";
           option.text = "A new one...";
-          selectCollection.add(option);
-
+          selectCollection.options.add(option, selectCollection.options[0]);
 
           show_module('.collection-only-old');
           hide_module('.collection-only');
