@@ -1,7 +1,7 @@
 // PRODUCTION
 var APIURL = "https://sigbro-wallet.api.nxter.org"
 var TEMPLATEURL = "https://sigbro-template.api.nxter.org"
-var AUTH_TIME = 1 * 60 * 1000
+var AUTH_TIME = 5 * 60 * 1000
 
 // DEVELOPMENT
 // var TEMPLATEURL = "http://localhost:9060"
