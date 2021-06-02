@@ -1998,6 +1998,18 @@ function showCollections() {
   }
 }
 
+function showIpfsCollections() {
+  checker = document.getElementById("sigbro_ipfs_is_collection");
+  if ( checker.checked == true) {
+    // findCollections();
+    show_module('.collection-only');
+    show_module('.collection-only-old');
+  } else {
+    hide_module('.collection-only');
+    hide_module('.collection-only-old');
+  }
+}
+
 function findCollections() {
   var xhttp = new XMLHttpRequest();
 
