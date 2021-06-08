@@ -979,12 +979,14 @@ function page_ops_set_accountRS() {
   document.getElementById('sigbro_send_senderRS').value = accRS;
   document.getElementById('sigbro_template_recipientRS').value = accRS;
   document.getElementById('sigbro_dataupload_network').value = network;
+  document.getElementById('sigbro_ipfs_network').value = network;
 
   var senderPubKey = localStorage.getItem("sigbro_pubkey_" + accRS);
   if (senderPubKey == null) {
     getPublicKey_v2(accRS, 'ardor');
   } else {
     document.getElementById('sigbro_dataupload_pubkey').value = senderPubKey;
+    document.getElementById('sigbro_ipfs_pubkey').value = senderPubKey;
   }
 
 }
@@ -2001,13 +2003,78 @@ function showCollections() {
 function showIpfsCollections() {
   checker = document.getElementById("sigbro_ipfs_is_collection");
   if ( checker.checked == true) {
-    // findCollections();
-    show_module('.collection-only');
+    findIpfsCollections();
     show_module('.collection-only-old');
   } else {
     hide_module('.collection-only');
     hide_module('.collection-only-old');
   }
+}
+
+function findIpfsCollections() {
+  var xhttp = new XMLHttpRequest();
+  var accoutRS = localStorage.getItem("sigbro_wallet_accountRS");
+  var network = localStorage.getItem("sigbro_wallet_network");
+  var url = "https://sigbro-mobile.api.nxter.org/api/v2/collections/";
+
+  const data = {
+    "accountRS": accoutRS,
+    "network": network
+  }
+
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4) {
+      if ( this.status == 200 ) {
+        let response = JSON.parse(this.responseText);
+        let colls = response.collections 
+        let collSize  = Object.keys(colls).length
+        if ( collSize > 0  ) {
+          // console.log("Found collections");
+          // console.log(colls)
+
+          var selectCollection = document.getElementById("sigbro_ipfs_collection_old");
+          selectCollection.innerHTML = ""; // clear
+
+          let idx = 0
+          for ( const [key, value] of Object.entries(colls)) {
+            let option = document.createElement( 'option' );
+            option.value = key;
+            option.text = key + " (" + String(value.elements) + "/" + String(value.size) + ")";
+            option.dataset.max = value.size;
+            option.dataset.asset = value.asset
+
+            // save asset for the first old collection
+            if ( idx == 0 ) {
+              $('#sigbro_ipfs_asset').val(value.asset);
+            }
+            idx ++
+
+
+            if ( value.elements >= value.size ) {
+              option.disabled = true
+            }
+
+            selectCollection.appendChild(option)
+          }  
+
+          let option = document.createElement( 'option' );
+          option.value = "";
+          option.text = "A new one...";
+          selectCollection.appendChild(option);
+
+
+        } else {
+          console.log("Collections not found")
+          show_module('.collection-only');
+        }
+
+      }
+    } // end  readyState == 4
+  }
+
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader('Content-Type', 'application/json');
+  xhttp.send(JSON.stringify(data));
 }
 
 function findCollections() {
@@ -2087,6 +2154,26 @@ function findCollections() {
 
   xhttp.open("POST", url, true);
   xhttp.send();
+}
+
+function showHideIpfsCollectionFields() {
+  collectionOldName = document.getElementById("sigbro_ipfs_collection_old");
+
+  if ( collectionOldName.value == "" ) {
+    $('#sigbro_ipfs_collection').val("");
+    $('#sigbro_ipfs_collection_size').val(10);
+    show_module('.collection-only');
+  } else {
+    let colName = collectionOldName.value;
+    let colMax = collectionOldName.options[collectionOldName.selectedIndex].dataset.max;
+    let assetID = collectionOldName.options[collectionOldName.selectedIndex].dataset.asset;
+    $('#sigbro_ipfs_asset').val(assetID)
+
+    $('#sigbro_ipfs_collection').val(colName);
+    $('#sigbro_ipfs_collection_size').val(colMax);
+
+    hide_module('.collection-only');
+  }
 }
 
 function showHideCollectionFields() {
