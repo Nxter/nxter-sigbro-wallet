@@ -1238,6 +1238,7 @@ function page_balances_show_assets() {
 
   if (assets == null) {
     var url = APIURL + "/api/v2/assets/" + accRS + "/en/" + _get_network_prefix() + "/";
+    console.log(url)
     getJSON(url, TIMEOUT_ARDR, page_balances_save_assets, "assets");
     return;
   }

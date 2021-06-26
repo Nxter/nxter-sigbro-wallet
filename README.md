@@ -10,6 +10,7 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
   - Use local numbers format with max 2 digits instead of regexp
   - Updated icons
   - Updated footer links
+  - Fixed bug with absent assets/currencies
 
 ### 3.18.0
   - Html reformat
