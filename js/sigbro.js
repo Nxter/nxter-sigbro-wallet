@@ -17,7 +17,8 @@ $(document).on('click', 'a.nav-link', function (e) {
 
   if (open_page == 'profile') {
     localStorage.setItem("sigbro_wallet_page", "profile");
-    show_profile();
+    show_balances();
+    // show_profile();
     return;
   }
 
@@ -81,7 +82,7 @@ $(document).ready(function () {
   if (page == 'balances') { 
     show_balances(); return; 
   } else if (page == 'profile') { 
-    show_profile(); return; 
+    show_balances(); return;
   } else if (page == 'operations') { 
     show_operations(); return; 
   } else if (page == 'alerts') { 
@@ -877,12 +878,14 @@ function show_balances() {
       page_balances_show_balance_ardor();
       page_balances_show_assets();
       page_balances_show_currencies();
+      page_profile_set_userinfo();
+
     },
 
     error: function (error) {
       //console.log('ERROR: ', error);
     },
-
+t
     complete: function (xhr, status) {
       //console.log('DONE');
     }
@@ -930,7 +933,7 @@ function show_index() {
             localStorage.setItem("sigbro_wallet_autologin", accRS);
           }
 
-          localStorage.setItem("sigbro_wallet_page", "balances");
+          localStorage.setItem("sigbro_wallet_page", "profile");
           show_balances();
         } else {
           alert("Check your accountRS and try again.");
@@ -1238,7 +1241,6 @@ function page_balances_show_assets() {
 
   if (assets == null) {
     var url = APIURL + "/api/v2/assets/" + accRS + "/en/" + _get_network_prefix() + "/";
-    console.log(url)
     getJSON(url, TIMEOUT_ARDR, page_balances_save_assets, "assets");
     return;
   }
@@ -1357,7 +1359,7 @@ function page_profile_set_userinfo() {
   }
 
   document.getElementById('sigbro_profile-username').textContent = accName;
-  document.getElementById('sigbro_profile-userdesc').textContent = accDesc;
+  //document.getElementById('sigbro_profile-userdesc').textContent = accDesc;
 }
 
 
@@ -1636,7 +1638,7 @@ function callback_auth_status_ok() {
   if ( resp_j.result == "ok" ) {
     localStorage.setItem("sigbro_wallet_accountRS", resp_j.accountRS);
     getPublicKey_v2(resp_j.accountRS, 'ardor');
-    localStorage.setItem("sigbro_wallet_page", "balances");
+    localStorage.setItem("sigbro_wallet_page", "profile");
     localStorage.removeItem("sigbro_uuid");
     show_balances();
   } else if (resp_j.result == "wait") {
