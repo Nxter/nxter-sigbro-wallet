@@ -1419,9 +1419,8 @@ function page_balances_set_balance_ardor(data) {
     var timestamp = Date.now();
     var ardor = respJSON.balances[1].balanceNQT / Math.pow(10, 8);
     var ignis = respJSON.balances[2].balanceNQT / Math.pow(10, 8);
-    var aeur = respJSON.balances[3].balanceNQT / Math.pow(10, 4);
     var bitswift = respJSON.balances[4].balanceNQT / Math.pow(10, 8);
-    var mpg = respJSON.balances[5].balanceNQT / Math.pow(10, 8);
+    var gps = respJSON.balances[6].balanceNQT / Math.pow(10, 4);
 
     var tmp = { 'value': ardor, 'timestamp': timestamp };
     localStorage.setItem('sigbro_wallet_balance_ardor', JSON.stringify(tmp));
@@ -1429,31 +1428,28 @@ function page_balances_set_balance_ardor(data) {
     var tmp = { 'value': ignis, 'timestamp': timestamp };
     localStorage.setItem('sigbro_wallet_balance_ignis', JSON.stringify(tmp));
 
-    var tmp = { 'value': aeur, 'timestamp': timestamp };
-    localStorage.setItem('sigbro_wallet_balance_aeur', JSON.stringify(tmp));
+    // var tmp = { 'value': aeur, 'timestamp': timestamp };
+    // localStorage.setItem('sigbro_wallet_balance_aeur', JSON.stringify(tmp));
 
     var tmp = { 'value': bitswift, 'timestamp': timestamp };
     localStorage.setItem('sigbro_wallet_balance_bitswift', JSON.stringify(tmp));
 
-    var tmp = { 'value': mpg, 'timestamp': timestamp };
-    localStorage.setItem('sigbro_wallet_balance_mpg', JSON.stringify(tmp));
+    var tmp = { 'value': gps, 'timestamp': timestamp };
+    localStorage.setItem('sigbro_wallet_balance_gps', JSON.stringify(tmp));
 
     page_balances_show_balance_ardor()
   } else {
     document.getElementById('sigbro_balances-balance-ardor').textContent = "NaN";
     document.getElementById('sigbro_balances-balance-ignis').textContent = "NaN";
-    document.getElementById('sigbro_balances-balance-aeur').textContent = "NaN";
     document.getElementById('sigbro_balances-balance-bitswift').textContent = "NaN";
-    document.getElementById('sigbro_balances-balance-mpg').textContent = "NaN";
+    document.getElementById('sigbro_balances-balance-gps').textContent = "NaN";
     //console.log(respJSON);
   }
 
 }
 
 function number_pretty_print(x) {
-  var parts = x.toString().split(".");
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  return parts.join(".");
+  return x.toLocaleString('en-US', {maximumFractionDigits:2}).replaceAll(',', ' ') // "1,234.57"
 }
 
 // set ardor, ignis, aeur, bitswift balance on the page
@@ -1464,34 +1460,35 @@ function page_balances_show_balance_ardor() {
   var accBalanceAeur = localStorage.getItem('sigbro_wallet_balance_aeur');
   var accBalanceBitswift = localStorage.getItem('sigbro_wallet_balance_bitswift');
   var accBalanceMPG = localStorage.getItem('sigbro_wallet_balance_mpg');
+  var accBalanceGPS = localStorage.getItem('sigbro_wallet_balance_gps')
 
-  if (accBalanceArdor == null || accBalanceIgnis == null || accBalanceAeur == null || accBalanceBitswift == null || accBalanceMPG == null) {
-    var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4&chain=5";
+  if (accBalanceArdor == null || accBalanceIgnis == null || accBalanceBitswift == null || accBalanceGPS == null ) {
+    var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=4&chain=6";
     getJSON(url, TIMEOUT_ARDR, page_balances_set_balance_ardor, "balance ARDOR");
     return;
   }
 
   accBalanceArdor = JSON.parse(accBalanceArdor);
   accBalanceIgnis = JSON.parse(accBalanceIgnis);
-  accBalanceAeur = JSON.parse(accBalanceAeur);
   accBalanceBitswift = JSON.parse(accBalanceBitswift);
-  accBalanceMPG = JSON.parse(accBalanceMPG);
+  accBalanceGPS = JSON.parse(accBalanceGPS);
 
 
   // If delta > 5 min need to get new balances
   var delta = Date.now() - accBalanceArdor.timestamp;
   //console.log("Delta: " + delta / 1000 + " sec.");
   if (delta > 5 * 60 * 1000) {
-    var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=3&chain=4&chain=5";
+    var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=4&chain=6";
     getJSON(url, TIMEOUT_ARDR, page_balances_set_balance_ardor, "balance ARDOR");
     return;
   }
 
   document.getElementById('sigbro_balances-balance-ardor').textContent = number_pretty_print(accBalanceArdor.value);
   document.getElementById('sigbro_balances-balance-ignis').textContent = number_pretty_print(accBalanceIgnis.value);
-  document.getElementById('sigbro_balances-balance-aeur').textContent = number_pretty_print(accBalanceAeur.value);
+  // document.getElementById('sigbro_balances-balance-aeur').textContent = number_pretty_print(accBalanceAeur.value);
   document.getElementById('sigbro_balances-balance-bitswift').textContent = number_pretty_print(accBalanceBitswift.value);
-  document.getElementById('sigbro_balances-balance-mpg').textContent = number_pretty_print(accBalanceMPG.value);
+  // document.getElementById('sigbro_balances-balance-mpg').textContent = number_pretty_print(accBalanceMPG.value);
+  document.getElementById('sigbro_balances-balance-gps').textContent = number_pretty_print(accBalanceGPS.value);
 
 }
 
@@ -1512,6 +1509,8 @@ function sigbro_clear_localstorage() {
   localStorage.removeItem("sigbro_wallet_balance_ardor");
   localStorage.removeItem("sigbro_wallet_balance_ignis");
   localStorage.removeItem("sigbro_wallet_balance_bitswift");
+  localStorage.removeItem("sigbro_wallet_balance_mpg");
+  localStorage.removeItem("sigbro_wallet_balance_gps");
 
   localStorage.removeItem("sigbro_wallet_url"); // last created url
   localStorage.removeItem("sigbro_uuid"); // uuid from last logon
@@ -1528,6 +1527,8 @@ function sigbro_clear_balances() {
   localStorage.removeItem("sigbro_wallet_balance_ardor");
   localStorage.removeItem("sigbro_wallet_balance_ignis");
   localStorage.removeItem("sigbro_wallet_balance_bitswift");
+  localStorage.removeItem("sigbro_wallet_balance_mpg");
+  localStorage.removeItem("sigbro_wallet_balance_gps");
 
   localStorage.removeItem("sigbro_wallet_url"); // last created url
   localStorage.removeItem("sigbro_uuid"); // uuid from last logon

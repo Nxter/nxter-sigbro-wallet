@@ -343,6 +343,7 @@ h1,
 .logo-crypto {
   margin: auto;
   max-width: 38px;
+  max-height: 38px;
 }
 .logo-crypto-box {
   width: 38px;
@@ -367,6 +368,7 @@ h1,
   .logo-crypto {
     margin: auto;
     max-width: 48px;
+    max-height: 48px;
   }
   .logo-crypto-box {
     width: 48px;
