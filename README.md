@@ -4,6 +4,9 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
 
 ## Change log
 
+### 3.20.0
+  - login with aliases
+
 ### 3.19.0
   - Show GPS balance
   - Remove MPG balance

@@ -18,7 +18,6 @@ $(document).on('click', 'a.nav-link', function (e) {
   if (open_page == 'profile') {
     localStorage.setItem("sigbro_wallet_page", "profile");
     show_balances();
-    // show_profile();
     return;
   }
 
@@ -831,33 +830,7 @@ function show_operations() {
 }
 
 function show_profile() {
-  $.ajax({
-    url: 'profile.html?_' + new Date().getTime(),
-    type: 'GET',
-    dataType: 'text',
-
-    success: function (response) {
-      // show page
-      $('#sigbro_spa').html(response);
-      // load data
-      page_show_network_type();
-      page_profile_set_accountRS();
-      page_profile_set_userinfo();
-      page_profile_show_public_key_alert();
-
-    },
-
-    error: function (error) {
-      //console.log('ERROR: ', error);
-    },
-
-    complete: function (xhr, status) {
-      //console.log('DONE');
-    }
-  });
-
-
-
+  show_balances();
 }
 
 function show_balances() {
@@ -885,7 +858,6 @@ function show_balances() {
     error: function (error) {
       //console.log('ERROR: ', error);
     },
-t
     complete: function (xhr, status) {
       //console.log('DONE');
     }
@@ -893,6 +865,64 @@ t
 
 
 
+}
+
+function check_alias(alias) {
+  let url = "https://random.api.nxter.org/ardor?requestType=getAlias&chain=2&aliasName="+alias;
+  var request = new XMLHttpRequest();
+  request.open('GET', url, false);  // `false` makes the request synchronous
+  request.send(null);
+
+  result = { result: "fail", msg: "", account: ""}
+
+  if (request.status === 200) {
+    resp = JSON.parse(request.responseText);
+
+    if ( resp.errorDescription ) {
+      result.result = "fail";
+      result.msg = resp.errorDescription;
+    }
+
+    if ( resp.aliasURI ) {
+      let alias = resp.aliasURI;
+      if ( alias.startsWith("acct:") && alias.endsWith("@nxt") ) {
+        let acc = alias.slice(5,-4);
+        result.result = "ok";
+        result.account = acc;
+        result.msg = "Found account";
+      } else {
+        result.result = "fail";
+        result.msg = "Wrong alias"
+      }
+    } else {
+        result.result = "fail";
+        result.msg = "Wrong alias or accountRS";
+    }
+  }
+
+  return result;
+}
+
+function show_index_error(msg) {
+  var error_msg = document.getElementById("sigbro_index_error");
+  error_msg.innerHTML = msg;
+  error_msg.setAttribute('style', "display: block");
+
+  setTimeout( function() {
+    error_msg.setAttribute('style', "display: none");
+  }, 2000)
+}
+
+function _login_index(accRS) {
+  localStorage.setItem("sigbro_wallet_accountRS", accRS);
+  getPublicKey_v2(accRS, 'ardor');
+  let checkbox = document.getElementById('sigbro_index-rememberme')
+  if (checkbox && checkbox.checked) {
+    // save account
+    localStorage.setItem("sigbro_wallet_autologin", accRS);
+  }
+  localStorage.setItem("sigbro_wallet_page", "profile");
+  show_balances();
 }
 
 function show_index() {
@@ -919,24 +949,37 @@ function show_index() {
       // index // LOG IN CLICK
       $(document).on('click', '#sigbro_index-button-login', function (e) {
         e.preventDefault();
-        var accRS = $('#sigbro_index-input-account').val();
-        //console.log(accRS);
-        // ARDOR-ZZZZ-48G3-9F9W-4CLJZ
+        var accRS = $('#sigbro_index-input-account').val().toUpperCase();
         var ardorRegex = /^ARDOR-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{5}/ig
         var nxtRegex = /^NXT-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{5}/ig
 
-        if (ardorRegex.test(accRS) || nxtRegex.test(accRS)) {
-          localStorage.setItem("sigbro_wallet_accountRS", accRS);
-          getPublicKey_v2(accRS, 'ardor');
-          if (document.getElementById('sigbro_index-rememberme').checked) {
-            // save account 
-            localStorage.setItem("sigbro_wallet_autologin", accRS);
-          }
-
-          localStorage.setItem("sigbro_wallet_page", "profile");
-          show_balances();
+        // if (ardorRegex.test(accRS) || ) {
+        if (ardorRegex.test(accRS)) {
+          _login_index(accRS);
+        }  else if ( nxtRegex.test(accRS) ) {
+          // convert nxt -> ardor
+          accRS = accRS.replace("NXT-", "ARDOR-")
+          _login_index(accRS);
         } else {
-          alert("Check your accountRS and try again.");
+          // check if this text is an alias
+          let res = check_alias(accRS);
+          if (res.status == "fail") {
+            show_index_error(res.msg);
+          } else {
+            var accountRS = res.account.toUpperCase();
+            if ( ardorRegex.test(accountRS) ) {
+              _login_index(accountRS);
+            } else if ( nxtRegex.test(accountRS) ) {
+              accountRS = accountRS.replace("NXT-", "ARDOR-")
+              _login_index(accountRS);
+            } else {
+              if ( res.msg ) {
+                show_index_error(res.msg);
+              } else {
+                show_index_error("Wrong accountRS or alias");
+              }
+            }
+          }
         }
       });
     }
