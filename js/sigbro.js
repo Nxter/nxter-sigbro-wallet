@@ -5,7 +5,7 @@ var AUTH_TIME = 5 * 60 * 1000
 
 // DEVELOPMENT
 // var TEMPLATEURL = "http://localhost:9060"
-// var APIURL = "http://localhost:8020"
+// var APIURL = "http://localhost:8025"
 
 var TIMEOUT_TEMPLATE = 10000;
 var TIMEOUT_SUBMIT = 10000;
@@ -946,6 +946,14 @@ function show_index() {
 
     complete: function (xhr, status) {
 
+      var input = document.getElementById("sigbro_index-input-account");
+      input.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          document.getElementById("sigbro_index-button-login").click();
+        }
+      });
+
       // index // LOG IN CLICK
       $(document).on('click', '#sigbro_index-button-login', function (e) {
         e.preventDefault();
@@ -962,6 +970,11 @@ function show_index() {
           _login_index(accRS);
         } else {
           // check if this text is an alias
+          if ( accRS.charAt(0) == "@" ) {
+            // remove @ if it exists
+            accRS = accRS.slice(1)
+          }
+          console.log("Alias: " + accRS)
           let res = check_alias(accRS);
           if (res.status == "fail") {
             show_index_error(res.msg);
@@ -1290,10 +1303,10 @@ function page_balances_show_assets() {
 
   assets_data = JSON.parse(assets);
 
-  // If delta > 5 min need to get new balances
+  // If delta > 1 min need to get new balances
   var delta = Date.now() - assets_data.timestamp;
   //console.log("Delta: " + delta / 1000 + " sec.");
-  if (delta > 5 * 60 * 1000) {
+  if (delta > 1 * 60 * 1000) {
     var url = APIURL + "/api/v2/assets/" + accRS + "/en/" + _get_network_prefix() + "/";
     getJSON(url, TIMEOUT_ARDR, page_balances_save_assets, "assets");
     return;
@@ -1336,7 +1349,7 @@ function page_balances_show_currencies() {
   // If delta > 5 min need to get new balances
   var delta = Date.now() - curr_data.timestamp;
   //console.log("Delta: " + delta / 1000 + " sec.");
-  if (delta > 5 * 60 * 1000) {
+  if (delta > 1 * 60 * 1000) {
     var url = APIURL + "/api/v2/currencies/" + accRS + "/en/" + _get_network_prefix() + "/";
     getJSON(url, TIMEOUT_ARDR, page_balances_save_currencies, "currencies");
     return;
@@ -1523,7 +1536,7 @@ function page_balances_show_balance_ardor() {
   // If delta > 5 min need to get new balances
   var delta = Date.now() - accBalanceArdor.timestamp;
   //console.log("Delta: " + delta / 1000 + " sec.");
-  if (delta > 5 * 60 * 1000) {
+  if (delta > 1 * 60 * 1000) {
     var url = _get_network_url('ardor') + "?requestType=getBalances&account=" + accRS + "&chain=1&chain=2&chain=4&chain=6";
     getJSON(url, TIMEOUT_ARDR, page_balances_set_balance_ardor, "balance ARDOR");
     return;

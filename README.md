@@ -4,6 +4,17 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
 
 ## Change log
 
+### 3.21.0
+  - finally remove MPG
+  - handle `Enter` button on the login page
+  - replace Bitswift -> BITS
+  - cache for the balance is 1 min instead of 5
+  - added more info about NFT + icon
+  - support @ for the aliases
+
+### 3.20.1
+  - remove MPG from operations
+
 ### 3.20.0
   - login with aliases
 
