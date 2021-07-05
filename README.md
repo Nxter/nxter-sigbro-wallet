@@ -10,7 +10,8 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
   - replace Bitswift -> BITS
   - cache for the balance is 1 min instead of 5
   - added more info about NFT + icon
-  - support @ for the aliases
+  - support @ for aliases
+  - new docker image
 
 ### 3.20.1
   - remove MPG from operations
