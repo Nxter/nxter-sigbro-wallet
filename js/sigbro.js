@@ -1129,7 +1129,7 @@ function page_ops_template_show_result() {
   if (resp_j.error) {
     page_ops_show_alert(resp_j.error);
   } else if (resp_j.uuid) {
-    var resp_url = "https://sigbro-template.api.nxter.org/api/v1/get/" + resp_j.uuid + "/";
+    var resp_url = "https://dl.sigbro.com/tmpl/" + resp_j.uuid + "/";
     //console.log("URL: " + resp_url);
     localStorage.setItem("sigbro_wallet_url", resp_url);
     show_qr(true);
@@ -1228,9 +1228,8 @@ function page_qr_show_qrcode(is_template) {
 
   }
 
-  var sigbroURL = accURL.replace("https", "sigbro");
   var link_sigbro = document.getElementById("sigbro_qr--mobile_url");
-  link_sigbro.setAttribute("href", sigbroURL);
+  link_sigbro.setAttribute("href", accURL);
 
   var QRC = qrcodegen.QrCode;
   var qr0 = QRC.encodeText(accURL, QRC.Ecc.HIGH);
@@ -1255,7 +1254,7 @@ function page_qr_show_qrcode_for_auth() {
   }
 
   var uuid = sigbroUUID.uuid;
-  var url = "sigbro://" + uuid;
+  var url = "https://dl.sigbro.com/auth/" + uuid + "/";
   //console.log(url);
 
   var QRC = qrcodegen.QrCode;
@@ -1680,7 +1679,7 @@ function callback_auth_new() {
 // will ask for the result
 function waitForOkay(uuid) {
   console.log("Waiting for the confirmation...");
-  url = "https://random.nxter.org/api/auth/status";
+  url = "https://random.api.nxter.org/api/auth/status";
   param = JSON.stringify({ "uuid": uuid });
   sendJSON(url, param, TIMEOUT_ARDR, callback_auth_status_ok);
 }
@@ -1758,7 +1757,7 @@ $(document).on('click', '#sigbo_index--btn_open_sigbro_mobile', function (e) {
     sendJSON(url, param, TIMEOUT_ARDR, callback_auth_new);
   }
 
-  var url_sigbro = "sigbro://" + uuid;
+  var url_sigbro = "https://dl.sigbro.com/auth/" + uuid + "/";
   window.open(url_sigbro, '_blank');
 });
 
