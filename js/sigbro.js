@@ -757,6 +757,64 @@ function show_qr(is_template) {
 
 }
 
+function clickActivateAccountButton() {
+  show_page_activate();
+}
+
+function clickActivateAccountRequest() {
+  var accRS = localStorage.getItem("sigbro_wallet_accountRS");
+  var pubKey = document.getElementById('sigbro_activate_publickey').value;
+
+  var url = APIURL + "/api/v2/activate/" + accRS + "/" + pubKey + "/";
+
+  $.ajax({
+    url: url,
+    type: 'GET',
+    dataType: 'text',
+
+    success: function (response) {
+      console.log("Request sent: ", response)
+    },
+
+    error: function (error) {
+      console.log('ERROR: ', error);
+    },
+
+    complete: function (xhr, status) {
+      // console.log('DONE');
+    }
+  });
+
+}
+
+function show_page_activate() {
+  $.ajax({
+    url: 'activate.html?_' + new Date().getTime(),
+    type: 'GET',
+    dataType: 'text',
+
+    success: function (response) {
+      // show page
+      $('#sigbro_spa').html(response);
+      // load data
+      page_show_network_type();
+
+      var accRS = localStorage.getItem("sigbro_wallet_accountRS");
+      document.getElementById('sigbro_activate_account_rs').textContent = accRS;
+
+    },
+
+    error: function (error) {
+      //console.log('ERROR: ', error);
+    },
+
+    complete: function (xhr, status) {
+      //console.log('DONE');
+    }
+  });
+
+}
+
 function show_offline_page() {
   $.ajax({
     url: 'offline.html?_' + new Date().getTime(),
@@ -1424,6 +1482,19 @@ function page_profile_set_userinfo() {
 function page_balances_set_accountRS() {
   var accRS = localStorage.getItem("sigbro_wallet_accountRS");
   if (accRS == null) { sigbro_clear_localstorage(); location.href = "/index.html"; }
+
+  getPublicKey_v2(accRS, 'ardor');
+
+  var pubKey = localStorage.getItem("sigbro_pubkey_" + accRS);
+
+  if ( pubKey == null ) {
+    document.getElementById('sigbro_profile_username_section').style.display = 'none';
+    document.getElementById('sigbro_profile_activate_section').style.display = 'block';
+    console.log("Account has no public Key")
+  } else {
+    document.getElementById('sigbro_profile_username_section').style.display = 'block';
+    document.getElementById('sigbro_profile_activate_section').style.display = 'none';
+  }
 
   document.getElementById('sigbro_balances-accountRS').textContent = accRS;
 }
