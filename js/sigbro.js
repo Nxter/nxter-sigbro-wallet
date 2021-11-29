@@ -1151,33 +1151,33 @@ $(document).on('click', '#sigbro_send_submit', function (e) {
     return;
   }
 
-  // check recipient publicKey
   var recipientRS = document.getElementById('sigbro_send_recipientRS').value;
-  getPublicKey_v2(recipientRS, 'ardor')
-  var recipientPublicKey = localStorage.getItem("sigbro_pubkey_" + recipientRS)
+  var currencies = document.querySelector('input[name = "sigbro_send_selector"]:checked').value;
 
-  if (recipientPublicKey == null) {
-    recipientPublicKey = prompt("Recipient accountRS does not have a publicKey, please provide:")
-  }
+  if ( currencies != "ardor" ) {
+    // check recipient publicKey
+    getPublicKey_v2(recipientRS, 'ardor')
+    var recipientPublicKey = localStorage.getItem("sigbro_pubkey_" + recipientRS)
 
-  if (recipientPublicKey == null) {
-    page_ops_show_alert("You cannot send money to the accountRS without PublicKey.");
-    return;
+    if (recipientPublicKey == null) {
+      recipientPublicKey = prompt("Recipient accountRS does not have a publicKey, please provide:")
+    }
+
+    if (recipientPublicKey == null) {
+      page_ops_show_alert("You cannot send money to the accountRS without PublicKey.");
+      return;
+    }
   }
 
   var amount = document.getElementById('sigbro_send_amount').value;
   var fee = -1;
-
   var encrypt_msg = 0;
-
-  var currencie = document.querySelector('input[name = "sigbro_send_selector"]:checked').value;
   var msg = document.getElementById('sigbro_send_message').value;
-
 
   var url = APIURL + "/api/v2/sendmoney/" + _get_network_prefix() + "/";
 
   param_json = {
-    "currencie": currencie,
+    "currencie": currencies,
     "recipient": recipientRS,
     "amount": amount,
     "publicKey": senderPubKey,
@@ -1186,6 +1186,7 @@ $(document).on('click', '#sigbro_send_submit', function (e) {
     "encrypt_msg": encrypt_msg,
     "recipientPublicKey": recipientPublicKey
   };
+
   param = JSON.stringify(param_json);
 
   //console.log("url: " + url);
