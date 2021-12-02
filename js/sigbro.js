@@ -762,6 +762,11 @@ function clickActivateAccountButton() {
 }
 
 function clickActivateAccountRequest() {
+  var button = document.getElementById('sigbro_lets_go_button')
+  button.setAttribute('style', "display: none");
+
+  var __response = document.getElementById('sigbro_lets_go_result')
+
   var accRS = localStorage.getItem("sigbro_wallet_accountRS");
   var pubKey = document.getElementById('sigbro_activate_publickey').value;
 
@@ -773,11 +778,14 @@ function clickActivateAccountRequest() {
     dataType: 'text',
 
     success: function (response) {
-      console.log("Request sent: ", response)
+      var data = JSON.parse(response);
+      console.log("Request sent: ", data)
+      __response.innerHTML = data.msg
     },
 
     error: function (error) {
-      console.log('ERROR: ', error);
+      console.error('ERROR: ', error);
+      __response.innerHTML = error
     },
 
     complete: function (xhr, status) {
@@ -800,7 +808,7 @@ function show_page_activate() {
       page_show_network_type();
 
       var accRS = localStorage.getItem("sigbro_wallet_accountRS");
-      document.getElementById('sigbro_activate_account_rs').textContent = accRS;
+      document.getElementById('sigbro_activate_account_rs').textContent = "Your account ID: " + accRS;
 
     },
 
@@ -1486,15 +1494,6 @@ function page_balances_set_accountRS() {
   getPublicKey_v2(accRS, 'ardor');
 
   var pubKey = localStorage.getItem("sigbro_pubkey_" + accRS);
-
-  if ( pubKey == null ) {
-    document.getElementById('sigbro_profile_username_section').style.display = 'none';
-    document.getElementById('sigbro_profile_activate_section').style.display = 'block';
-    console.log("Account has no public Key")
-  } else {
-    document.getElementById('sigbro_profile_username_section').style.display = 'block';
-    document.getElementById('sigbro_profile_activate_section').style.display = 'none';
-  }
 
   document.getElementById('sigbro_balances-accountRS').textContent = accRS;
 }
