@@ -770,7 +770,16 @@ function clickActivateAccountRequest() {
   var accRS = localStorage.getItem("sigbro_wallet_accountRS");
   var pubKey = document.getElementById('sigbro_activate_publickey').value;
 
-  var url = APIURL + "/api/v2/activate/" + accRS + "/" + pubKey + "/";
+  if ( pubKey.trim().length != 64) {
+    __response.innerHTML = "Wrong Public Key. Please, verify and try again."
+    setTimeout(function () {
+      button.setAttribute('style', "display: block");
+      __response.innerHTML = "";
+    }, 2000);
+    return
+  }
+
+  var url = APIURL + "/api/v2/activate/" + accRS + "/" + pubKey.trim() + "/";
 
   $.ajax({
     url: url,
