@@ -1,0 +1,74 @@
+<div class="wrapper d-flex flex-column">
+    <header>
+        <div class="red-header">
+            <div class="container-fluid">
+                <div class="row justify-content-center mb-2rem">
+                    <div class="col-md-11 col-lg-10 col-xl-9">
+                        <div class="logo-box">
+                            <img src="img/logo.svg" alt="" class="d-none d-sm-block">
+                        </div>
+                        <button class="btn btn-logout float-right" id="sigbro-logout">log out</button>
+                        <button class="btn btn-logout float-right" id="sigbro-change-network">network</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nav-wrapper shadow">
+            <ul class="nav justify-content-center this-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#profile">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#operations">Operations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#alerts">Alerts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#offline">OFFLINE</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <div class="flex-grow-1">
+        <div class="container-fluid">
+            <div class="row justify-content-center mb-2rem">
+                <div class="col-md-10 col-lg-9 col-xl-8 white-bck">
+                   <h4 class="text-center" id="sigbro_activate_account_rs"></h4>
+                  
+                  <pre>
+On this page you can claim:
+
+- 1 BOWL NFT
+- 1 SIG asset, that will do you good (think "lottery ticket")
+- 10 IGNIS to use for sending transactions
+- 50 testIGNIS, so you can play around on the Ardor test network
+
+If your Ardor account is new, we will initiate it for you and pay the fee.
+
+<b>Conditions for using the faucet</b>:
+You may not have used it before
+You must use it with an account you use with the <a href="https://sigbro.app/" target="_blank">SIGBRO app</a>
+                  </pre>
+                  
+                   <div class="row mb-1rem collection-only">
+                      <div class="no-gutters col-12">
+                        <div class="input-group mb-3">
+                          <input type="text" class="form-control sigbro-input" name="sigbro_activate_publickey" id="sigbro_activate_publickey" aria-describedby=""
+                                   placeholder="Enter your public key here" minlength="64" style="width: 100%;">
+                        </div>
+                      </div>
+                   </div>
+                  
+                  <div class="text-center" id="sigbro_lets_go_button">
+                      <center>
+                        <button type="button" class="btn btn-block p-medium btn-qr"  onclick="clickActivateAccountRequest()" style="width: 200px;">LET'S GO</button>
+                      </center>
+                  </div>
+                  
+                 <div class="text-center" id="sigbro_lets_go_result"></div>
+                
+                </div>
+            </div>
+        </div>
+    </div>

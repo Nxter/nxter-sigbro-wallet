@@ -757,6 +757,81 @@ function show_qr(is_template) {
 
 }
 
+function clickActivateAccountButton() {
+  show_page_activate();
+}
+
+function clickActivateAccountRequest() {
+  var button = document.getElementById('sigbro_lets_go_button')
+  button.setAttribute('style', "display: none");
+
+  var __response = document.getElementById('sigbro_lets_go_result')
+
+  var accRS = localStorage.getItem("sigbro_wallet_accountRS");
+  var pubKey = document.getElementById('sigbro_activate_publickey').value;
+
+  if ( pubKey.trim().length != 64) {
+    __response.innerHTML = "Wrong Public Key. Please, verify and try again."
+    setTimeout(function () {
+      button.setAttribute('style', "display: block");
+      __response.innerHTML = "";
+    }, 2000);
+    return
+  }
+
+  var url = APIURL + "/api/v2/activate/" + accRS + "/" + pubKey.trim() + "/";
+
+  $.ajax({
+    url: url,
+    type: 'GET',
+    dataType: 'text',
+
+    success: function (response) {
+      var data = JSON.parse(response);
+      console.log("Request sent: ", data)
+      __response.innerHTML = data.msg
+    },
+
+    error: function (error) {
+      console.error('ERROR: ', error);
+      __response.innerHTML = error
+    },
+
+    complete: function (xhr, status) {
+      // console.log('DONE');
+    }
+  });
+
+}
+
+function show_page_activate() {
+  $.ajax({
+    url: 'activate.html?_' + new Date().getTime(),
+    type: 'GET',
+    dataType: 'text',
+
+    success: function (response) {
+      // show page
+      $('#sigbro_spa').html(response);
+      // load data
+      page_show_network_type();
+
+      var accRS = localStorage.getItem("sigbro_wallet_accountRS");
+      document.getElementById('sigbro_activate_account_rs').textContent = "Your account ID: " + accRS;
+
+    },
+
+    error: function (error) {
+      //console.log('ERROR: ', error);
+    },
+
+    complete: function (xhr, status) {
+      //console.log('DONE');
+    }
+  });
+
+}
+
 function show_offline_page() {
   $.ajax({
     url: 'offline.html?_' + new Date().getTime(),
@@ -1424,6 +1499,10 @@ function page_profile_set_userinfo() {
 function page_balances_set_accountRS() {
   var accRS = localStorage.getItem("sigbro_wallet_accountRS");
   if (accRS == null) { sigbro_clear_localstorage(); location.href = "/index.html"; }
+
+  getPublicKey_v2(accRS, 'ardor');
+
+  var pubKey = localStorage.getItem("sigbro_pubkey_" + accRS);
 
   document.getElementById('sigbro_balances-accountRS').textContent = accRS;
 }
