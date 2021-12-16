@@ -150,6 +150,7 @@
                               <select class="custom-select" id="sigbro_template_operation" onchange="showRightFields()">
                                 <option value="sendMoney" selected>Send Money</option>
                                 <option value="leaseBalance">Lease Balance</option>
+                                <option value="transferAsset">Transfer Asset</option>
                               </select>
                             </div>
                           </div>
@@ -175,7 +176,6 @@
                             <input type="text" class="form-control sigbro-input" id="sigbro_template_recipientRS" readonly>
                           </div>
                           <div class="col-md-6 form-group sigbro-module-sendmoney">
-
                             <label for="InputAmount" class="p-medium">Amount</label>
                             <input type="amount" class="form-control sigbro-input" id="sigbro_template_amount" aria-describedby="" placeholder="0.0">
                           </div>
@@ -196,13 +196,16 @@
                             </div>
 
                           </div>
+                          <div class="col-md-6 form-group mb-2rem sigbro-module-transferasset" style="visibility: hidden; margin-bottom: 0rem;">
+                            <label for="sigbro_transfer_assetid" class="p-medium">Asset ID</label>
+                            <input type="text" class="form-control" id="sigbro_transfer_assetid" placeholder="" style="padding: 0.5rem;">
+                          </div>
+                          <div class="col-md-6 form-group mb-2rem sigbro-module-transferasset" style="visibility: hidden;"></div>
+                          <div class="col-md-6 form-group mb-2rem sigbro-module-transferasset" style="visibility: hidden;">
+                            <label for="sigbro_transfer_asset_count" class="p-medium">quantityQNT (count)</label>
+                            <input type="number" class="form-control" min="0" id="sigbro_transfer_asset_count" placeholder="" style="padding: 0.5rem;">
+                          </div>
                         </div>
-
-                        <div class="row mb-1rem">
-
-                        </div>
-
-
 
                         <div class="row mb-2rem sigbro-module-sendmoney">
                           <div class="col">
@@ -211,20 +214,10 @@
                           </div>
                           <div class="w-100"></div>
                         </div>
-                        <!--
-                        <div class="row align-items-end">
-                          <div class="col-auto form-group mb-2rem">
-                            <label class="lable-box lable-box-fee">Encrypt message
-                              <input type="checkbox" id="sigbro_template_encrypt_message" disabled>
-                              <span class="checkmark"></span>
-                            </label>
-                          </div>
-                        </div>
-                        -->
                         <div class="row mb-1rem" id="sigbro_template_messages_block" style="display: none;">
                           <div class="col">
                             <label for="exampleFormControlTextarea1 p-media">Status</label>
-                            <span class="form-control" id="sigbro_template_messages_text"></span>
+                            <span class="form-control" id="sigbro_template_messages_text" style="margin-bottom: 1rem;"></span>
                           </div>
                           <div class="w-100"></div>
                         </div>

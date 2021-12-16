@@ -892,6 +892,8 @@ function show_operations() {
       page_show_network_type();
       page_ops_set_accountRS();
       show_accountRS();
+      hide_module('.sigbro-module-transferasset');
+      hide_module('.sigbro-module-leasebalance');
     },
 
     error: function (error) {
@@ -1181,14 +1183,26 @@ $(document).on('click', '#sigbro_template_submit', function (e) {
 
   }
 
+  if ( operation == 'transferAsset' ) {
+    var asset_id = document.getElementById('sigbro_transfer_assetid').value;
+    var amount = document.getElementById('sigbro_transfer_asset_count').value;
 
+     template = {
+      "network": NETWORK,
+      "chain": currencie,
+      "requestType": operation,
+      "recipientRS": recipientRS,
+      "asset": asset_id,
+      "quantityQNT": amount,
+     };
+  }
 
   param = JSON.stringify(
     { "template": template }
   );
 
-  //console.log("url: " + url);
-  //console.log("params: " + param);
+  console.log("url: " + url);
+  console.log("params: " + param);
 
   sendJSON(url, param, TIMEOUT_TEMPLATE, page_ops_template_show_result);
 });
@@ -1198,17 +1212,27 @@ function page_ops_template_show_result() {
   var resp = this.responseText;
   var resp_j = JSON.parse(resp);
 
-  //console.log("RESULT:");
-  //console.log(resp_j);
+  console.log("RESULT:");
+  console.log(resp_j.result);
+  console.log(resp_j.msg);
 
-  if (resp_j.error) {
-    page_ops_show_alert(resp_j.error);
+  if (resp_j.result == "fail") {
+    page_ops_show_template_alert(resp_j.msg);
   } else if (resp_j.uuid) {
     var resp_url = "https://dl.sigbro.com/tmpl/" + resp_j.uuid + "/";
-    //console.log("URL: " + resp_url);
+    console.log("URL: " + resp_url);
     localStorage.setItem("sigbro_wallet_url", resp_url);
     show_qr(true);
+  } else {
+    page_ops_show_template_alert("Unknown error, sorry.");
   }
+}
+
+function page_ops_show_template_alert(msg) {
+  var msg_block = document.getElementById('sigbro_template_messages_block');
+  msg_block.setAttribute('style', 'display:none;');
+  document.getElementById('sigbro_template_messages_text').innerHTML = msg;
+  msg_block.setAttribute('style', '');
 }
 
 
@@ -2102,6 +2126,7 @@ function showRightFields() {
   item = document.getElementById("sigbro_template_operation").value;
   //console.log('Selected: ' + item);
   if (item == 'sendMoney') {
+    hide_module('.sigbro-module-transferasset');
     hide_module('.sigbro-module-leasebalance');
     show_module('.sigbro-module-sendmoney');
     enable_all_childchain();
@@ -2109,11 +2134,22 @@ function showRightFields() {
     document.getElementById("sigbro_template_currencie").value = 2;
   }
   if (item == 'leaseBalance') {
-    show_module('.sigbro-module-leasebalance');
+    hide_module('.sigbro-module-transferasset');
     hide_module('.sigbro-module-sendmoney');
+    show_module('.sigbro-module-leasebalance');
     // set ardor
     document.getElementById("sigbro_template_currencie").value = 1;
     disable_all_childchain_except('ardor');
+  }
+
+  if ( item == 'transferAsset') {
+    hide_module('.sigbro-module-sendmoney');
+    hide_module('.sigbro-module-leasebalance');
+
+    disable_all_childchain_except('ignis')
+    document.getElementById("sigbro_template_currencie").value = 2;
+
+    show_module('.sigbro-module-transferasset');
   }
 
 }
