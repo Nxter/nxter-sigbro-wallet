@@ -4,6 +4,9 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
 
 ## Change log
 
+### 3.25.1
+  - fix: remove faucet button
+
 ### 3.25.0
   - feat: transferAsset template type 
 
