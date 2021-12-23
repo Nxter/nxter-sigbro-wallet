@@ -1,6 +1,6 @@
 // PRODUCTION
 var APIURL = "https://sigbro-wallet.api.nxter.org"
-var TEMPLATEURL = "https://sigbro-template.api.nxter.org"
+var TEMPLATEURL = "https://sclickActivateAccountButtonigbro-template.api.nxter.org"
 var AUTH_TIME = 5 * 60 * 1000
 
 // DEVELOPMENT
@@ -758,7 +758,7 @@ function show_qr(is_template) {
 }
 
 function clickActivateAccountButton() {
-  show_page_activate();
+  // show_page_activate();
 }
 
 function clickActivateAccountRequest() {
