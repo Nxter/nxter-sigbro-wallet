@@ -2211,6 +2211,7 @@ function findIpfsCollections() {
           selectCollection.innerHTML = ""; // clear
 
           let idx = 0
+          let full = 0
           for ( const [key, value] of Object.entries(colls)) {
             let option = document.createElement( 'option' );
             option.value = key;
@@ -2227,6 +2228,7 @@ function findIpfsCollections() {
 
             if ( value.elements >= value.size ) {
               option.disabled = true
+              full ++
             }
 
             selectCollection.appendChild(option)
@@ -2237,6 +2239,9 @@ function findIpfsCollections() {
           option.text = "A new one...";
           selectCollection.appendChild(option);
 
+          if ( collSize == full ) {
+            show_module('.collection-only');
+          }
 
         } else {
           console.log("Collections not found")
