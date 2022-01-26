@@ -1114,14 +1114,12 @@ function page_ops_set_accountRS() {
   if (accRS == null) { sigbro_clear_localstorage(); location.href = "/index.html"; }
   document.getElementById('sigbro_send_senderRS').value = accRS;
   document.getElementById('sigbro_template_recipientRS').value = accRS;
-  document.getElementById('sigbro_dataupload_network').value = network;
   document.getElementById('sigbro_ipfs_network').value = network;
 
   var senderPubKey = localStorage.getItem("sigbro_pubkey_" + accRS);
   if (senderPubKey == null) {
     getPublicKey_v2(accRS, 'ardor');
   } else {
-    document.getElementById('sigbro_dataupload_pubkey').value = senderPubKey;
     document.getElementById('sigbro_ipfs_pubkey').value = senderPubKey;
   }
 

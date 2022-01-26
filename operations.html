@@ -246,7 +246,10 @@
 
                         <div class="row mb-1rem" style="padding-bottom: 1rem;">
                           <div class="no-gutters col-md-12">
-                            <center><a href="https://ipfs.io/" target="_blank">Read about IPFS</a></center>
+                            <center>
+                              <a href="https://ipfs.io/" target="_blank">Read about IPFS</a> &nbsp;
+                              <a href="https://nftmagic.art/licenses" target="_blank">Read about NFT Licenses</a> &nbsp;
+                            </center>
                           </div>
                         </div>
 
@@ -307,7 +310,7 @@
                         </div>
 
                         <div class="row mb-1rem">
-                          <div class="no-gutters col-md-12">
+                          <div class="no-gutters col-md-9 col-xs-12">
                             <div class="input-group mb-3">
                               <div class="input-group-prepend">
                                 <label class="input-group-text" style="min-width: 120px;" for="sigbro_ipfs_name">NFT Name</label>
@@ -316,6 +319,24 @@
                                 required="required" minlength="3" maxlength="40">
                             </div>
                           </div>
+                          
+                          <div class="no-gutters col-md-3 col-xs-12">
+                            <div class="input-group mb-3">
+                              <select class="custom-select" name="sigbro_ipfs_license" id="sigbro_ipfs_license">
+                                <option value="10" selected>10 - Basic NFT license</option>
+                                <option value="20">20 - CC BY-NC-ND</option>
+                                <option value="30">30 - CC BY-NC</option>
+                                <option value="40">40 - CC BY-NC-SA</option>
+                                <option value="50">50 - CC BY-ND</option>
+                                <option value="60">60 - CC BY</option>
+                                <option value="70">70 - CC BY-SA</option>
+                                <option value="80">80 - CC0 Public Domain</option>
+                                <option value="90">90 - Custom license</option>
+                                <option value="99">99 - Transfer of copyright</option>
+                              </select>
+                            </div>
+                          </div>
+                          
                         </div>
 
                         <div class="row mb-1rem">
@@ -427,174 +448,13 @@
 
                         <div class="row mb-1rem" id="sigbro_ipfs_upload_block" style="display: none;">
                           <div class="col">
-                            <label for="exampleFormControlTextarea1 p-media">Status</label>
+                            <label for="sigbro_upload_status_text">Status</label>
                             <span class="form-control" id="sigbro_upload_status_text"></span>
                           </div>
                           <div class="w-100"></div>
                         </div>
 
                         <button type="submit" class="btn btn-block p-medium btn-qr" id="sigbro_ipfs_upload_submit">Upload and Generate QR-Code</button>
-                      </form>
-                    </div>
-                  </div>
-
-                  <!-- Upload File -->
-                  <div class="operation-stroke" id="headingUpload">
-                    <a class="collapsed a-black" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseUpload" aria-expanded="false" aria-controls="collapseUpload">
-                      <p class="h4 weight-normal">
-                        Issue NFT with a file attached to Ardor Archival Nodes
-                        <i class="fas fa-angle-down"></i>
-                      </p>
-                    </a>
-                  </div> <!-- /upload file-->
-
-                  <div id="collapseUpload" class="collapse" aria-labelledby="headingUpload" data-parent="#accordionExample">
-                    <div class="send-box">
-                      <form class="send-form" action="https://sigbro-mobile.api.nxter.org/api/v1/data-storage/" method="POST" enctype=multipart/form-data>
-                        <input type="hidden" id="sigbro_dataupload_pubkey" name="sigbro_pubkey" />
-                        <input type="hidden" id="sigbro_dataupload_network" name="sigbro_network" />
-
-                        <div class="row mb-1rem" style="padding-bottom: 1rem;">
-                          <div class="no-gutters col-md-12">
-                            <center><a href="https://www.nxter.org/ardor-scalable-blockchain-platform/" target="_blank">Read about Ardor Archival Nodes</a></center>
-                          </div>
-                        </div>
-
-
-                        <div class="row mb-1rem" style="padding-bottom: 1rem;">
-                          <div class="no-gutters col-md-12">
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" name="sigbro_entity_is_collection" value="1" id="sigbro_entity_is_collection" onclick="showCollections()">
-                              <label class="form-check-label" for="sigbro_entity_is_collection">
-                                Check it if this NFT is part of a collection only!
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row mb-1rem collection-only" style="display: none;">
-                          <div class="no-gutters col-md-8 col-xs-12">
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_collection">Collection</label>
-                              </div>
-                              <input type="text" class="form-control sigbro-input" name="sigbro_entity_collection" id="sigbro_entity_collection" aria-describedby=""
-                                placeholder="Collection name (max 28 characters)" minlength="3" maxlength="28">
-                            </div>
-                          </div>
-                          <div class="no-gutters col-md-4 col-xs-12">
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <label class="input-group-text" for="sigbro_entity_collection_size">Size</label>
-                              </div>
-                              <input type="number" class="form-control sigbro-input" name="sigbro_entity_collection_size" id="sigbro_entity_collection_size" aria-describedby="" placeholder="max 1000"
-                                min="2" max="1000">
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row mb-1rem collection-only-old" style="display: none;">
-                          <div class="no-gutters col-md-12 col-xs-12">
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_collection">Select one existing collection</label>
-                              </div>
-                              <select class="custom-select" name="sigbro_entity_collection_old" id="sigbro_entity_collection_old" onchange="showHideCollectionFields();">
-                                <option value="" selected>A new one...</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-
-
-                        <div class="row mb-1rem">
-                          <div class="no-gutters col-md-12">
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_name">NFT Name</label>
-                              </div>
-                              <input type="text" class="form-control sigbro-input" name="sigbro_entity_name" id="sigbro_entity_name" aria-describedby="" placeholder="NFT name (max 100 characters)"
-                                required="required" minlength="3" maxlength="100">
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row mb-1rem">
-                          <div class="no-gutters col-md-12">
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <label class="input-group-text" style="min-width: 120px;" for="sigbro_entity_descr">Description</label>
-                              </div>
-                              <input type="text" class="form-control sigbro-input" name="sigbro_entity_descr" id="sigbro_entity_descr" aria-describedby=""
-                                placeholder="NFT Description (max 1000 characters)" maxlength="1000">
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row mb-1rem" style="margin-bottom: 1rem;">
-                          <div class="no-gutters col-md-12">
-                            <h6>NFT Categories:</h6>
-                          </div>
-                          <div class="no-gutters col-md-12">
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="checkbox" id="sigbro_tag1" name="sigbro_tag1" value="Audio">
-                              <label class="form-check-label" for="sigbro_tag1">Audio</label>
-                            </div>
-
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="checkbox" id="sigbro_tag2" name="sigbro_tag2" value="Art">
-                              <label class="form-check-label" for="sigbro_tag2">Art</label>
-                            </div>
-
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="checkbox" id="sigbro_tag3" name="sigbro_tag3" value="Collectibles">
-                              <label class="form-check-label" for="sigbro_tag3">Collectibles</label>
-                            </div>
-
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="checkbox" id="sigbro_tag4" name="sigbro_tag4" value="Trading Cards">
-                              <label class="form-check-label" for="sigbro_tag4">Trading Cards</label>
-                            </div>
-
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="checkbox" id="sigbro_tag5" name="sigbro_tag5" value="Games">
-                              <label class="form-check-label" for="sigbro_tag5">Games</label>
-                            </div>
-                          </div>
-
-                        </div>
-
-                        <div class="row mb-1rem">
-                          <div class="no-gutters col-md-8 col-xs-12">
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <label class="input-group-text" style="min-width: 120px;" for="sigbro_file">NFT File (5Mb)</label>
-                              </div>
-                              <input type="file" class="form-control sigbro-input" name="sigbro_file" id="sigbro_file" aria-describedby="" placeholder="File to upload (Max 5Mb)" required="required">
-                            </div>
-                          </div>
-
-                          <div class="no-gutters col-md-4 col-xs-12">
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <label class="input-group-text" for="sigbro_entity_nft_count">Count</label>
-                              </div>
-                              <input type="number" class="form-control sigbro-input" name="sigbro_entity_nft_count" id="sigbro_entity_nft_count" aria-describedby="" placeholder="" min="1"
-                                max="1000000000" required="required" value="1">
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row mb-1rem" id="sigbro_upload_block" style="display: none;">
-                          <div class="col">
-                            <label for="exampleFormControlTextarea1 p-media">Status</label>
-                            <span class="form-control" id="sigbro_upload_status_text"></span>
-                          </div>
-                          <div class="w-100"></div>
-                        </div>
-
-                        <button type="submit" class="btn btn-block p-medium btn-qr" id="sigbro_upload_submit">Upload and Generate QR-Code</button>
-
                       </form>
                     </div>
                   </div>
