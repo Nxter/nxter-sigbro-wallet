@@ -1,0 +1,13 @@
+FROM nginx:1.23.3-alpine
+
+LABEL maintainer="scor2k <scor2k@gmail.com>"
+
+USER root
+ADD nginx.conf /etc/nginx/
+
+RUN rm -f /usr/share/nginx/html/*
+COPY . /usr/share/nginx/html/
+
+USER nginx
+
+EXPOSE 8035

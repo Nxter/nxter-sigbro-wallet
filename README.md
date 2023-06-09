@@ -4,6 +4,12 @@ Fast and simble wallet for Ardor Sigbro Project. It can generate QR code for Sig
 
 ## Change log
 
+### 3.29.0
+  - resurrect the old way to upload NFTs (to the archival node)
+
+### 3.27.0
+  - upgrade version & arm version
+
 ### 3.26.0
   - feat: License for NFTv2
   - feat: remove NFTv1
